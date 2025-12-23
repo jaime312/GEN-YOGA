@@ -26,12 +26,9 @@
                     serif: ['Playfair Display', 'serif'],
                     sans: ['Lato', 'sans-serif'],
                 },
-                // --- CAMBIO AQUÍ ---
                 backgroundImage: {
-                    // Imagen de meditación/yoga (silueta tranquila)
                     'hero-pattern': "url('https://images.unsplash.com/photo-1552196563-55cd4e45efb3?q=80&w=1926&auto=format&fit=crop')",
                 }
-                // -------------------
             }
         }
     }
@@ -41,7 +38,6 @@
             font-family: 'Lato', sans-serif; 
             background: #fafaf9; 
             color: #374151;
-            /* Fondo sutil */
             background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
             background-size: 32px 32px;
         }
@@ -66,6 +62,59 @@
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* ESTILOS DEL CALENDARIO */
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        
+        .calendar-day:hover:not(.disabled):not(.other-month) {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #2d8a8e, #236c6f);
+            color: white;
+        }
+        
+        .calendar-day.selected {
+            background: linear-gradient(135deg, #2d8a8e, #236c6f) !important;
+            color: white !important;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(45, 138, 142, 0.3);
+        }
+        
+        .calendar-day.has-classes::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            width: 4px;
+            height: 4px;
+            background: #d4af37;
+            border-radius: 50%;
+        }
+        
+        .calendar-day.selected.has-classes::after {
+            background: white;
+        }
+        
+        .calendar-day.disabled {
+            color: #d1d5db;
+            cursor: not-allowed;
+            opacity: 0.4;
+        }
+        
+        .calendar-day.other-month {
+            color: #e5e7eb;
+        }
+        
+        .calendar-day.today {
+            border: 2px solid #d4af37;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -178,7 +227,7 @@
         
         <!-- HEADER -->
         <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 shadow-sm">
-            <div class="max-w-6xl mx-auto px-4 h-20 flex justify-between items-center">
+            <div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
                 <!-- LOGO BRANDING -->
                 <div class="flex items-center gap-3 group cursor-default">
                     <div class="w-11 h-11 bg-gradient-to-br from-q19-800 to-q19-600 rounded-full flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition duration-300">
@@ -211,7 +260,7 @@
             
             <!-- BARRA ADMIN -->
             <div class="admin-only hidden w-full bg-gray-900 text-white text-xm font-medium shadow-inner">
-                <div class="max-w-6xl mx-auto flex">
+                <div class="max-w-7xl mx-auto flex">
                     <button onclick="switchTab('horarios')" id="tab-horarios" class="px-7 py-4 border-b-2 border-gold-500 bg-gray-800 flex items-center gap-2 transition hover:bg-gray-800">
                         <i class="ph-bold ph-calendar-check text-gold-400"></i> Gestión Reservas
                     </button>
@@ -222,13 +271,12 @@
             </div>
         </header>
 
-
-        <main class="flex-grow max-w-6xl mx-auto px-4 py-8 md:py-12 w-full">
+        <main class="flex-grow max-w-7xl mx-auto px-4 py-8 md:py-12 w-full">
             
             <!-- VISTA HORARIOS -->
             <div id="view-horarios" class="fade-in">
                 <!-- Banner Bienvenida / Header Sección -->
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6 pb-6 border-b border-gray-200/60">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-6 pb-6 border-b border-gray-200/60">
                     <div>
                         <span class="inline-block py-1 px-3 rounded-full bg-gold-50 text-gold-700 font-bold tracking-widest text-[10px] uppercase mb-3 border border-gold-100">
                             Calendario Semanal
@@ -260,18 +308,68 @@
                     </a>
                 </div>
 
-                <!-- Contenedor Calendario -->
-                <div id="schedule-container" class="space-y-8"></div>
-                
-                <!-- Empty State -->
-                <div id="empty-state" class="hidden flex flex-col items-center justify-center py-24 text-center">
-                    <div class="bg-white p-8 rounded-full mb-6 shadow-sm border border-gray-100">
-                        <i class="ph-duotone ph-calendar-slash text-5xl text-gray-300"></i>
+                <!-- LAYOUT: CLASES (IZQUIERDA) + CALENDARIO (DERECHA) -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    
+                    <!-- CLASES (IZQUIERDA) -->
+                    <div class="lg:col-span-8">
+                        <div id="schedule-container" class="space-y-6"></div>
+                        
+                        <!-- Empty State -->
+                        <div id="empty-state" class="hidden flex flex-col items-center justify-center py-24 text-center">
+                            <div class="bg-white p-8 rounded-full mb-6 shadow-sm border border-gray-100">
+                                <i class="ph-duotone ph-calendar-slash text-5xl text-gray-300"></i>
+                            </div>
+                            <h3 class="brand-font text-2xl font-bold text-gray-800 mb-2">No hay clases disponibles</h3>
+                            <p class="text-gray-500 text-sm font-light max-w-xs mx-auto">
+                                Estamos planificando la próxima semana. Vuelve a consultar en breve.
+                            </p>
+                        </div>
                     </div>
-                    <h3 class="brand-font text-2xl font-bold text-gray-800 mb-2">No hay clases disponibles</h3>
-                    <p class="text-gray-500 text-sm font-light max-w-xs mx-auto">
-                        Estamos planificando la próxima semana. Vuelve a consultar en breve.
-                    </p>
+
+                    <!-- CALENDARIO (DERECHA) -->
+                    <div class="lg:col-span-4">
+                        <div class="sticky top-24">
+                            <div class="bg-white rounded-3xl shadow-lg border border-gray-100 p-6">
+                                <!-- Header Calendario -->
+                                <div class="flex items-center justify-between mb-6">
+                                    <button onclick="cambiarMes(-1)" class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 transition text-gray-600">
+                                        <i class="ph-bold ph-caret-left text-lg"></i>
+                                    </button>
+                                    
+                                    <div class="text-center">
+                                        <h3 id="calendar-month-year" class="brand-font text-xl font-bold text-gray-900"></h3>
+                                        <p class="text-xs text-gray-400 uppercase tracking-wider mt-0.5">Selecciona un día</p>
+                                    </div>
+                                    
+                                    <button onclick="cambiarMes(1)" class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 transition text-gray-600">
+                                        <i class="ph-bold ph-caret-right text-lg"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Días de la Semana -->
+                                <div class="grid grid-cols-7 gap-1 mb-2">
+                                    <div class="text-center text-xs font-bold text-gray-400 py-2">L</div>
+                                    <div class="text-center text-xs font-bold text-gray-400 py-2">M</div>
+                                    <div class="text-center text-xs font-bold text-gray-400 py-2">X</div>
+                                    <div class="text-center text-xs font-bold text-gray-400 py-2">J</div>
+                                    <div class="text-center text-xs font-bold text-gray-400 py-2">V</div>
+                                    <div class="text-center text-xs font-bold text-gray-400 py-2">S</div>
+                                    <div class="text-center text-xs font-bold text-gray-400 py-2">D</div>
+                                </div>
+
+                                <!-- Grid Días -->
+                                <div id="calendar-grid" class="grid grid-cols-7 gap-1"></div>
+
+                                <!-- Botón Limpiar Filtro -->
+                                <button onclick="limpiarFiltroFecha()" class="mt-6 w-full bg-gray-100 text-gray-600 py-3 rounded-xl text-sm font-bold hover:bg-gray-200 transition flex items-center justify-center gap-2">
+                                    <i class="ph-bold ph-x-circle"></i>
+                                    Ver todas las clases
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -340,11 +438,9 @@
         </footer>
     </div>
 
-
     <!-- JS LOGIC -->
     <script>
         // --- 1. CONFIGURACIÓN ---
-        // Asegúrate de que estas keys coinciden con tu proyecto Supabase real
         const SUPA_URL = 'https://jkjifmrrlyncuwpjhxvk.supabase.co';
         const SUPA_KEY = 'sb_publishable_xnIELom1ouXaBDJNYaWDAQ_VJNjlnIK'; 
         const client = window.supabase.createClient(SUPA_URL, SUPA_KEY);
@@ -353,13 +449,15 @@
         let isAdmin = false;
         let userBonos = 0;
         let allUsersCache = [];
+        let allClasesCache = [];
+        let selectedDate = null;
+        let currentCalendarMonth = new Date();
 
         // --- 2. AUTHENTICATION ---
         function toggleAuth(view) {
             const login = document.getElementById('login-card');
             const reg = document.getElementById('register-card');
             
-            // Animación simple de cambio
             if(view === 'register') { 
                 login.classList.add('hidden'); 
                 reg.classList.remove('hidden');
@@ -437,7 +535,8 @@
             document.getElementById('app-view').classList.remove('hidden');
             
             await checkProfile(); 
-            cargarHorarios();     
+            cargarHorarios();
+            renderizarCalendario();
         }
 
         async function checkProfile() {
@@ -452,7 +551,6 @@
 
             if (data) {
                 userBonos = data.bonos || 0;
-                // Animación numérica simple
                 animateValue("bonos-count", parseInt(document.getElementById('bonos-count').innerText), userBonos, 500);
                 
                 if (data.rol === 'admin') {
@@ -484,11 +582,101 @@
             window.requestAnimationFrame(step);
         }
 
+        // --- 4. CALENDARIO ---
+        function renderizarCalendario() {
+            const year = currentCalendarMonth.getFullYear();
+            const month = currentCalendarMonth.getMonth();
+            
+            // Header
+            const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                               'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            document.getElementById('calendar-month-year').textContent = `${monthNames[month]} ${year}`;
+            
+            // Grid
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const startDayOfWeek = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1; // Lunes = 0
+            const daysInMonth = lastDay.getDate();
+            
+            const grid = document.getElementById('calendar-grid');
+            grid.innerHTML = '';
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            // Días del mes anterior
+            const prevMonthDays = new Date(year, month, 0).getDate();
+            for (let i = startDayOfWeek - 1; i >= 0; i--) {
+                const day = prevMonthDays - i;
+                const dayEl = crearDiaCalendario(day, true, false, false, null);
+                dayEl.classList.add('other-month');
+                grid.appendChild(dayEl);
+            }
+            
+            // Días del mes actual
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateObj = new Date(year, month, day);
+                const dateKey = dateObj.toISOString().split('T')[0];
+                const isToday = dateObj.getTime() === today.getTime();
+                const isPast = dateObj < today;
+                const hasClasses = allClasesCache.some(c => {
+                    const claseDate = new Date(c.fecha_inicio).toISOString().split('T')[0];
+                    return claseDate === dateKey;
+                });
+                const isSelected = selectedDate === dateKey;
+                
+                const dayEl = crearDiaCalendario(day, false, isToday, isPast, dateKey);
+                if (hasClasses) dayEl.classList.add('has-classes');
+                if (isSelected) dayEl.classList.add('selected');
+                if (isPast) dayEl.classList.add('disabled');
+                
+                grid.appendChild(dayEl);
+            }
+            
+            // Días del mes siguiente (para completar la grid)
+            const totalCells = grid.children.length;
+            const remainingCells = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+            for (let day = 1; day <= remainingCells; day++) {
+                const dayEl = crearDiaCalendario(day, true, false, false, null);
+                dayEl.classList.add('other-month');
+                grid.appendChild(dayEl);
+            }
+        }
 
-        // --- 4. HORARIOS (CALENDARIO VISUAL MEJORADO) ---
+        function crearDiaCalendario(day, isOtherMonth, isToday, isPast, dateKey) {
+            const div = document.createElement('div');
+            div.className = 'calendar-day rounded-lg text-sm font-medium text-gray-700 bg-gray-50';
+            div.textContent = day;
+            
+            if (isToday) div.classList.add('today');
+            
+            if (!isOtherMonth && !isPast && dateKey) {
+                div.onclick = () => filtrarPorFecha(dateKey);
+            }
+            
+            return div;
+        }
+
+        function cambiarMes(delta) {
+            currentCalendarMonth.setMonth(currentCalendarMonth.getMonth() + delta);
+            renderizarCalendario();
+        }
+
+        function filtrarPorFecha(dateKey) {
+            selectedDate = dateKey;
+            renderizarCalendario();
+            renderizarClases();
+        }
+
+        function limpiarFiltroFecha() {
+            selectedDate = null;
+            renderizarCalendario();
+            renderizarClases();
+        }
+
+        // --- 5. HORARIOS (CLASES) ---
         async function cargarHorarios() {
             const container = document.getElementById('schedule-container');
-            // Loader elegante
             container.innerHTML = `
                 <div class="flex flex-col items-center justify-center py-20 gap-4 opacity-50">
                     <i class="ph-duotone ph-spinner animate-spin text-4xl text-q19-600"></i>
@@ -501,6 +689,7 @@
             if (!clases || clases.length === 0) {
                 container.innerHTML = '';
                 document.getElementById('empty-state').classList.remove('hidden');
+                allClasesCache = [];
                 return;
             }
             document.getElementById('empty-state').classList.add('hidden');
@@ -511,20 +700,49 @@
                 reservasMap[r.clase_id].push(r);
             });
 
-            const grupos = {};
             clases.forEach(c => {
-                const dateKey = new Date(c.fecha_inicio).toISOString().split('T')[0];
-                if (!grupos[dateKey]) grupos[dateKey] = [];
-                
                 const misRes = reservasMap[c.id] || [];
                 c.ocupadas = misRes.length;
                 c.miReserva = misRes.find(r => r.user_id === currentUser.id);
+            });
+
+            allClasesCache = clases;
+            renderizarCalendario();
+            renderizarClases();
+        }
+
+        function renderizarClases() {
+            const container = document.getElementById('schedule-container');
+            
+            // Filtrar clases
+            let clasesAMostrar = allClasesCache;
+            if (selectedDate) {
+                clasesAMostrar = allClasesCache.filter(c => {
+                    const claseDate = new Date(c.fecha_inicio).toISOString().split('T')[0];
+                    return claseDate === selectedDate;
+                });
+            }
+
+            if (clasesAMostrar.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white rounded-2xl p-12 text-center border border-gray-100">
+                        <i class="ph-duotone ph-calendar-x text-5xl text-gray-300 mb-4"></i>
+                        <p class="text-gray-500 font-medium">No hay clases en esta fecha</p>
+                        <button onclick="limpiarFiltroFecha()" class="mt-4 text-q19-600 hover:underline text-sm font-bold">Ver todas</button>
+                    </div>`;
+                return;
+            }
+
+            // Agrupar por fecha
+            const grupos = {};
+            clasesAMostrar.forEach(c => {
+                const dateKey = new Date(c.fecha_inicio).toISOString().split('T')[0];
+                if (!grupos[dateKey]) grupos[dateKey] = [];
                 grupos[dateKey].push(c);
             });
 
             container.innerHTML = '';
             
-            // Renderizado
             Object.keys(grupos).sort().forEach(dateKey => {
                 const dateObj = new Date(dateKey);
                 const diaNombre = dateObj.toLocaleDateString('es-ES', { weekday: 'long' });
@@ -532,14 +750,13 @@
                 const mes = dateObj.toLocaleDateString('es-ES', { month: 'long' });
 
                 const section = document.createElement('div');
-                section.className = 'bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden mb-8';
+                section.className = 'bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden';
                 
-                // Cabecera Día
                 section.innerHTML = `
-                    <div class="bg-gradient-to-r from-gray-50 to-white px-8 py-5 border-b border-gray-100 flex items-center justify-between">
+                    <div class="bg-gradient-to-r from-gray-50 to-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                         <div class="flex items-baseline gap-2">
-                            <span class="brand-font text-2xl font-bold text-gray-800 capitalize">${diaNombre}</span>
-                            <span class="text-sm font-semibold text-gold-600 bg-gold-50 px-2 py-0.5 rounded-md border border-gold-100">${diaNumero} ${mes}</span>
+                            <span class="brand-font text-xl font-bold text-gray-800 capitalize">${diaNombre}</span>
+                            <span class="text-xs font-semibold text-gold-600 bg-gold-50 px-2 py-0.5 rounded-md border border-gold-100">${diaNumero} ${mes}</span>
                         </div>
                     </div>
                     <div id="grid-${dateKey}" class="divide-y divide-gray-50"></div>
@@ -551,46 +768,37 @@
                 grupos[dateKey].forEach(c => {
                     const hora = new Date(c.fecha_inicio).toLocaleTimeString('es-ES', {hour:'2-digit', minute:'2-digit'});
                     
-                    // Lógica visual por tipo de clase
                     const isPilates = c.nombre.toLowerCase().includes('pilates') || c.nombre.toLowerCase().includes('reformer');
                     const isHot = c.nombre.toLowerCase().includes('hot') || c.nombre.toLowerCase().includes('bikram');
                     
-                    // Colores e iconos dinámicos
-                    let iconName = 'ph-person-simple-lotus';
                     let iconColorClass = 'bg-sky-50 text-sky-600 border-sky-100';
-                    let tagClass = 'text-sky-600 bg-sky-50 border-sky-100';
                     let tipoTexto = 'Yoga';
 
                     if (isPilates) {
-                        iconName = 'ph-person-simple-run'; // Reformer sim
                         iconColorClass = 'bg-emerald-50 text-emerald-600 border-emerald-100';
-                        tagClass = 'text-emerald-600 bg-emerald-50 border-emerald-100';
                         tipoTexto = 'Reformer';
                     } else if (isHot) {
-                        iconName = 'ph-fire-simple';
                         iconColorClass = 'bg-rose-50 text-rose-600 border-rose-100';
-                        tagClass = 'text-rose-600 bg-rose-50 border-rose-100';
-                        tipoTexto = 'Hot Yoga';
+                        tipoTexto = 'Hot';
                     }
 
                     const llena = c.ocupadas >= c.capacidad_max;
                     const reservada = !!c.miReserva;
                     
-                    // Botón de acción
                     let btnAction = '';
                     if (reservada) {
                         btnAction = `
-                            <button onclick="cancelar(${c.miReserva.id})" class="group flex items-center gap-2 text-[11px] font-bold text-gray-400 hover:text-red-500 border border-gray-200 hover:border-red-200 bg-white px-5 py-2.5 rounded-full transition shadow-sm">
+                            <button onclick="cancelar(${c.miReserva.id})" class="group flex items-center gap-2 text-[11px] font-bold text-gray-400 hover:text-red-500 border border-gray-200 hover:border-red-200 bg-white px-4 py-2 rounded-full transition shadow-sm">
                                 <i class="ph-bold ph-x group-hover:scale-110 transition"></i> CANCELAR
                             </button>`;
                     } else if (llena) {
-                        btnAction = `<span class="text-[10px] font-bold text-gray-400 bg-gray-100 px-4 py-2 rounded-full uppercase tracking-wide border border-gray-200 cursor-not-allowed">Completa</span>`;
+                        btnAction = `<span class="text-[10px] font-bold text-gray-400 bg-gray-100 px-3 py-2 rounded-full uppercase tracking-wide border border-gray-200 cursor-not-allowed">Completa</span>`;
                     } else {
                         const disabledClass = (userBonos < 1 && !isAdmin) ? 'opacity-50 cursor-not-allowed grayscale' : 'hover:shadow-lg hover:brightness-110 active:scale-95';
                         const btnText = (userBonos < 1 && !isAdmin) ? '0 Bonos' : 'RESERVAR';
                         
                         btnAction = `
-                            <button onclick="reservar(${c.id})" class="bg-gradient-to-r from-q19-700 via-q19-600 to-q19-500 text-white text-[11px] font-bold px-8 py-2.5 rounded-full shadow-md transition transform ${disabledClass}">
+                            <button onclick="reservar(${c.id})" class="bg-gradient-to-r from-q19-700 via-q19-600 to-q19-500 text-white text-[11px] font-bold px-6 py-2 rounded-full shadow-md transition transform ${disabledClass}">
                                 ${btnText}
                             </button>`;
                     }
@@ -598,39 +806,36 @@
                     const adminTrash = `<button onclick="borrarClase(${c.id})" class="admin-only hidden text-gray-300 hover:text-red-500 transition ml-2 p-1" title="Eliminar Clase"><i class="ph-bold ph-trash"></i></button>`;
 
                     const row = document.createElement('div');
-                    row.className = 'p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-6 hover:bg-gray-50/50 transition duration-300 group';
+                    row.className = 'p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-gray-50/50 transition duration-300 group';
                     
                     row.innerHTML = `
-                        <div class="flex items-start gap-5 w-full">
-                            <!-- Hora Box -->
-                            <div class="flex flex-col items-center justify-center w-16 h-16 rounded-2xl ${iconColorClass} border shadow-sm flex-shrink-0">
-                                <span class="text-xs font-bold opacity-80 uppercase pb-0.5">${tipoTexto}</span>
-                                <span class="text-lg font-black tracking-tight leading-none">${hora}</span>
+                        <div class="flex items-start gap-4 w-full">
+                            <div class="flex flex-col items-center justify-center w-14 h-14 rounded-xl ${iconColorClass} border shadow-sm flex-shrink-0">
+                                <span class="text-[9px] font-bold opacity-80 uppercase pb-0.5">${tipoTexto}</span>
+                                <span class="text-base font-black tracking-tight leading-none">${hora}</span>
                             </div>
                             
                             <div class="flex-grow">
                                 <div class="flex items-start justify-between">
-                                    <h4 class="brand-font font-bold text-xl text-gray-800 group-hover:text-q19-700 transition leading-tight">
+                                    <h4 class="brand-font font-bold text-lg text-gray-800 group-hover:text-q19-700 transition leading-tight">
                                         ${c.nombre}
                                         ${adminTrash}
                                     </h4>
                                 </div>
                                 
-                                <div class="flex items-center gap-3 mt-2.5">
-                                    <!-- Badges -->
-                                    <div class="flex items-center gap-1.5 text-xs text-gray-500 bg-white border border-gray-200 px-2.5 py-1 rounded-md shadow-sm" title="Aforo">
-                                        <i class="ph-bold ph-users text-gray-300"></i>
+                                <div class="flex items-center gap-2 mt-2">
+                                    <div class="flex items-center gap-1.5 text-xs text-gray-500 bg-white border border-gray-200 px-2 py-0.5 rounded-md shadow-sm" title="Aforo">
+                                        <i class="ph-bold ph-users text-gray-300 text-sm"></i>
                                         <span class="font-bold text-gray-700">${c.ocupadas}</span>
                                         <span class="text-gray-300 text-[10px]">/ ${c.capacidad_max}</span>
                                     </div>
 
-                                    ${reservada ? '<span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-2.5 py-1 rounded-md uppercase tracking-wide flex items-center gap-1"><i class="ph-fill ph-check-circle"></i> Tu Plaza</span>' : ''}
+                                    ${reservada ? '<span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-md uppercase tracking-wide flex items-center gap-1"><i class="ph-fill ph-check-circle"></i> Tu Plaza</span>' : ''}
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Action Area -->
-                        <div class="flex items-center justify-end sm:min-w-[140px]">
+                        <div class="flex items-center justify-end sm:min-w-[120px]">
                             ${btnAction}
                         </div>
                     `;
@@ -639,8 +844,7 @@
             });
         }
 
-
-        // --- 5. LOGICA RESERVAS ---
+        // --- 6. LOGICA RESERVAS ---
         async function reservar(claseId) {
             if (userBonos < 1 && !isAdmin) return Swal.fire({ 
                 icon:'warning', 
@@ -650,7 +854,6 @@
                 confirmButtonColor: '#d4af37'
             });
 
-            // Optimistic UI update (opcional) o espera a respuesta
             const { error } = await client.rpc('reservar_con_bono', { 
                 p_clase_id: claseId, 
                 p_user_id: currentUser.id 
@@ -697,7 +900,7 @@
         }
 
 
-        // --- 6. GESTIÓN ADMIN ---
+        // --- 7. GESTIÓN ADMIN ---
         function switchTab(tabName) {
             const tHorarios = document.getElementById('tab-horarios');
             const tUsuarios = document.getElementById('tab-usuarios');
@@ -793,7 +996,6 @@
         }
 
         async function sumarBono(userId, qty) {
-            // Optimistic update visual (opcional) pero seguro esperar server
             const { data } = await client.from('profiles').select('bonos').eq('id', userId).single();
             const nuevoSaldo = (data.bonos || 0) + qty;
             
@@ -803,24 +1005,21 @@
             else {
                 const Toast = Swal.mixin({toast: true, position: 'bottom-end', showConfirmButton: false, timer: 1000});
                 Toast.fire({icon: 'success', title: 'Saldo actualizado'});
-                cargarUsuariosAdmin(); // Recargar tabla
+                cargarUsuariosAdmin();
             }
         }
 
-
-        // --- 7. UTILS ADMIN (GENERADOR) ---
+        // --- 8. UTILS ADMIN (GENERADOR) ---
         async function generarSemana() {
             Swal.fire({ title: 'Planificando...', didOpen: () => Swal.showLoading() });
             
             const hoy = new Date();
             const slots = [];
-            // Ajustar al lunes de ESTA semana (o siguiente si es fin de semana)
             const diaSemana = hoy.getDay();
             const diff = diaSemana === 0 ? -6 : 1 - diaSemana; 
             const lunes = new Date(hoy);
             lunes.setDate(hoy.getDate() + diff);
 
-            // Generar Lunes a Viernes
             for(let i=0; i<5; i++) { 
                let d = new Date(lunes); 
                d.setDate(lunes.getDate() + i);
@@ -831,19 +1030,15 @@
                    return fin.toISOString();
                };
 
-               // 09:30 - Pilates Reformer
                let m1 = new Date(d); m1.setHours(9,30,0,0);
                slots.push({nombre: 'Pilates Reformer', fecha_inicio: m1.toISOString(), fecha_fin: getEnd(m1), capacidad_max: 6});
                
-               // 11:00 - Vinyasa
                let m2 = new Date(d); m2.setHours(11,0,0,0);
                slots.push({nombre: 'Vinyasa Flow', fecha_inicio: m2.toISOString(), fecha_fin: getEnd(m2), capacidad_max: 10});
 
-               // 18:00 - Pilates
                let t1 = new Date(d); t1.setHours(18,0,0,0);
                slots.push({nombre: 'Pilates Reformer', fecha_inicio: t1.toISOString(), fecha_fin: getEnd(t1), capacidad_max: 6});
                
-               // 19:30 - Hot Yoga (Alternancia ejemplo)
                let t2 = new Date(d); t2.setHours(19,30,0,0);
                const claseTarde = (i % 2 === 0) ? 'Hot Yoga' : 'Hatha Yoga';
                slots.push({nombre: claseTarde, fecha_inicio: t2.toISOString(), fecha_fin: getEnd(t2), capacidad_max: 12});
@@ -875,7 +1070,7 @@
             }
         }
 
-        // --- 8. REALTIME ---
+        // --- 9. REALTIME ---
         client.channel('public:db').on('postgres_changes', {event: '*', schema: 'public'}, () => {
             if(currentUser) {
                 checkProfile();
