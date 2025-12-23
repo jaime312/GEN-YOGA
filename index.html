@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bienestar Q19 - Studio</title>
+    <title>HAM Yoga by Farmacia Q19</title>
     
     <!-- Librerías -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -12,26 +12,39 @@
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
     <!-- Fuentes -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        q19: { 50: '#f0f9fa', 100: '#d5eff1', 500: '#2d8a8e', 700: '#236c6f', 900: '#1a4d4f' },
-                        gold: { 400: '#d4af37', 500: '#c5a059', 600: '#a68545' }
-                    },
-                    fontFamily: {
-                        serif: ['Playfair Display', 'serif'],
-                        sans: ['Lato', 'sans-serif'],
-                    }
+        theme: {
+            extend: {
+                colors: {
+                    q19: { 50: '#f0f9fa', 100: '#d5eff1', 500: '#2d8a8e', 700: '#236c6f', 900: '#1a4d4f' },
+                    gold: { 50: '#fffbf0', 100: '#ffefc2', 400: '#d4af37', 500: '#c5a059', 600: '#a68545' }
+                },
+                fontFamily: {
+                    serif: ['Playfair Display', 'serif'],
+                    sans: ['Lato', 'sans-serif'],
+                },
+                // --- CAMBIO AQUÍ ---
+                backgroundImage: {
+                    // Imagen de meditación/yoga (silueta tranquila)
+                    'hero-pattern': "url('https://images.unsplash.com/photo-1552196563-55cd4e45efb3?q=80&w=1926&auto=format&fit=crop')",
                 }
+                // -------------------
             }
         }
+    }
     </script>
     <style>
-        body { font-family: 'Lato', sans-serif; background: #fdfdfd; color: #374151; }
+        body { 
+            font-family: 'Lato', sans-serif; 
+            background: #fafaf9; 
+            color: #374151;
+            /* Fondo sutil */
+            background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
         h1, h2, h3, .brand-font { font-family: 'Playfair Display', serif; }
         
         /* Control de Visibilidad Admin */
@@ -39,106 +52,168 @@
         .is-admin .admin-only { display: inline-block !important; }
         .is-admin .admin-flex { display: flex !important; }
         
-        .fade-in { animation: fadeIn 0.5s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        ::-webkit-scrollbar { width: 6px; }
+        /* Scrollbar elegante */
+        ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; border: 2px solid #fafaf9; }
+        ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
     </style>
 </head>
-<body>
+<body class="antialiased">
 
-    <!-- ================= AUTH SCREEN ================= -->
-    <div id="auth-container" class="min-h-screen flex items-center justify-center p-6 bg-[url('https://images.unsplash.com/photo-1552196563-55cd4e45efb3?q=80&w=1926&auto=format&fit=crop')] bg-cover bg-center relative">
-        <div class="absolute inset-0 bg-q19-900/50 backdrop-blur-sm"></div>
+    <!-- ================= AUTH SCREEN (LANDING STYLE) ================= -->
+    <div id="auth-container" class="min-h-screen flex items-center justify-center p-4 md:p-8 bg-hero-pattern bg-cover bg-center bg-no-repeat relative">
+        <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-md"></div>
         
-        <div id="login-card" class="bg-white/95 backdrop-blur-xl p-10 rounded-2xl shadow-2xl w-full max-w-md relative z-10 border-t-4 border-q19-500">
-            <div class="text-center mb-8">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-q19-50 text-q19-700 mb-4 shadow-inner">
-                    <span class="brand-font text-3xl font-bold">Q</span>
-                </div>
-                <h2 class="text-3xl font-bold text-gray-900 brand-font">Bienestar Q19</h2>
-                <p class="text-gray-500 mt-2 font-light">Tu espacio de salud en Albacete</p>
-            </div>
-
-            <form id="form-login" class="space-y-5">
-                <div>
-                    <input type="email" id="login-email" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-q19-500 outline-none transition placeholder-gray-400" placeholder="Correo electrónico" required>
-                </div>
-                <div>
-                    <input type="password" id="login-password" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-q19-500 outline-none transition placeholder-gray-400" placeholder="Contraseña" required>
-                </div>
-                <button type="submit" class="w-full bg-q19-700 text-white py-3.5 rounded-lg font-bold hover:bg-q19-900 transition shadow-lg tracking-wide uppercase text-sm">Iniciar Sesión</button>
-            </form>
-
-            <div class="mt-8 text-center">
-                <button onclick="toggleAuth('register')" class="text-gray-500 hover:text-q19-700 text-sm font-medium transition">¿Primera vez? Crea tu cuenta aquí</button>
-            </div>
+        <div class="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 relative z-10 items-center">
             
-            <div class="mt-8 pt-6 border-t border-gray-100 flex justify-center">
-                <a href="https://www.farmaciaq19fmas.com/" target="_blank" class="flex items-center gap-2 text-xs text-gray-400 hover:text-q19-500 transition group">
-                    <i class="ph-bold ph-storefront text-lg group-hover:scale-110 transition"></i>
-                    Visita Farmacia Q19
-                </a>
-            </div>
-        </div>
+            <!-- Panel Izquierdo (Branding & Info) -->
+            <div class="text-white fade-in order-2 lg:order-1 text-center lg:text-left">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-[10px] font-bold uppercase tracking-[0.25em] mb-6 backdrop-blur-md">
+                    <i class="ph-fill ph-sparkle text-gold-400"></i>
+                    Studio & Wellness
+                </div>
+                
+                <h1 class="brand-font text-5xl md:text-7xl font-bold leading-tight mb-2 text-white drop-shadow-sm">
+                    HAM Yoga
+                </h1>
+                <p class="text-xs md:text-sm uppercase tracking-[0.35em] text-gold-400 font-bold mb-6 pl-1">
+                    by Farmacia Q19
+                </p>
+                
+                <p class="text-gray-200 text-lg md:text-xl font-light leading-relaxed max-w-lg mx-auto lg:mx-0 mb-10">
+                    Descubre tu mejor versión a través del movimiento consciente. 
+                    <span class="block mt-2 text-white/80 text-base">Pilates Reformer • Vinyasa • Hatha</span>
+                </p>
 
-        <div id="register-card" class="bg-white/95 backdrop-blur-xl p-10 rounded-2xl shadow-2xl w-full max-w-md relative z-10 border-t-4 border-gold-500 hidden">
-            <div class="text-center mb-8">
-                <h2 class="text-2xl font-bold text-gray-900 brand-font">Nueva Cuenta</h2>
-                <p class="text-gray-500 text-sm">Empieza a cuidar de ti</p>
+                <div class="flex flex-wrap justify-center lg:justify-start gap-4 text-xs font-medium text-gray-200">
+                    <div class="flex items-center gap-2 bg-black/20 border border-white/10 px-4 py-2.5 rounded-full backdrop-blur-md">
+                        <i class="ph-fill ph-calendar-check text-emerald-400 text-lg"></i>
+                        <span>Reservas 24/7</span>
+                    </div>
+                    <div class="flex items-center gap-2 bg-black/20 border border-white/10 px-4 py-2.5 rounded-full backdrop-blur-md">
+                        <i class="ph-fill ph-ticket text-gold-400 text-lg"></i>
+                        <span>Bonos Flexibles</span>
+                    </div>
+                </div>
             </div>
-            <form id="form-register" class="space-y-5">
-                <input type="email" id="reg-email" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg outline-none" placeholder="Tu email" required>
-                <input type="password" id="reg-password" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg outline-none" placeholder="Crea una contraseña" required>
-                <button type="submit" class="w-full bg-gray-900 text-white py-3.5 rounded-lg font-bold hover:bg-black transition shadow-lg uppercase text-sm">Crear Cuenta</button>
-            </form>
-            <div class="mt-6 text-center">
-                <button onclick="toggleAuth('login')" class="text-q19-500 font-bold text-sm hover:underline">Volver a Iniciar Sesión</button>
+
+            <!-- Panel Derecho (Forms) -->
+            <div class="w-full max-w-md mx-auto order-1 lg:order-2 fade-in" style="animation-delay: 0.2s;">
+                
+                <!-- LOGIN FORM -->
+                <div id="login-card" class="bg-white/95 backdrop-blur-xl p-8 md:p-10 rounded-3xl shadow-2xl border-t-4 border-q19-700 relative overflow-hidden">
+                    <div class="text-center mb-8 relative z-10">
+                        <h2 class="text-3xl font-bold text-gray-900 brand-font">Bienvenido</h2>
+                        <p class="text-gray-500 mt-2 text-xs font-bold uppercase tracking-[0.2em]">Accede a tu cuenta</p>
+                    </div>
+
+                    <form id="form-login" class="space-y-5 relative z-10">
+                        <div class="group">
+                            <label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1 mb-1.5 block">Email</label>
+                            <div class="relative">
+                                <i class="ph-bold ph-envelope-simple absolute left-4 top-3.5 text-gray-400 group-focus-within:text-q19-600 transition"></i>
+                                <input type="email" id="login-email" class="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-q19-500 focus:border-q19-500 outline-none transition placeholder-gray-400" placeholder="hola@ejemplo.com" required>
+                            </div>
+                        </div>
+                        <div class="group">
+                            <label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1 mb-1.5 block">Contraseña</label>
+                            <div class="relative">
+                                <i class="ph-bold ph-lock-key absolute left-4 top-3.5 text-gray-400 group-focus-within:text-q19-600 transition"></i>
+                                <input type="password" id="login-password" class="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-q19-500 focus:border-q19-500 outline-none transition placeholder-gray-400" placeholder="••••••••" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full bg-gray-900 text-white py-4 rounded-xl font-bold hover:bg-q19-800 transition shadow-lg hover:shadow-xl transform active:scale-[0.98] tracking-wide text-sm flex items-center justify-center gap-2 group">
+                            INICIAR SESIÓN <i class="ph-bold ph-arrow-right group-hover:translate-x-1 transition"></i>
+                        </button>
+                    </form>
+
+                    <div class="mt-8 text-center relative z-10">
+                        <p class="text-gray-400 text-sm">¿Aún no tienes cuenta?</p>
+                        <button onclick="toggleAuth('register')" class="text-q19-700 font-bold text-sm hover:underline mt-1">Regístrate gratis aquí</button>
+                    </div>
+                    
+                    <!-- Decoración fondo card -->
+                    <div class="absolute -top-10 -right-10 w-32 h-32 bg-q19-50 rounded-full blur-3xl opacity-50 pointer-events-none"></div>
+                    <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-gold-50 rounded-full blur-3xl opacity-50 pointer-events-none"></div>
+                </div>
+
+                <!-- REGISTER FORM -->
+                <div id="register-card" class="bg-white/95 backdrop-blur-xl p-8 md:p-10 rounded-3xl shadow-2xl border-t-4 border-gold-500 hidden relative">
+                    <div class="text-center mb-8">
+                        <h2 class="text-2xl font-bold text-gray-900 brand-font">Crear Cuenta</h2>
+                        <p class="text-gray-500 text-xs font-bold uppercase tracking-[0.2em] mt-2">Únete a la comunidad</p>
+                    </div>
+                    <form id="form-register" class="space-y-5">
+                        <div>
+                            <input type="email" id="reg-email" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-gold-500 transition" placeholder="Tu mejor email" required>
+                        </div>
+                        <div>
+                            <input type="password" id="reg-password" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-gold-500 transition" placeholder="Crea una contraseña segura" required>
+                        </div>
+                        <button type="submit" class="w-full bg-gray-900 text-white py-4 rounded-xl font-bold hover:bg-black transition shadow-lg transform active:scale-[0.98] tracking-wide text-sm">REGISTRARME</button>
+                    </form>
+                    <div class="mt-6 text-center">
+                        <button onclick="toggleAuth('login')" class="text-gray-500 font-medium text-sm hover:text-gray-800 transition">← Volver a Iniciar Sesión</button>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
 
+
     <!-- ================= APP PRINCIPAL ================= -->
-    <div id="app-view" class="hidden min-h-screen flex flex-col bg-gray-50/50">
+    <div id="app-view" class="hidden min-h-screen flex flex-col bg-[#fafaf9]">
+        
         <!-- HEADER -->
-        <header class="bg-white sticky top-0 z-50 border-b border-gray-100">
+        <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 shadow-sm">
             <div class="max-w-6xl mx-auto px-4 h-20 flex justify-between items-center">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-q19-700 rounded-full flex items-center justify-center text-white shadow-md">
-                        <span class="brand-font font-bold text-xl pb-1">Q</span>
+                <!-- LOGO BRANDING -->
+                <div class="flex items-center gap-3 group cursor-default">
+                    <div class="w-11 h-11 bg-gradient-to-br from-q19-800 to-q19-600 rounded-full flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition duration-300">
+                        <span class="brand-font font-bold text-2xl pb-1 italic">H</span>
                     </div>
-                    <div class="hidden sm:block">
-                        <h1 class="brand-font font-bold text-xl text-gray-900 leading-none">Bienestar Q19</h1>
-                        <span class="text-[10px] tracking-[0.2em] text-gold-600 uppercase font-bold">Studio & Wellness</span>
+                    <div class="flex flex-col">
+                        <h1 class="brand-font font-bold text-xl text-gray-900 leading-none tracking-tight">HAM Yoga</h1>
+                        <span class="text-[10px] tracking-[0.25em] text-gold-600 uppercase font-bold mt-0.5">by Farmacia Q19</span>
                     </div>
                 </div>
 
-                <div class="flex items-center gap-8">
+                <!-- MENU DERECHA -->
+                <div class="flex items-center gap-4 sm:gap-8">
                     <!-- CONTADOR DE BONOS -->
                     <div class="flex flex-col items-end">
-                        <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-0.5">Saldo Disponible</span>
-                        <div class="flex items-center gap-2 text-q19-900 bg-q19-50 px-3 py-1 rounded-full border border-q19-100">
+                        <span class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mb-0.5">Mis Bonos</span>
+                        <div class="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full border border-gray-200 shadow-sm hover:border-gold-300 transition cursor-default">
                             <i class="ph-fill ph-ticket text-gold-500 text-lg"></i>
-                            <span id="bonos-count" class="font-bold text-lg leading-none">0</span>
-                            <span class="text-xs font-medium text-gray-500">clases</span>
+                            <span id="bonos-count" class="font-bold text-gray-800 text-lg leading-none">0</span>
                         </div>
                     </div>
 
                     <div class="h-8 w-px bg-gray-200 hidden sm:block"></div>
 
-                    <button onclick="logout()" class="text-gray-400 hover:text-red-500 transition p-2 hover:bg-red-50 rounded-full" title="Cerrar Sesión">
-                        <i class="ph-bold ph-sign-out text-xl"></i>
+                    <button onclick="logout()" class="text-gray-400 hover:text-red-500 transition p-2.5 hover:bg-red-50 rounded-full group" title="Cerrar Sesión">
+                        <i class="ph-bold ph-sign-out text-xl group-hover:-translate-x-0.5 transition"></i>
                     </button>
                 </div>
             </div>
             
-            <!-- BARRA DE ADMIN (Solo visible si es admin por CSS) -->
-            <div class="admin-only hidden w-full bg-gray-900 text-white text-xs font-medium">
+            <!-- BARRA ADMIN -->
+            <div class="admin-only hidden w-full bg-gray-900 text-white text-xs font-medium shadow-inner">
                 <div class="max-w-6xl mx-auto flex">
-                    <button onclick="switchTab('horarios')" id="tab-horarios" class="px-6 py-3 border-b-2 border-gold-500 hover:bg-gray-800 transition flex items-center gap-2">
-                        <i class="ph-bold ph-calendar-check"></i> Gestión Reservas
+                    <button onclick="switchTab('horarios')" id="tab-horarios" class="px-6 py-3 border-b-2 border-gold-500 bg-gray-800 flex items-center gap-2 transition hover:bg-gray-800">
+                        <i class="ph-bold ph-calendar-check text-gold-400"></i> Gestión Reservas
                     </button>
                     <button onclick="switchTab('usuarios')" id="tab-usuarios" class="px-6 py-3 border-b-2 border-transparent text-gray-400 hover:text-white hover:bg-gray-800 transition flex items-center gap-2">
                         <i class="ph-bold ph-users-three"></i> Usuarios y Bonos
@@ -147,108 +222,129 @@
             </div>
         </header>
 
-        <main class="flex-grow max-w-6xl mx-auto px-4 py-10 w-full">
+
+        <main class="flex-grow max-w-6xl mx-auto px-4 py-8 md:py-12 w-full">
             
             <!-- VISTA HORARIOS -->
             <div id="view-horarios" class="fade-in">
-                <!-- Banner Bienvenida -->
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
+                <!-- Banner Bienvenida / Header Sección -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6 pb-6 border-b border-gray-200/60">
                     <div>
-                        <span class="text-gold-600 font-bold tracking-widest text-xs uppercase mb-2 block">Calendario Semanal</span>
-                        <h2 class="text-4xl brand-font font-bold text-gray-900">Reserva tu momento</h2>
-                        <p class="text-gray-500 mt-3 font-light text-lg max-w-xl">Disfruta de nuestras sesiones de Pilates Reformer y Yoga Vinyasa diseñadas para tu equilibrio.</p>
+                        <span class="inline-block py-1 px-3 rounded-full bg-gold-50 text-gold-700 font-bold tracking-widest text-[10px] uppercase mb-3 border border-gold-100">
+                            Calendario Semanal
+                        </span>
+                        <h2 class="text-4xl md:text-5xl brand-font font-bold text-gray-900 mb-3">Reserva tu práctica</h2>
+                        <p class="text-gray-500 font-light text-lg max-w-xl leading-relaxed">
+                            Encuentra el equilibrio perfecto entre cuerpo y mente. Selecciona tu clase y prepárate para desconectar.
+                        </p>
                     </div>
                     <!-- Botón Admin (Generar) -->
-                    <button onclick="generarSemana()" class="admin-only hidden bg-white border border-gray-200 text-indigo-600 px-5 py-2.5 rounded-lg text-sm font-bold shadow-sm hover:shadow-md hover:border-indigo-200 transition flex items-center gap-2">
-                        <i class="ph-bold ph-magic-wand"></i> Generar Semana Completa
+                    <button onclick="generarSemana()" class="admin-only hidden bg-white border border-gray-200 text-indigo-600 px-5 py-3 rounded-xl text-sm font-bold shadow-sm hover:shadow-md hover:border-indigo-200 transition flex items-center gap-2">
+                        <i class="ph-bold ph-magic-wand text-lg"></i> Generar Semana
                     </button>
                 </div>
 
                 <!-- Alerta Sin Bonos -->
-                <div id="no-bonos-alert" class="hidden mb-10 bg-orange-50 border border-orange-100 p-5 rounded-xl flex flex-col sm:flex-row justify-between items-center gap-4 shadow-sm">
+                <div id="no-bonos-alert" class="hidden mb-10 bg-orange-50/80 backdrop-blur-sm border border-orange-100 p-5 rounded-2xl flex flex-col sm:flex-row justify-between items-center gap-4 shadow-sm animate-pulse">
                     <div class="flex items-center gap-4">
-                        <div class="bg-orange-100 p-2 rounded-full text-orange-500">
+                        <div class="bg-white p-2.5 rounded-full text-orange-500 shadow-sm">
                             <i class="ph-fill ph-warning-circle text-2xl"></i>
                         </div>
                         <div>
-                            <p class="font-bold text-orange-900 text-lg">Saldo insuficiente</p>
-                            <p class="text-sm text-orange-800/80">Necesitas recargar bonos para reservar clase.</p>
+                            <p class="font-bold text-orange-900 text-lg">Saldo agotado</p>
+                            <p class="text-sm text-orange-800/80">Recarga tus bonos en la farmacia para seguir reservando.</p>
                         </div>
                     </div>
-                    <a href="https://maps.google.com/?q=Farmacia+Q19+Albacete" target="_blank" class="text-xs bg-white text-orange-800 px-4 py-2 rounded-lg border border-orange-200 font-bold hover:bg-orange-50 hover:border-orange-300 transition uppercase tracking-wide">
-                        Ir a Farmacia Q19
+                    <a href="https://maps.google.com/?q=Farmacia+Q19+Albacete" target="_blank" class="text-xs bg-white text-orange-800 px-5 py-2.5 rounded-xl border border-orange-200 font-bold hover:bg-orange-50 hover:border-orange-300 transition uppercase tracking-wide shadow-sm">
+                        Cómo llegar
                     </a>
                 </div>
 
-                <div id="schedule-container" class="space-y-12"></div>
+                <!-- Contenedor Calendario -->
+                <div id="schedule-container" class="space-y-8"></div>
                 
+                <!-- Empty State -->
                 <div id="empty-state" class="hidden flex flex-col items-center justify-center py-24 text-center">
-                    <div class="bg-gray-50 p-6 rounded-full mb-4">
-                        <i class="ph-duotone ph-calendar-slash text-4xl text-gray-300"></i>
+                    <div class="bg-white p-8 rounded-full mb-6 shadow-sm border border-gray-100">
+                        <i class="ph-duotone ph-calendar-slash text-5xl text-gray-300"></i>
                     </div>
-                    <p class="text-gray-500 text-lg font-light">No hay clases disponibles en este momento.</p>
-                    <p class="text-sm text-gray-400 mt-1">Vuelve a consultar pronto.</p>
+                    <h3 class="brand-font text-2xl font-bold text-gray-800 mb-2">No hay clases disponibles</h3>
+                    <p class="text-gray-500 text-sm font-light max-w-xs mx-auto">
+                        Estamos planificando la próxima semana. Vuelve a consultar en breve.
+                    </p>
                 </div>
             </div>
+
 
             <!-- VISTA USUARIOS (Admin) -->
             <div id="view-usuarios" class="hidden fade-in">
                 <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
                     <div>
                         <h2 class="text-3xl brand-font font-bold text-gray-900">Cartera de Clientes</h2>
-                        <p class="text-gray-500 mt-1">Gestiona recargas y saldos manualmente.</p>
+                        <p class="text-gray-500 mt-1">Gestión manual de bonos y accesos.</p>
                     </div>
-                    <!-- Buscador -->
-                    <div class="relative w-full md:w-80">
-                        <i class="ph-bold ph-magnifying-glass absolute left-3 top-3.5 text-gray-400"></i>
+                    <div class="relative w-full md:w-80 group">
+                        <i class="ph-bold ph-magnifying-glass absolute left-4 top-3.5 text-gray-400 group-focus-within:text-q19-500 transition"></i>
                         <input type="text" id="user-search" onkeyup="filtrarUsuarios()" 
-                            class="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-q19-500 outline-none shadow-sm transition" 
-                            placeholder="Buscar por email...">
+                            class="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-q19-500 outline-none shadow-sm transition placeholder-gray-400" 
+                            placeholder="Buscar email...">
                     </div>
                 </div>
 
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
                     <table class="w-full text-left border-collapse">
-                        <thead class="bg-gray-50/50 border-b border-gray-100 text-xs uppercase text-gray-500 font-bold tracking-wider">
+                        <thead class="bg-gray-50 border-b border-gray-100 text-[10px] uppercase text-gray-500 font-bold tracking-wider">
                             <tr>
-                                <th class="px-6 py-4">Cliente</th>
+                                <th class="px-6 py-4">Usuario</th>
                                 <th class="px-6 py-4 text-center">Rol</th>
-                                <th class="px-6 py-4 text-center">Saldo Actual</th>
-                                <th class="px-6 py-4 text-right">Acciones Rápidas</th>
+                                <th class="px-6 py-4 text-center">Saldo</th>
+                                <th class="px-6 py-4 text-right">Añadir / Quitar</th>
                             </tr>
                         </thead>
-                        <tbody id="users-table-body" class="divide-y divide-gray-50 text-sm">
-                            <!-- JS Inserta filas -->
+                        <tbody id="users-table-body" class="divide-y divide-gray-50 text-sm text-gray-600">
+                            <!-- JS Rellena esto -->
                         </tbody>
                     </table>
-                    <div id="no-users-found" class="hidden p-10 text-center text-gray-400 italic">No se encontraron usuarios con ese email.</div>
+                    <div id="no-users-found" class="hidden p-12 text-center text-gray-400 italic">No se han encontrado resultados.</div>
                 </div>
             </div>
 
         </main>
 
-        <footer class="bg-white border-t border-gray-200 py-10 mt-auto">
+
+        <footer class="bg-white border-t border-gray-200 py-12 mt-auto">
             <div class="max-w-6xl mx-auto px-4 text-center">
-                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mx-auto mb-4">
-                    <span class="brand-font font-bold text-xl pb-1">Q</span>
+                <div class="w-14 h-14 bg-gray-50 rounded-full flex items-center justify-center text-gray-400 mx-auto mb-5 border border-gray-100">
+                    <span class="brand-font font-bold text-2xl pb-1 italic text-gray-300">H</span>
                 </div>
-                <p class="brand-font font-bold text-q19-900 text-lg mb-2">Bienestar Q19</p>
-                <p class="text-gray-400 text-sm mb-6 max-w-md mx-auto">Un espacio dedicado a tu salud integral, avalado por Farmacia Q19 Albacete.</p>
-                <div class="flex justify-center gap-6 text-2xl text-q19-500">
-                    <a href="#" class="hover:text-q19-700 hover:scale-110 transition"><i class="ph-fill ph-instagram-logo"></i></a>
-                    <a href="#" class="hover:text-q19-700 hover:scale-110 transition"><i class="ph-fill ph-facebook-logo"></i></a>
-                    <a href="#" class="hover:text-q19-700 hover:scale-110 transition"><i class="ph-fill ph-whatsapp-logo"></i></a>
+                <p class="brand-font font-bold text-gray-900 text-xl mb-1">HAM Yoga</p>
+                <p class="text-[10px] uppercase tracking-[0.25em] text-gold-500 font-bold mb-6">by Farmacia Q19</p>
+                
+                <p class="text-gray-400 text-sm mb-8 max-w-md mx-auto leading-relaxed">
+                    Un espacio dedicado al bienestar integral, la salud física y la paz mental. <br>
+                    Cuidamos de ti desde el interior.
+                </p>
+                
+                <div class="flex justify-center gap-8 text-2xl text-q19-600 mb-8">
+                    <a href="#" class="hover:text-q19-800 hover:scale-110 transition duration-300"><i class="ph-fill ph-instagram-logo"></i></a>
+                    <a href="#" class="hover:text-q19-800 hover:scale-110 transition duration-300"><i class="ph-fill ph-facebook-logo"></i></a>
+                    <a href="https://wa.me/" class="hover:text-q19-800 hover:scale-110 transition duration-300"><i class="ph-fill ph-whatsapp-logo"></i></a>
                 </div>
-                <div class="mt-8 text-xs text-gray-300">
-                    &copy; 2025 Bienestar Q19. Todos los derechos reservados.
+                
+                <div class="border-t border-gray-100 pt-8 mt-8 flex flex-col md:flex-row justify-center items-center gap-4 text-xs text-gray-400">
+                    <span>&copy; 2025 HAM Yoga by Q19. Todos los derechos reservados.</span>
+                    <span class="hidden md:inline text-gray-300">•</span>
+                    <a href="#" class="hover:text-gray-600">Política de Privacidad</a>
                 </div>
             </div>
         </footer>
     </div>
 
+
     <!-- JS LOGIC -->
     <script>
-        // --- 1. CONFIG ---
+        // --- 1. CONFIGURACIÓN ---
+        // Asegúrate de que estas keys coinciden con tu proyecto Supabase real
         const SUPA_URL = 'https://jkjifmrrlyncuwpjhxvk.supabase.co';
         const SUPA_KEY = 'sb_publishable_xnIELom1ouXaBDJNYaWDAQ_VJNjlnIK'; 
         const client = window.supabase.createClient(SUPA_URL, SUPA_KEY);
@@ -262,8 +358,17 @@
         function toggleAuth(view) {
             const login = document.getElementById('login-card');
             const reg = document.getElementById('register-card');
-            if(view === 'register') { login.classList.add('hidden'); reg.classList.remove('hidden'); }
-            else { reg.classList.add('hidden'); login.classList.remove('hidden'); }
+            
+            // Animación simple de cambio
+            if(view === 'register') { 
+                login.classList.add('hidden'); 
+                reg.classList.remove('hidden');
+                reg.classList.add('fade-in');
+            } else { 
+                reg.classList.add('hidden'); 
+                login.classList.remove('hidden'); 
+                login.classList.add('fade-in');
+            }
         }
 
         client.auth.onAuthStateChange((event, session) => {
@@ -274,7 +379,7 @@
                 currentUser = null;
                 document.getElementById('auth-container').classList.remove('hidden');
                 document.getElementById('app-view').classList.add('hidden');
-                document.body.classList.remove('is-admin'); // Limpiar estado al salir
+                document.body.classList.remove('is-admin');
             }
         });
 
@@ -282,9 +387,22 @@
             e.preventDefault();
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
-            Swal.showLoading();
+            
+            Swal.fire({
+                title: 'Entrando...',
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading(),
+                background: '#fff',
+                color: '#333'
+            });
+
             const { error } = await client.auth.signInWithPassword({ email, password });
-            if(error) Swal.fire({ icon: 'error', title: 'Acceso Denegado', text: 'Email o contraseña incorrectos', confirmButtonColor: '#1a4d4f' });
+            if(error) Swal.fire({ 
+                icon: 'error', 
+                title: 'Ups...', 
+                text: 'Credenciales incorrectas.', 
+                confirmButtonColor: '#1a4d4f' 
+            });
             else Swal.close();
         });
 
@@ -292,31 +410,41 @@
             e.preventDefault();
             const email = document.getElementById('reg-email').value;
             const password = document.getElementById('reg-password').value;
-            if(password.length < 6) return Swal.fire('Contraseña muy corta', 'Mínimo 6 caracteres', 'warning');
+            
+            if(password.length < 6) return Swal.fire('Contraseña débil', 'Usa al menos 6 caracteres.', 'warning');
+            
             Swal.showLoading();
             const { error } = await client.auth.signUp({ email, password });
+            
             if(error) Swal.fire('Error', error.message, 'error');
-            else Swal.fire({ icon: 'success', title: '¡Bienvenido!', text: 'Cuenta creada correctamente.', timer: 1500, showConfirmButton: false });
+            else Swal.fire({ 
+                icon: 'success', 
+                title: '¡Bienvenido a HAM Yoga!', 
+                text: 'Revisa tu email para confirmar la cuenta.', 
+                confirmButtonColor: '#1a4d4f' 
+            });
         });
 
-        async function logout() { await client.auth.signOut(); location.reload(); }
+        async function logout() { 
+            await client.auth.signOut(); 
+            location.reload(); 
+        }
+
 
         // --- 3. APP INIT & PROFILE ---
         async function initApp() {
             document.getElementById('auth-container').classList.add('hidden');
             document.getElementById('app-view').classList.remove('hidden');
             
-            await checkProfile(); // Carga bonos y rol
-            cargarHorarios();     // Carga calendario
+            await checkProfile(); 
+            cargarHorarios();     
         }
 
         async function checkProfile() {
-            // Consulta segura a profiles
             const { data, error } = await client.from('profiles').select('rol, bonos').eq('id', currentUser.id).single();
             
             if (error) {
-                console.error("Error obteniendo perfil:", error);
-                // Si falla (ej. usuario nuevo sin perfil), asumimos user normal
+                console.error("Error perfil:", error);
                 isAdmin = false;
                 document.body.classList.remove('is-admin');
                 return;
@@ -324,32 +452,48 @@
 
             if (data) {
                 userBonos = data.bonos || 0;
-                document.getElementById('bonos-count').textContent = userBonos;
+                // Animación numérica simple
+                animateValue("bonos-count", parseInt(document.getElementById('bonos-count').innerText), userBonos, 500);
                 
-                // Configurar modo Admin
                 if (data.rol === 'admin') {
                     isAdmin = true;
                     document.body.classList.add('is-admin');
-                    // Asegurar que si recarga en usuarios, se vea
                 } else {
                     isAdmin = false;
                     document.body.classList.remove('is-admin');
-                    // Forzar a vista horarios si estaba en usuarios
                     const vUsuarios = document.getElementById('view-usuarios');
                     if(!vUsuarios.classList.contains('hidden')) switchTab('horarios');
                 }
 
-                // Mostrar alerta solo si no tiene bonos y NO es admin
                 const alertBox = document.getElementById('no-bonos-alert');
                 if (userBonos < 1 && !isAdmin) alertBox.classList.remove('hidden');
                 else alertBox.classList.add('hidden');
             }
         }
 
-        // --- 4. HORARIOS (CALENDARIO) ---
+        function animateValue(id, start, end, duration) {
+            if (start === end) return;
+            const obj = document.getElementById(id);
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start);
+                if (progress < 1) window.requestAnimationFrame(step);
+            };
+            window.requestAnimationFrame(step);
+        }
+
+
+        // --- 4. HORARIOS (CALENDARIO VISUAL MEJORADO) ---
         async function cargarHorarios() {
             const container = document.getElementById('schedule-container');
-            container.innerHTML = '<div class="flex justify-center py-12"><i class="ph-duotone ph-spinner animate-spin text-4xl text-q19-500"></i></div>';
+            // Loader elegante
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-20 gap-4 opacity-50">
+                    <i class="ph-duotone ph-spinner animate-spin text-4xl text-q19-600"></i>
+                    <span class="text-xs uppercase tracking-widest font-bold text-gray-400">Cargando clases...</span>
+                </div>`;
 
             const { data: clases } = await client.from('clases').select('*').order('fecha_inicio');
             const { data: reservas } = await client.from('reservas').select('*');
@@ -367,7 +511,6 @@
                 reservasMap[r.clase_id].push(r);
             });
 
-            // Agrupar por días
             const grupos = {};
             clases.forEach(c => {
                 const dateKey = new Date(c.fecha_inicio).toISOString().split('T')[0];
@@ -381,7 +524,7 @@
 
             container.innerHTML = '';
             
-            // Renderizar Grupos (Días)
+            // Renderizado
             Object.keys(grupos).sort().forEach(dateKey => {
                 const dateObj = new Date(dateKey);
                 const diaNombre = dateObj.toLocaleDateString('es-ES', { weekday: 'long' });
@@ -389,12 +532,15 @@
                 const mes = dateObj.toLocaleDateString('es-ES', { month: 'long' });
 
                 const section = document.createElement('div');
-                section.className = 'bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden';
+                section.className = 'bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden mb-8';
                 
+                // Cabecera Día
                 section.innerHTML = `
-                    <div class="bg-gray-50/50 px-6 py-4 border-b border-gray-100 flex items-baseline gap-2">
-                        <span class="brand-font text-2xl font-bold text-gray-900 capitalize">${diaNombre}</span>
-                        <span class="text-sm font-medium text-gray-400">${diaNumero} de ${mes}</span>
+                    <div class="bg-gradient-to-r from-gray-50 to-white px-8 py-5 border-b border-gray-100 flex items-center justify-between">
+                        <div class="flex items-baseline gap-2">
+                            <span class="brand-font text-2xl font-bold text-gray-800 capitalize">${diaNombre}</span>
+                            <span class="text-sm font-semibold text-gold-600 bg-gold-50 px-2 py-0.5 rounded-md border border-gold-100">${diaNumero} ${mes}</span>
+                        </div>
                     </div>
                     <div id="grid-${dateKey}" class="divide-y divide-gray-50"></div>
                 `;
@@ -405,76 +551,122 @@
                 grupos[dateKey].forEach(c => {
                     const hora = new Date(c.fecha_inicio).toLocaleTimeString('es-ES', {hour:'2-digit', minute:'2-digit'});
                     
-                    const isPilates = c.nombre.toLowerCase().includes('pilates');
-                    const iconBg = isPilates ? 'bg-rose-50 text-rose-600' : 'bg-teal-50 text-q19-600';
-                    const iconName = isPilates ? 'ph-person-simple-run' : 'ph-lotus'; 
+                    // Lógica visual por tipo de clase
+                    const isPilates = c.nombre.toLowerCase().includes('pilates') || c.nombre.toLowerCase().includes('reformer');
+                    const isHot = c.nombre.toLowerCase().includes('hot') || c.nombre.toLowerCase().includes('bikram');
+                    
+                    // Colores e iconos dinámicos
+                    let iconName = 'ph-person-simple-lotus';
+                    let iconColorClass = 'bg-sky-50 text-sky-600 border-sky-100';
+                    let tagClass = 'text-sky-600 bg-sky-50 border-sky-100';
+                    let tipoTexto = 'Yoga';
+
+                    if (isPilates) {
+                        iconName = 'ph-person-simple-run'; // Reformer sim
+                        iconColorClass = 'bg-emerald-50 text-emerald-600 border-emerald-100';
+                        tagClass = 'text-emerald-600 bg-emerald-50 border-emerald-100';
+                        tipoTexto = 'Reformer';
+                    } else if (isHot) {
+                        iconName = 'ph-fire-simple';
+                        iconColorClass = 'bg-rose-50 text-rose-600 border-rose-100';
+                        tagClass = 'text-rose-600 bg-rose-50 border-rose-100';
+                        tipoTexto = 'Hot Yoga';
+                    }
 
                     const llena = c.ocupadas >= c.capacidad_max;
                     const reservada = !!c.miReserva;
                     
+                    // Botón de acción
                     let btnAction = '';
                     if (reservada) {
-                        btnAction = `<button onclick="cancelar(${c.miReserva.id})" class="flex items-center gap-1.5 text-xs font-bold text-gray-400 hover:text-red-600 border border-gray-200 hover:border-red-200 bg-white px-4 py-2 rounded-lg transition"><i class="ph-bold ph-x"></i> CANCELAR</button>`;
+                        btnAction = `
+                            <button onclick="cancelar(${c.miReserva.id})" class="group flex items-center gap-2 text-[11px] font-bold text-gray-400 hover:text-red-500 border border-gray-200 hover:border-red-200 bg-white px-5 py-2.5 rounded-full transition shadow-sm">
+                                <i class="ph-bold ph-x group-hover:scale-110 transition"></i> CANCELAR
+                            </button>`;
                     } else if (llena) {
-                        btnAction = `<span class="text-xs font-bold text-gray-300 bg-gray-50 border border-gray-100 px-4 py-2 rounded-lg select-none">COMPLETA</span>`;
+                        btnAction = `<span class="text-[10px] font-bold text-gray-400 bg-gray-100 px-4 py-2 rounded-full uppercase tracking-wide border border-gray-200 cursor-not-allowed">Completa</span>`;
                     } else {
-                        if (userBonos > 0 || isAdmin) {
-                            btnAction = `<button onclick="reservar(${c.id})" class="bg-gray-900 text-white text-xs font-bold px-6 py-2.5 rounded-lg hover:bg-gold-500 hover:shadow-md transition transform active:scale-95">RESERVAR</button>`;
-                        } else {
-                            btnAction = `<button disabled class="bg-gray-100 text-gray-300 text-xs font-bold px-6 py-2.5 rounded-lg cursor-not-allowed border border-gray-100" title="Sin saldo">0 BONOS</button>`;
-                        }
+                        const disabledClass = (userBonos < 1 && !isAdmin) ? 'opacity-50 cursor-not-allowed grayscale' : 'hover:shadow-lg hover:brightness-110 active:scale-95';
+                        const btnText = (userBonos < 1 && !isAdmin) ? '0 Bonos' : 'RESERVAR';
+                        
+                        btnAction = `
+                            <button onclick="reservar(${c.id})" class="bg-gradient-to-r from-q19-700 via-q19-600 to-q19-500 text-white text-[11px] font-bold px-8 py-2.5 rounded-full shadow-md transition transform ${disabledClass}">
+                                ${btnText}
+                            </button>`;
                     }
 
-                    // Botón basura para admin
-                    const adminTrash = `<button onclick="borrarClase(${c.id})" class="admin-only hidden text-gray-300 hover:text-red-500 transition p-2" title="Eliminar Clase"><i class="ph-bold ph-trash"></i></button>`;
+                    const adminTrash = `<button onclick="borrarClase(${c.id})" class="admin-only hidden text-gray-300 hover:text-red-500 transition ml-2 p-1" title="Eliminar Clase"><i class="ph-bold ph-trash"></i></button>`;
 
                     const row = document.createElement('div');
-                    row.className = 'p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-gray-50/30 transition group';
+                    row.className = 'p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-6 hover:bg-gray-50/50 transition duration-300 group';
+                    
                     row.innerHTML = `
-                        <div class="flex items-center gap-5">
-                            <div class="w-16 h-16 rounded-2xl ${iconBg} flex flex-col items-center justify-center flex-shrink-0">
-                                <i class="ph-fill ${iconName} text-2xl mb-0.5"></i>
-                                <span class="text-[10px] font-black tracking-wide">${hora}</span>
+                        <div class="flex items-start gap-5 w-full">
+                            <!-- Hora Box -->
+                            <div class="flex flex-col items-center justify-center w-16 h-16 rounded-2xl ${iconColorClass} border shadow-sm flex-shrink-0">
+                                <span class="text-xs font-bold opacity-80 uppercase pb-0.5">${tipoTexto}</span>
+                                <span class="text-lg font-black tracking-tight leading-none">${hora}</span>
                             </div>
-                            <div>
-                                <h4 class="brand-font font-bold text-lg text-gray-800 group-hover:text-q19-700 transition flex items-center gap-2">
-                                    ${c.nombre}
-                                    ${adminTrash}
-                                </h4>
-                                <div class="flex items-center gap-4 text-sm text-gray-500 mt-1.5">
-                                    <div class="flex items-center gap-1.5" title="Aforo">
-                                        <i class="ph-fill ph-users text-gray-300"></i>
-                                        <span class="font-medium">${c.ocupadas}</span>
-                                        <span class="text-gray-300">/ ${c.capacidad_max}</span>
+                            
+                            <div class="flex-grow">
+                                <div class="flex items-start justify-between">
+                                    <h4 class="brand-font font-bold text-xl text-gray-800 group-hover:text-q19-700 transition leading-tight">
+                                        ${c.nombre}
+                                        ${adminTrash}
+                                    </h4>
+                                </div>
+                                
+                                <div class="flex items-center gap-3 mt-2.5">
+                                    <!-- Badges -->
+                                    <div class="flex items-center gap-1.5 text-xs text-gray-500 bg-white border border-gray-200 px-2.5 py-1 rounded-md shadow-sm" title="Aforo">
+                                        <i class="ph-bold ph-users text-gray-300"></i>
+                                        <span class="font-bold text-gray-700">${c.ocupadas}</span>
+                                        <span class="text-gray-300 text-[10px]">/ ${c.capacidad_max}</span>
                                     </div>
-                                    ${reservada ? '<span class="text-q19-600 bg-q19-50 border border-q19-100 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wide">Tu Plaza</span>' : ''}
+
+                                    ${reservada ? '<span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-2.5 py-1 rounded-md uppercase tracking-wide flex items-center gap-1"><i class="ph-fill ph-check-circle"></i> Tu Plaza</span>' : ''}
                                 </div>
                             </div>
                         </div>
-                        <div class="flex justify-end pt-2 sm:pt-0">${btnAction}</div>
+
+                        <!-- Action Area -->
+                        <div class="flex items-center justify-end sm:min-w-[140px]">
+                            ${btnAction}
+                        </div>
                     `;
                     grid.appendChild(row);
                 });
             });
         }
 
-        // --- 5. RESERVAS (RPC) ---
-        async function reservar(claseId) {
-            // Protección Frontend
-            if (userBonos < 1 && !isAdmin) return Swal.fire({ icon:'warning', title:'Sin saldo', text:'Necesitas recargar bonos en Farmacia Q19.', confirmButtonColor: '#2d8a8e' });
 
-            const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
-            
-            // Llamada segura a SQL
+        // --- 5. LOGICA RESERVAS ---
+        async function reservar(claseId) {
+            if (userBonos < 1 && !isAdmin) return Swal.fire({ 
+                icon:'warning', 
+                title:'Sin bonos', 
+                text:'Necesitas adquirir un bono para reservar.',
+                confirmButtonText: 'Entendido',
+                confirmButtonColor: '#d4af37'
+            });
+
+            // Optimistic UI update (opcional) o espera a respuesta
             const { error } = await client.rpc('reservar_con_bono', { 
                 p_clase_id: claseId, 
                 p_user_id: currentUser.id 
             });
 
             if (error) {
-                Swal.fire({ icon:'error', title:'Error', text: error.message });
+                Swal.fire({ icon:'error', title:'Error al reservar', text: error.message });
             } else {
-                Toast.fire({ icon: 'success', title: '¡Reserva confirmada!' });
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Reserva Confirmada!',
+                    text: 'Te esperamos en clase.',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    backdrop: `rgba(0,0,0,0.4)`
+                });
                 await checkProfile(); 
                 cargarHorarios();
             }
@@ -483,10 +675,11 @@
         async function cancelar(reservaId) {
             const res = await Swal.fire({
                 title: '¿Cancelar reserva?',
-                text: "Se te devolverá 1 bono automáticamente.",
-                icon: 'question',
+                text: "Se te devolverá el bono a tu cuenta.",
+                icon: 'warning',
+                iconColor: '#d4af37',
                 showCancelButton: true,
-                confirmButtonColor: '#d33',
+                confirmButtonColor: '#374151',
                 cancelButtonColor: '#9ca3af',
                 confirmButtonText: 'Sí, cancelar'
             });
@@ -495,14 +688,16 @@
                 const { error } = await client.rpc('cancelar_con_bono', { p_reserva_id: reservaId });
                 if (error) Swal.fire('Error', error.message, 'error');
                 else {
-                    Swal.fire({ icon: 'success', title: 'Cancelada', text:'Has recuperado 1 bono.', showConfirmButton: false, timer: 1500 });
+                    const Toast = Swal.mixin({toast: true, position: 'top-end', showConfirmButton: false, timer: 2000});
+                    Toast.fire({icon: 'info', title: 'Reserva cancelada. Bono devuelto.'});
                     await checkProfile();
                     cargarHorarios();
                 }
             }
         }
 
-        // --- 6. GESTIÓN ADMIN (PESTAÑAS & USUARIOS) ---
+
+        // --- 6. GESTIÓN ADMIN ---
         function switchTab(tabName) {
             const tHorarios = document.getElementById('tab-horarios');
             const tUsuarios = document.getElementById('tab-usuarios');
@@ -512,28 +707,28 @@
             if(tabName === 'horarios') {
                 vHorarios.classList.remove('hidden');
                 vUsuarios.classList.add('hidden');
-                tHorarios.classList.add('border-gold-500', 'text-white');
+                tHorarios.classList.add('border-gold-500', 'bg-gray-800');
                 tHorarios.classList.remove('border-transparent', 'text-gray-400');
                 tUsuarios.classList.add('border-transparent', 'text-gray-400');
-                tUsuarios.classList.remove('border-gold-500', 'text-white');
+                tUsuarios.classList.remove('border-gold-500', 'bg-gray-800');
             } else {
                 vHorarios.classList.add('hidden');
                 vUsuarios.classList.remove('hidden');
-                tUsuarios.classList.add('border-gold-500', 'text-white');
+                tUsuarios.classList.add('border-gold-500', 'bg-gray-800', 'text-white');
                 tUsuarios.classList.remove('border-transparent', 'text-gray-400');
                 tHorarios.classList.add('border-transparent', 'text-gray-400');
-                tHorarios.classList.remove('border-gold-500', 'text-white');
+                tHorarios.classList.remove('border-gold-500', 'bg-gray-800');
                 cargarUsuariosAdmin();
             }
         }
 
         async function cargarUsuariosAdmin() {
             const tbody = document.getElementById('users-table-body');
-            tbody.innerHTML = '<tr><td colspan="4" class="p-8 text-center text-gray-400 italic">Cargando base de datos...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="4" class="p-8 text-center text-gray-400 italic"><i class="ph-duotone ph-spinner animate-spin"></i> Cargando...</td></tr>';
 
             const { data: users, error } = await client.from('profiles').select('*').order('email');
             
-            if (error) return Swal.fire('Error', 'No se pudieron cargar usuarios. Revisa permisos RLS.', 'error');
+            if (error) return Swal.fire('Error Admin', 'Fallo al cargar usuarios.', 'error');
 
             allUsersCache = users; 
             renderUsersTable(users);
@@ -554,32 +749,36 @@
             users.forEach(u => {
                 const isAdminRow = u.rol === 'admin';
                 const row = document.createElement('tr');
-                row.className = 'hover:bg-gray-50 transition group';
+                row.className = 'hover:bg-gray-50 transition border-b border-gray-50 last:border-0';
                 
                 const roleBadge = isAdminRow 
-                    ? '<span class="bg-gray-900 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Admin</span>' 
-                    : '<span class="bg-gray-100 text-gray-500 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Cliente</span>';
+                    ? '<span class="bg-gray-900 text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-widest border border-gray-800">Admin</span>' 
+                    : '<span class="bg-gray-100 text-gray-400 text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-widest border border-gray-200">Cliente</span>';
 
                 row.innerHTML = `
-                    <td class="px-6 py-4 font-medium text-gray-700 flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full flex items-center justify-center ${isAdminRow ? 'bg-gold-100 text-gold-600' : 'bg-gray-100 text-gray-400'}">
-                            <i class="ph-fill ${isAdminRow ? 'ph-crown' : 'ph-user'}"></i>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${isAdminRow ? 'bg-gold-100 text-gold-700' : 'bg-gray-200 text-gray-500'}">
+                                ${u.email ? u.email.charAt(0).toUpperCase() : '?'}
+                            </div>
+                            <span class="font-medium text-gray-700 truncate max-w-[140px] sm:max-w-none">${u.email || 'Anon'}</span>
                         </div>
-                        <span class="truncate max-w-[150px] sm:max-w-none">${u.email || 'Sin email'}</span>
                     </td>
                     <td class="px-6 py-4 text-center">${roleBadge}</td>
                     <td class="px-6 py-4 text-center">
-                        <span class="font-serif font-bold text-xl ${u.bonos > 0 ? 'text-q19-700' : 'text-gray-300'}">${u.bonos || 0}</span>
+                        <span class="font-bold text-lg ${u.bonos > 0 ? 'text-q19-600' : 'text-gray-300'}">${u.bonos || 0}</span>
                     </td>
                     <td class="px-6 py-4 text-right">
-                        <div class="flex justify-end gap-2 opacity-100 sm:opacity-0 group-hover:opacity-100 transition">
-                            <button onclick="sumarBono('${u.id}', 1)" class="bg-white border border-gray-200 text-gray-600 hover:text-q19-600 hover:border-q19-300 px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-sm flex items-center gap-1">
-                                <i class="ph-bold ph-plus"></i>1
+                        <div class="flex justify-end items-center gap-2">
+                            <button onclick="sumarBono('${u.id}', -1)" class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-400 hover:text-red-500 hover:border-red-200 hover:bg-red-50 transition" title="Restar"><i class="ph-bold ph-minus"></i></button>
+                            
+                            <button onclick="sumarBono('${u.id}', 1)" class="px-3 h-8 flex items-center gap-1 rounded-lg bg-gray-900 text-white text-xs font-bold hover:bg-black transition shadow-sm">
+                                <i class="ph-bold ph-plus"></i> 1
                             </button>
-                            <button onclick="sumarBono('${u.id}', 5)" class="bg-gold-500 text-white hover:bg-gold-600 px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-sm flex items-center gap-1">
-                                <i class="ph-bold ph-ticket"></i> 5 Pack
+                            
+                            <button onclick="sumarBono('${u.id}', 5)" class="px-3 h-8 flex items-center gap-1 rounded-lg bg-gold-500 text-white text-xs font-bold hover:bg-gold-600 transition shadow-sm" title="Pack 5">
+                                <i class="ph-bold ph-ticket"></i> +5
                             </button>
-                            <button onclick="sumarBono('${u.id}', -1)" class="text-gray-300 hover:text-red-400 px-2 transition" title="Restar bono"><i class="ph-bold ph-minus"></i></button>
                         </div>
                     </td>
                 `;
@@ -594,6 +793,7 @@
         }
 
         async function sumarBono(userId, qty) {
+            // Optimistic update visual (opcional) pero seguro esperar server
             const { data } = await client.from('profiles').select('bonos').eq('id', userId).single();
             const nuevoSaldo = (data.bonos || 0) + qty;
             
@@ -601,49 +801,52 @@
             
             if(error) Swal.fire('Error', error.message, 'error');
             else {
-                const Toast = Swal.mixin({toast: true, position: 'top-end', showConfirmButton: false, timer: 1000});
+                const Toast = Swal.mixin({toast: true, position: 'bottom-end', showConfirmButton: false, timer: 1000});
                 Toast.fire({icon: 'success', title: 'Saldo actualizado'});
-                cargarUsuariosAdmin();
+                cargarUsuariosAdmin(); // Recargar tabla
             }
         }
 
-        // --- 7. GENERAR SEMANA (Admin - CORREGIDO) ---
+
+        // --- 7. UTILS ADMIN (GENERADOR) ---
         async function generarSemana() {
-            Swal.fire({ title: 'Generando...', didOpen: () => Swal.showLoading() });
+            Swal.fire({ title: 'Planificando...', didOpen: () => Swal.showLoading() });
             
             const hoy = new Date();
             const slots = [];
-            // Ajustar al lunes
+            // Ajustar al lunes de ESTA semana (o siguiente si es fin de semana)
             const diaSemana = hoy.getDay();
+            const diff = diaSemana === 0 ? -6 : 1 - diaSemana; 
             const lunes = new Date(hoy);
-            const diff = diaSemana === 0 ? -6 : 1 - diaSemana;
             lunes.setDate(hoy.getDate() + diff);
 
-            for(let i=0; i<5; i++) { // Lu-Vi
-               let d = new Date(lunes); d.setDate(lunes.getDate() + i);
-               
-               // Función helper para calcular fin (ej: 50 minutos de clase)
+            // Generar Lunes a Viernes
+            for(let i=0; i<5; i++) { 
+               let d = new Date(lunes); 
+               d.setDate(lunes.getDate() + i);
+
                const getEnd = (dateObj) => {
                    const fin = new Date(dateObj);
                    fin.setMinutes(fin.getMinutes() + 50); 
                    return fin.toISOString();
                };
 
-               // Mañana 1
+               // 09:30 - Pilates Reformer
                let m1 = new Date(d); m1.setHours(9,30,0,0);
                slots.push({nombre: 'Pilates Reformer', fecha_inicio: m1.toISOString(), fecha_fin: getEnd(m1), capacidad_max: 6});
                
-               // Mañana 2
+               // 11:00 - Vinyasa
                let m2 = new Date(d); m2.setHours(11,0,0,0);
-               slots.push({nombre: 'Yoga Vinyasa Suave', fecha_inicio: m2.toISOString(), fecha_fin: getEnd(m2), capacidad_max: 10});
+               slots.push({nombre: 'Vinyasa Flow', fecha_inicio: m2.toISOString(), fecha_fin: getEnd(m2), capacidad_max: 10});
 
-               // Tarde 1
+               // 18:00 - Pilates
                let t1 = new Date(d); t1.setHours(18,0,0,0);
                slots.push({nombre: 'Pilates Reformer', fecha_inicio: t1.toISOString(), fecha_fin: getEnd(t1), capacidad_max: 6});
                
-               // Tarde 2
+               // 19:30 - Hot Yoga (Alternancia ejemplo)
                let t2 = new Date(d); t2.setHours(19,30,0,0);
-               slots.push({nombre: 'Yoga Hatha Dinámico', fecha_inicio: t2.toISOString(), fecha_fin: getEnd(t2), capacidad_max: 12});
+               const claseTarde = (i % 2 === 0) ? 'Hot Yoga' : 'Hatha Yoga';
+               slots.push({nombre: claseTarde, fecha_inicio: t2.toISOString(), fecha_fin: getEnd(t2), capacidad_max: 12});
             }
             
             const { error } = await client.from('clases').insert(slots);
@@ -651,13 +854,21 @@
             
             if(error) Swal.fire('Error', error.message, 'error');
             else {
-                Swal.fire({ icon: 'success', title: '¡Semana generada!', showConfirmButton: false, timer: 1500 });
+                Swal.fire({ icon: 'success', title: '¡Semana creada!', showConfirmButton: false, timer: 1500 });
                 cargarHorarios();
             }
         }
         
         async function borrarClase(id) {
-            const res = await Swal.fire({ title: '¿Borrar clase?', text:'Se cancelarán las reservas.', icon:'warning', showCancelButton:true, confirmButtonColor:'#d33' });
+            const res = await Swal.fire({ 
+                title: '¿Eliminar clase?', 
+                text:'Esta acción no se puede deshacer.', 
+                icon:'warning', 
+                showCancelButton:true, 
+                confirmButtonColor:'#d33',
+                confirmButtonText: 'Sí, borrar'
+            });
+
             if(res.isConfirmed) {
                 await client.from('clases').delete().eq('id', id);
                 cargarHorarios();
@@ -666,9 +877,12 @@
 
         // --- 8. REALTIME ---
         client.channel('public:db').on('postgres_changes', {event: '*', schema: 'public'}, () => {
-            checkProfile(); // Escuchar cambios en bonos
-            cargarHorarios();
+            if(currentUser) {
+                checkProfile();
+                cargarHorarios();
+            }
         }).subscribe();
+
     </script>
 </body>
 </html>
