@@ -10,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="app.js" defer></script>
     
     <!-- Fuentes -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
@@ -31,7 +32,8 @@
                 }
             }
         }
-    }
+    };
+    ;
     </script>
     <style>
         body { 
@@ -890,7 +892,7 @@
             container.innerHTML = `
                 <div class="flex flex-col items-center justify-center py-20 gap-4 opacity-50">
                     <i class="ph-duotone ph-spinner animate-spin text-4xl text-q19-600"></i>
-                    <span class="text-xs uppercase tracking-widest font-bold text-gray-400">Cargando clases...</span>
+                    <span class="text-xs uppercase tracking-widest font-bold text-gray-500">Cargando clases...</span>
                 </div>`;
 
             const { data: clases } = await client.from('clases').select('*').order('fecha_inicio');
@@ -972,7 +974,7 @@
                 section.className = 'bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden';
                 
                 section.innerHTML = `
-                    <div class="bg-gradient-to-r from-gray-50 to-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <div class="bg-gradient-to-r from-gray-400 to-gray-200 px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                         <div class="flex items-baseline gap-2">
                             <span class="brand-font text-xl font-bold text-gray-800 capitalize">${diaNombre}</span>
                             <span class="text-xs font-semibold text-gold-600 bg-gold-50 px-2 py-0.5 rounded-md border border-gold-100">${diaNumero} ${mes}</span>
@@ -1194,7 +1196,7 @@
                 return;
             }
 
-            const { data: perfiles, error: errPerfiles } = await client.from('profiles').select('id, email');
+            const { data: perfiles, error: errPerfiles } = await client.from('profiles').select('id, nombre, apellidos, fecha_nacimiento, email');
             if (errPerfiles) {
                 console.error(errPerfiles);
                 cont.innerHTML = '';
@@ -1255,13 +1257,13 @@
                 card.className = 'bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden';
 
                 card.innerHTML = `
-                    <div class="bg-gradient-to-r from-gray-50 to-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <div class="bg-gradient-to-r from-gray-400 to-gray-200 px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                         <div class="flex items-baseline gap-2">
                             <span class="brand-font text-xl font-bold text-gray-800 capitalize">${diaNombre}</span>
                             <span class="text-xs font-semibold text-gold-600 bg-gold-50 px-2 py-0.5 rounded-md border border-gold-100">${diaNumero} ${mes}</span>
                         </div>
                     </div>
-                    <div class="divide-y divide-gray-50" id="asistencias-grid-${dateKey}"></div>
+                    <div class="divide-y divide-y-2 divide-gray-500" id="asistencias-grid-${dateKey}"></div>
                 `;
 
                 cont.appendChild(card);
@@ -1287,16 +1289,30 @@
                             </div>`;
                     } else {
                         alumnosHTML = `
-                            <ul class="mt-2 space-y-1 text-sm">
-                                ${listadoReservas.map(r => {
-                                    const perfil = perfilesMap[r.user_id];
-                                    const email = perfil ? perfil.email : 'Usuario sin email';
-                                    return `<li class="flex items-center gap-2">
-                                        <i class="ph-bold ph-user-circle text-gray-400"></i>
-                                        <span class="text-gray-700">${email}</span>
-                                    </li>`;
-                                }).join('')}
-                            </ul>`;
+    <ul class="mt-2 space-y-1 text-sm">
+        ${listadoReservas.map(r => {
+            const perfil = perfilesMap[r.user_id] || {};
+            const nombre = perfil.nombre || '';
+            const apellidos = perfil.apellidos || '';
+            const fechaNac = perfil.fecha_nacimiento 
+                ? new Date(perfil.fecha_nacimiento).toLocaleDateString('es-ES')
+                : '';
+            const email = perfil.email || 'Sin email';
+
+            const titulo = (nombre || apellidos) 
+                ? `${nombre} ${apellidos}`.trim()
+                : email;
+
+            return `
+                <li class="flex items-center gap-4 text-sm">
+                    <i class="ph-bold ph-user-circle text-gray-400"></i>
+                    <span class="text-gray-800 font-medium min-w-[140px]">${titulo}</span>
+                    ${fechaNac ? `<span class="text-gray-500 text-xs min-w-[110px]">F. nac.: ${fechaNac}</span>` : '<span class="text-gray-400 text-xs min-w-[110px]">F. nac.: —</span>'}
+                    <span class="text-gray-600 text-xs break-all">${email}</span>
+                </li>`;
+        }).join('')}
+    </ul>`;
+
                     }
 
                     fila.innerHTML = `
@@ -1561,14 +1577,14 @@
                     <div class="space-y-6">
                         ${Object.keys(porCategoria).map(categoria => `
                             <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                                <div class="bg-gradient-to-r from-gray-50 to-white px-6 py-4 border-b border-gray-100">
-                                    <h3 class="font-bold text-lg text-gray-800 flex items-center gap-2">
+                                <div class="bg-gradient-to-r from-black to-gray-500 px-6 py-4 border-b border-gray-100">
+                                    <h3 class="font-bold text-lg text-white flex items-center gap-2">
                                         <i class="ph-fill ph-folder text-q19-600"></i>
                                         ${categoria}
                                     </h3>
                                 </div>
                                 
-                                <div class="divide-y divide-gray-50">
+                                <div class="divide-y-2 divide-gray-500">
                                     ${porCategoria[categoria].map(config => renderConfigItem(config)).join('')}
                                 </div>
                             </div>
