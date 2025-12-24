@@ -257,19 +257,22 @@
             </div>
             
             <!-- BARRA ADMIN -->
-<div class="admin-only hidden w-full bg-gray-900 text-white text-xm font-medium shadow-inner">
-    <div class="max-w-7xl mx-auto flex">
-        <button onclick="switchTab('horarios')" id="tab-horarios" class="px-7 py-4 border-b-2 border-gold-500 bg-gray-800 flex items-center gap-2 transition hover:bg-gray-800">
-            <i class="ph-bold ph-calendar-check text-gold-400"></i> Gestión Reservas
-        </button>
-        <button onclick="switchTab('usuarios')" id="tab-usuarios" class="px-7 py-4 border-b-2 border-transparent text-gray-400 hover:text-white hover:bg-gray-800 transition flex items-center gap-2">
-            <i class="ph-bold ph-users-three"></i> Usuarios y Bonos
-        </button>
-        <button onclick="switchTab('configuracion')" id="tab-configuracion" class="px-7 py-4 border-b-2 border-transparent text-gray-400 hover:text-white hover:bg-gray-800 transition flex items-center gap-2">
-            <i class="ph-bold ph-gear"></i> Configuración
-        </button>
-    </div>
-</div>
+            <div class="admin-only hidden w-full bg-gray-900 text-white text-xm font-medium shadow-inner">
+                <div class="max-w-7xl mx-auto flex">
+                    <button onclick="switchTab('horarios')" id="tab-horarios" class="px-7 py-4 border-b-2 border-gold-500 bg-gray-800 flex items-center gap-2 transition hover:bg-gray-800">
+                        <i class="ph-bold ph-calendar-check text-gold-400"></i> Gestión Reservas
+                    </button>
+                    <button onclick="switchTab('asistencias')" id="tab-asistencias" class="px-7 py-4 border-b-2 border-transparent text-gray-400 hover:text-white hover:bg-gray-800 transition flex items-center gap-2">
+                        <i class="ph-bold ph-list-checks"></i> Alumnos por clase
+                    </button>
+                    <button onclick="switchTab('usuarios')" id="tab-usuarios" class="px-7 py-4 border-b-2 border-transparent text-gray-400 hover:text-white hover:bg-gray-800 transition flex items-center gap-2">
+                        <i class="ph-bold ph-users-three"></i> Usuarios y Bonos
+                    </button>
+                    <button onclick="switchTab('configuracion')" id="tab-configuracion" class="px-7 py-4 border-b-2 border-transparent text-gray-400 hover:text-white hover:bg-gray-800 transition flex items-center gap-2">
+                        <i class="ph-bold ph-gear"></i> Configuración
+                    </button>
+                </div>
+            </div>
 
         </header>
 
@@ -377,6 +380,24 @@
                 </div>
             </div>
 
+            <!-- VISTA ASISTENCIAS (Alumnos por clase) -->
+            <div id="view-asistencias" class="hidden fade-in">
+                <div class="flex flex-col md:flex-row justify-between items-start mb-8 gap-4">
+                    <div>
+                        <h2 class="text-3xl brand-font font-bold text-gray-900">Alumnos por clase</h2>
+                        <p class="text-gray-500 mt-1">Revisa qué alumnos están apuntados en cada sesión.</p>
+                    </div>
+                </div>
+
+                <div id="asistencias-container" class="space-y-6">
+                    <!-- JS rellena aquí las clases con sus alumnos -->
+                </div>
+
+                <div id="asistencias-empty" class="hidden bg-white rounded-2xl p-12 text-center border border-gray-100 mt-4">
+                    <i class="ph-duotone ph-users text-5xl text-gray-300 mb-4"></i>
+                    <p class="text-gray-500 font-medium">No hay clases registradas o reservas aún.</p>
+                </div>
+            </div>
 
             <!-- VISTA USUARIOS (Admin) -->
             <div id="view-usuarios" class="hidden fade-in">
@@ -412,38 +433,37 @@
             </div>
 
             <!-- VISTA CONFIGURACIÓN (Admin) -->
-<div id="view-configuracion" class="hidden fade-in">
-    <div class="flex flex-col md:flex-row justify-between items-start mb-8 gap-4">
-        <div>
-            <h2 class="text-3xl brand-font font-bold text-gray-900">Configuración del Sistema</h2>
-            <p class="text-gray-500 mt-1">Gestiona los parámetros de configuración de la aplicación.</p>
-        </div>
-        <button onclick="agregarConfiguracion()" class="flex items-center gap-2 bg-q19-700 text-white px-5 py-3 rounded-xl text-sm font-bold shadow-lg hover:shadow-xl hover:scale-105 transition">
-            <i class="ph-bold ph-plus-circle text-lg"></i> Nuevo Parámetro
-        </button>
-    </div>
+            <div id="view-configuracion" class="hidden fade-in">
+                <div class="flex flex-col md:flex-row justify-between items-start mb-8 gap-4">
+                    <div>
+                        <h2 class="text-3xl brand-font font-bold text-gray-900">Configuración del Sistema</h2>
+                        <p class="text-gray-500 mt-1">Gestiona los parámetros de configuración de la aplicación.</p>
+                    </div>
+                    <button onclick="agregarConfiguracion()" class="flex items-center gap-2 bg-q19-700 text-white px-5 py-3 rounded-xl text-sm font-bold shadow-lg hover:shadow-xl hover:scale-105 transition">
+                        <i class="ph-bold ph-plus-circle text-lg"></i> Nuevo Parámetro
+                    </button>
+                </div>
 
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-        <table class="w-full text-left border-collapse">
-            <thead class="bg-gray-50 border-b border-gray-100 text-[10px] uppercase text-gray-500 font-bold tracking-wider">
-                <tr>
-                    <th class="px-6 py-4">Clave</th>
-                    <th class="px-6 py-4">Valor</th>
-                    <th class="px-6 py-4">Descripción</th>
-                    <th class="px-6 py-4 text-center">Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="config-table-body" class="divide-y divide-gray-50 text-sm text-gray-600">
-                <!-- JS Rellena esto -->
-            </tbody>
-        </table>
-        <div id="no-config-found" class="hidden p-12 text-center text-gray-400 italic">No hay configuraciones disponibles.</div>
-    </div>
-</div>
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-50 border-b border-gray-100 text-[10px] uppercase text-gray-500 font-bold tracking-wider">
+                            <tr>
+                                <th class="px-6 py-4">Clave</th>
+                                <th class="px-6 py-4">Valor</th>
+                                <th class="px-6 py-4">Descripción</th>
+                                <th class="px-6 py-4 text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="config-table-body" class="divide-y divide-gray-50 text-sm text-gray-600">
+                            <!-- JS Rellena esto -->
+                        </tbody>
+                    </table>
+                    <div id="no-config-found" class="hidden p-12 text-center text-gray-400 italic">No hay configuraciones disponibles.</div>
+                </div>
+            </div>
 
 
         </main>
-
 
         <footer class="bg-white border-t border-gray-200 py-12 mt-auto">
             <div class="max-w-6xl mx-auto px-4 text-center">
@@ -546,6 +566,7 @@
     </div>
 
     <!-- JS LOGIC -->
+     
     <script>
         // --- 1. CONFIGURACIÓN ---
         const SUPA_URL = 'https://jkjifmrrlyncuwpjhxvk.supabase.co';
@@ -559,6 +580,7 @@
         let allClasesCache = [];
         let selectedDate = null;
         let currentCalendarMonth = new Date();
+        let allConfigCache = [];
 
         // --- 2. AUTHENTICATION ---
         function toggleAuth(view) {
@@ -635,20 +657,56 @@
             location.reload(); 
         }
 
+        // Mapeo de configuraciones con información amigable
+        const CONFIG_INFO = {
+            'horas_limite_cancelacion': {
+                nombre: 'Tiempo límite para cancelar',
+                descripcion: 'Horas mínimas de anticipación requeridas para cancelar una reserva',
+                icono: 'ph-clock-countdown',
+                tipo: 'numero',
+                unidad: 'horas',
+                categoria: 'Reservas'
+            },
+            'permitir_cancelacion_admin_siempre': {
+                nombre: 'Admins cancelan siempre',
+                descripcion: 'Permitir que administradores cancelen reservas sin límite de tiempo',
+                icono: 'ph-shield-check',
+                tipo: 'booleano',
+                categoria: 'Permisos'
+            },
+            'max_reservas_simultaneas': {
+                nombre: 'Reservas simultáneas por usuario',
+                descripcion: 'Número máximo de reservas activas que puede tener un usuario',
+                icono: 'ph-users',
+                tipo: 'numero',
+                unidad: 'reservas',
+                categoria: 'Límites'
+            },
+            'dias_anticipacion_max': {
+                nombre: 'Anticipación máxima',
+                descripcion: 'Cuántos días en el futuro se puede reservar',
+                icono: 'ph-calendar-plus',
+                tipo: 'numero',
+                unidad: 'días',
+                categoria: 'Reservas'
+            }
+        };
+
         // --- 3. APP INIT & PROFILE ---
 
         function formatDateLocal(date) {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-}
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
         async function initApp() {
             document.getElementById('auth-container').classList.add('hidden');
             document.getElementById('app-view').classList.remove('hidden');
             
             await checkProfile(); 
-            cargarHorarios();
+            await cargarHorarios();
             renderizarCalendario();
         }
 
@@ -808,7 +866,7 @@
             document.getElementById('empty-state').classList.add('hidden');
 
             const reservasMap = {};
-            reservas.forEach(r => {
+            (reservas || []).forEach(r => {
                 if(!reservasMap[r.clase_id]) reservasMap[r.clase_id] = [];
                 reservasMap[r.clase_id].push(r);
             });
@@ -816,7 +874,7 @@
             clases.forEach(c => {
                 const misRes = reservasMap[c.id] || [];
                 c.ocupadas = misRes.length;
-                c.miReserva = misRes.find(r => r.user_id === currentUser.id);
+                c.miReserva = misRes.find(r => r.user_id === (currentUser && currentUser.id));
             });
 
             allClasesCache = clases;
@@ -992,7 +1050,8 @@
                     backdrop: `rgba(0,0,0,0.4)`
                 });
                 await checkProfile(); 
-                cargarHorarios();
+                await cargarHorarios();
+                if (isAdmin) await cargarAsistenciasPorClase();
             }
         }
 
@@ -1015,49 +1074,217 @@
                     const Toast = Swal.mixin({toast: true, position: 'top-end', showConfirmButton: false, timer: 2000});
                     Toast.fire({icon: 'info', title: 'Reserva cancelada. Bono devuelto.'});
                     await checkProfile();
-                    cargarHorarios();
+                    await cargarHorarios();
+                    if (isAdmin) await cargarAsistenciasPorClase();
                 }
             }
         }
 
         // --- 7. GESTIÓN ADMIN ---
 
-        function switchTab(tabName) {
-    const tHorarios = document.getElementById('tab-horarios');
-    const tUsuarios = document.getElementById('tab-usuarios');
-    const tConfiguracion = document.getElementById('tab-configuracion');
-    const vHorarios = document.getElementById('view-horarios');
-    const vUsuarios = document.getElementById('view-usuarios');
-    const vConfiguracion = document.getElementById('view-configuracion');
+        async function switchTab(tabName) {
+            const tHorarios = document.getElementById('tab-horarios');
+            const tAsistencias = document.getElementById('tab-asistencias');
+            const tUsuarios = document.getElementById('tab-usuarios');
+            const tConfiguracion = document.getElementById('tab-configuracion');
+            const vHorarios = document.getElementById('view-horarios');
+            const vAsistencias = document.getElementById('view-asistencias');
+            const vUsuarios = document.getElementById('view-usuarios');
+            const vConfiguracion = document.getElementById('view-configuracion');
 
-    // Ocultar todas las vistas
-    vHorarios.classList.add('hidden');
-    vUsuarios.classList.add('hidden');
-    vConfiguracion.classList.add('hidden');
+            // Ocultar todas las vistas
+            vHorarios.classList.add('hidden');
+            vAsistencias.classList.add('hidden');
+            vUsuarios.classList.add('hidden');
+            vConfiguracion.classList.add('hidden');
 
-    // Reset todos los tabs
-    [tHorarios, tUsuarios, tConfiguracion].forEach(tab => {
-        tab.classList.add('border-transparent', 'text-gray-400');
-        tab.classList.remove('border-gold-500', 'bg-gray-800', 'text-white');
-    });
+            // Reset todos los tabs
+            [tHorarios, tAsistencias, tUsuarios, tConfiguracion].forEach(tab => {
+                tab.classList.add('border-transparent', 'text-gray-400');
+                tab.classList.remove('border-gold-500', 'bg-gray-800', 'text-white');
+            });
 
-    // Activar el tab seleccionado
-    if(tabName === 'horarios') {
-        vHorarios.classList.remove('hidden');
-        tHorarios.classList.add('border-gold-500', 'bg-gray-800');
-        tHorarios.classList.remove('border-transparent', 'text-gray-400');
-    } else if(tabName === 'usuarios') {
-        vUsuarios.classList.remove('hidden');
-        tUsuarios.classList.add('border-gold-500', 'bg-gray-800', 'text-white');
-        tUsuarios.classList.remove('border-transparent', 'text-gray-400');
-        cargarUsuariosAdmin();
-    } else if(tabName === 'configuracion') {
-        vConfiguracion.classList.remove('hidden');
-        tConfiguracion.classList.add('border-gold-500', 'bg-gray-800', 'text-white');
-        tConfiguracion.classList.remove('border-transparent', 'text-gray-400');
-        cargarConfiguracion();
-    }
-}
+            // Activar el tab seleccionado
+            if(tabName === 'horarios') {
+                vHorarios.classList.remove('hidden');
+                tHorarios.classList.add('border-gold-500', 'bg-gray-800', 'text-white');
+                tHorarios.classList.remove('border-transparent', 'text-gray-400');
+            } else if(tabName === 'asistencias') {
+                vAsistencias.classList.remove('hidden');
+                tAsistencias.classList.add('border-gold-500', 'bg-gray-800', 'text-white');
+                tAsistencias.classList.remove('border-transparent', 'text-gray-400');
+                await cargarAsistenciasPorClase();
+            } else if(tabName === 'usuarios') {
+                vUsuarios.classList.remove('hidden');
+                tUsuarios.classList.add('border-gold-500', 'bg-gray-800', 'text-white');
+                tUsuarios.classList.remove('border-transparent', 'text-gray-400');
+                await cargarUsuariosAdmin();
+            } else if(tabName === 'configuracion') {
+                vConfiguracion.classList.remove('hidden');
+                tConfiguracion.classList.add('border-gold-500', 'bg-gray-800', 'text-white');
+                tConfiguracion.classList.remove('border-transparent', 'text-gray-400');
+                await cargarConfiguracion();
+            }
+        }
+
+        // NUEVO: cargar alumnos por clase
+        async function cargarAsistenciasPorClase() {
+            const cont = document.getElementById('asistencias-container');
+            const empty = document.getElementById('asistencias-empty');
+
+            cont.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-20 gap-4 opacity-50">
+                    <i class="ph-duotone ph-spinner animate-spin text-4xl text-q19-600"></i>
+                    <span class="text-xs uppercase tracking-widest font-bold text-gray-400">Cargando asistencias...</span>
+                </div>`;
+
+            // Obtener clases + reservas + profiles
+            const { data: clases, error: errClases } = await client.from('clases').select('*').order('fecha_inicio');
+            if (errClases) {
+                console.error(errClases);
+                cont.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            const { data: reservas, error: errRes } = await client.from('reservas').select('*');
+            if (errRes) {
+                console.error(errRes);
+                cont.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            const { data: perfiles, error: errPerfiles } = await client.from('profiles').select('id, email');
+            if (errPerfiles) {
+                console.error(errPerfiles);
+                cont.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            if (!clases || clases.length === 0) {
+                cont.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            empty.classList.add('hidden');
+
+            const perfilesMap = {};
+            (perfiles || []).forEach(p => { perfilesMap[p.id] = p; });
+
+            // Mapear reservas por clase
+            const reservasPorClase = {};
+            (reservas || []).forEach(r => {
+                if (!reservasPorClase[r.clase_id]) reservasPorClase[r.clase_id] = [];
+                reservasPorClase[r.clase_id].push(r);
+            });
+
+            cont.innerHTML = '';
+
+            // Agrupar clases futuras por fecha para que quede más legible
+            const hoy = new Date();
+            hoy.setHours(0, 0, 0, 0);
+
+            const clasesFuturas = clases.filter(c => {
+                const d = new Date(c.fecha_inicio);
+                d.setHours(0,0,0,0);
+                return d >= hoy;
+            });
+
+            if (clasesFuturas.length === 0) {
+                cont.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            const grupos = {};
+            clasesFuturas.forEach(c => {
+                const dateKey = formatDateLocal(new Date(c.fecha_inicio));
+                if (!grupos[dateKey]) grupos[dateKey] = [];
+                grupos[dateKey].push(c);
+            });
+
+            Object.keys(grupos).sort().forEach(dateKey => {
+                const dateObj = new Date(dateKey);
+                const diaNombre = dateObj.toLocaleDateString('es-ES', { weekday: 'long' });
+                const diaNumero = dateObj.getDate();
+                const mes = dateObj.toLocaleDateString('es-ES', { month: 'long' });
+
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden';
+
+                card.innerHTML = `
+                    <div class="bg-gradient-to-r from-gray-50 to-white px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                        <div class="flex items-baseline gap-2">
+                            <span class="brand-font text-xl font-bold text-gray-800 capitalize">${diaNombre}</span>
+                            <span class="text-xs font-semibold text-gold-600 bg-gold-50 px-2 py-0.5 rounded-md border border-gold-100">${diaNumero} ${mes}</span>
+                        </div>
+                    </div>
+                    <div class="divide-y divide-gray-50" id="asistencias-grid-${dateKey}"></div>
+                `;
+
+                cont.appendChild(card);
+
+                const grid = card.querySelector(`#asistencias-grid-${dateKey}`);
+
+                grupos[dateKey].forEach(c => {
+                    const hora = new Date(c.fecha_inicio).toLocaleTimeString('es-ES', {hour:'2-digit', minute:'2-digit'});
+                    const listadoReservas = reservasPorClase[c.id] || [];
+                    const totalReservas = listadoReservas.length;
+
+                    const fila = document.createElement('div');
+                    fila.className = 'p-5 flex flex-col gap-4';
+
+                    // Cabecera clase + contador
+                    let alumnosHTML = '';
+
+                    if (totalReservas === 0) {
+                        alumnosHTML = `
+                            <div class="px-4 py-3 bg-gray-50 border border-dashed border-gray-200 rounded-xl text-sm text-gray-400 flex items-center gap-2">
+                                <i class="ph-duotone ph-user-circle text-xl"></i>
+                                <span>Sin alumnos apuntados todavía.</span>
+                            </div>`;
+                    } else {
+                        alumnosHTML = `
+                            <ul class="mt-2 space-y-1 text-sm">
+                                ${listadoReservas.map(r => {
+                                    const perfil = perfilesMap[r.user_id];
+                                    const email = perfil ? perfil.email : 'Usuario sin email';
+                                    return `<li class="flex items-center gap-2">
+                                        <i class="ph-bold ph-user-circle text-gray-400"></i>
+                                        <span class="text-gray-700">${email}</span>
+                                    </li>`;
+                                }).join('')}
+                            </ul>`;
+                    }
+
+                    fila.innerHTML = `
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md">${hora}</span>
+                                    <span class="brand-font font-semibold text-gray-900">${c.nombre}</span>
+                                </div>
+                                <div class="mt-1 flex items-center gap-2 text-xs text-gray-500">
+                                    <span class="flex items-center gap-1">
+                                        <i class="ph-bold ph-users text-gray-400"></i>
+                                        ${totalReservas} / ${c.capacidad_max}
+                                    </span>
+                                    ${totalReservas >= c.capacidad_max ? '<span class="text-[10px] font-bold text-red-600 bg-red-50 border border-red-100 px-2 py-0.5 rounded-md uppercase tracking-wide">Completa</span>' : ''}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            ${alumnosHTML}
+                        </div>
+                    `;
+
+                    grid.appendChild(fila);
+                });
+            });
+        }
 
         async function cargarUsuariosAdmin() {
             const tbody = document.getElementById('users-table-body');
@@ -1206,6 +1433,7 @@
                     timer: 2000
                 });
                 await cargarHorarios();
+                if (isAdmin) await cargarAsistenciasPorClase();
             }
         });
 
@@ -1227,213 +1455,310 @@
 
             if(res.isConfirmed) {
                 await client.from('clases').delete().eq('id', id);
-                cargarHorarios();
+                await cargarHorarios();
+                if (isAdmin) await cargarAsistenciasPorClase();
             }
         }
 
         // --- 9. REALTIME ---
-        client.channel('public:db').on('postgres_changes', {event: '*', schema: 'public'}, () => {
+        client.channel('public:db').on('postgres_changes', {event: '*', schema: 'public'}, async () => {
             if(currentUser) {
-                checkProfile();
-                cargarHorarios();
+                await checkProfile();
+                await cargarHorarios();
+                if (isAdmin) await cargarAsistenciasPorClase();
             }
         }).subscribe();
 
-        // --- 8. GESTIÓN DE CONFIGURACIÓN ---
-let allConfigCache = [];
-
-async function cargarConfiguracion() {
-    const tbody = document.getElementById('config-table-body');
-    const noRes = document.getElementById('no-config-found');
-    
-    tbody.innerHTML = '<tr><td colspan="4" class="p-8 text-center text-gray-400 italic"><i class="ph-duotone ph-spinner animate-spin"></i> Cargando...</td></tr>';
-
-    const { data: configs, error } = await client.from('configuracion').select('*').order('clave');
-    
-    if (error) {
-        console.error('Error al cargar configuración:', error);
-        return Swal.fire('Error', 'No se pudo cargar la configuración.', 'error');
-    }
-
-    allConfigCache = configs || [];
-    
-    tbody.innerHTML = '';
-    
-    if(!configs || configs.length === 0) {
-        noRes.classList.remove('hidden');
-        return;
-    }
-    noRes.classList.add('hidden');
-
-    configs.forEach(config => {
-        const row = document.createElement('tr');
-        row.className = 'hover:bg-gray-50 transition border-b border-gray-50 last:border-0';
-        
-        row.innerHTML = `
-            <td class="px-6 py-4">
-                <span class="font-mono text-xs font-bold text-q19-700 bg-q19-50 px-2 py-1 rounded">${config.clave}</span>
-            </td>
-            <td class="px-6 py-4">
-                <span class="font-medium text-gray-700">${config.valor || '-'}</span>
-            </td>
-            <td class="px-6 py-4">
-                <span class="text-gray-500 text-sm">${config.descripcion || '-'}</span>
-            </td>
-            <td class="px-6 py-4 text-center">
-                <div class="flex justify-center items-center gap-2">
-                    <button onclick="editarConfiguracion('${config.id}')" class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-600 hover:text-q19-600 hover:border-q19-300 hover:bg-q19-50 transition" title="Editar">
-                        <i class="ph-bold ph-pencil"></i>
-                    </button>
-                    <button onclick="eliminarConfiguracion('${config.id}', '${config.clave}')" class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-400 hover:text-red-500 hover:border-red-200 hover:bg-red-50 transition" title="Eliminar">
-                        <i class="ph-bold ph-trash"></i>
-                    </button>
-                </div>
-            </td>
-        `;
-        tbody.appendChild(row);
-    });
-}
-
-async function agregarConfiguracion() {
-    const { value: formValues } = await Swal.fire({
-        title: 'Nuevo Parámetro',
-        html: `
-            <div class="space-y-4 text-left">
-                <div>
-                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">Clave</label>
-                    <input id="config-clave" class="swal2-input w-full" placeholder="ej: max_reservas_dia">
-                </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">Valor</label>
-                    <input id="config-valor" class="swal2-input w-full" placeholder="ej: 3">
-                </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">Descripción</label>
-                    <textarea id="config-descripcion" class="swal2-textarea w-full" placeholder="Máximo de reservas por día para cada usuario"></textarea>
-                </div>
-            </div>
-        `,
-        focusConfirm: false,
-        showCancelButton: true,
-        confirmButtonText: 'Guardar',
-        cancelButtonText: 'Cancelar',
-        confirmButtonColor: '#236c6f',
-        preConfirm: () => {
-            const clave = document.getElementById('config-clave').value;
-            const valor = document.getElementById('config-valor').value;
-            const descripcion = document.getElementById('config-descripcion').value;
+        // --- 10. GESTIÓN DE CONFIGURACIÓN ---
+        async function cargarConfiguracion() {
+            const container = document.getElementById('view-configuracion');
             
-            if (!clave) {
-                Swal.showValidationMessage('La clave es obligatoria');
-                return false;
+            // Mostrar loading
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-20">
+                    <i class="ph-duotone ph-spinner animate-spin text-4xl text-q19-600 mb-4"></i>
+                    <p class="text-gray-400 text-sm">Cargando configuración...</p>
+                </div>
+            `;
+
+            const { data: configs, error } = await client.from('configuracion').select('*').order('clave');
+            
+            if (error) {
+                console.error('Error:', error);
+                return Swal.fire('Error', 'No se pudo cargar la configuración.', 'error');
             }
+
+            allConfigCache = configs || [];
             
-            return { clave, valor, descripcion };
-        }
-    });
-
-    if (formValues) {
-        const { error } = await client.from('configuracion').insert([formValues]);
-        
-        if (error) {
-            Swal.fire('Error', error.message, 'error');
-        } else {
-            Swal.fire({
-                icon: 'success',
-                title: 'Parámetro creado',
-                showConfirmButton: false,
-                timer: 1500
+            // Agrupar por categoría
+            const porCategoria = {};
+            configs.forEach(config => {
+                const info = CONFIG_INFO[config.clave] || {
+                    nombre: config.clave,
+                    descripcion: config.descripcion || 'Sin descripción',
+                    icono: 'ph-gear',
+                    categoria: 'Otros'
+                };
+                
+                if (!porCategoria[info.categoria]) {
+                    porCategoria[info.categoria] = [];
+                }
+                
+                porCategoria[info.categoria].push({...config, info});
             });
-            cargarConfiguracion();
+
+            // Renderizar vista mejorada
+            container.innerHTML = `
+                <div class="fade-in">
+                    <div class="flex flex-col md:flex-row justify-between items-start mb-8 gap-4">
+                        <div>
+                            <h2 class="text-3xl brand-font font-bold text-gray-900">Configuración del Sistema</h2>
+                            <p class="text-gray-500 mt-1">Ajusta los parámetros de funcionamiento de la aplicación</p>
+                        </div>
+                        <button onclick="agregarConfiguracion()" class="flex items-center gap-2 bg-q19-700 text-white px-5 py-3 rounded-xl text-sm font-bold shadow-lg hover:shadow-xl hover:scale-105 transition">
+                            <i class="ph-bold ph-plus-circle text-lg"></i> Nuevo Parámetro
+                        </button>
+                    </div>
+                    <div class="space-y-6">
+                        ${Object.keys(porCategoria).map(categoria => `
+                            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                                <div class="bg-gradient-to-r from-gray-50 to-white px-6 py-4 border-b border-gray-100">
+                                    <h3 class="font-bold text-lg text-gray-800 flex items-center gap-2">
+                                        <i class="ph-fill ph-folder text-q19-600"></i>
+                                        ${categoria}
+                                    </h3>
+                                </div>
+                                
+                                <div class="divide-y divide-gray-50">
+                                    ${porCategoria[categoria].map(config => renderConfigItem(config)).join('')}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
         }
-    }
-}
 
-async function editarConfiguracion(id) {
-    const config = allConfigCache.find(c => c.id === id);
-    if (!config) return;
+        function renderConfigItem(config) {
+            const valor = config.valor;
+            const info = config.info;
+            
+            // Renderizar según tipo
+            let valorDisplay = '';
+            if (info.tipo === 'booleano') {
+                const isTrue = valor === 'true' || valor === true;
+                valorDisplay = `
+                    <div class="flex items-center gap-2">
+                        <div class="relative inline-block w-12 h-6">
+                            <input type="checkbox" ${isTrue ? 'checked' : ''} 
+                                   onchange="actualizarConfigRapido('${config.id}', this.checked ? 'true' : 'false')"
+                                   class="sr-only peer">
+                            <div class="w-12 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-6 peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 cursor-pointer"></div>
+                        </div>
+                        <span class="text-sm font-bold ${isTrue ? 'text-emerald-600' : 'text-gray-400'}">
+                            ${isTrue ? 'Activado' : 'Desactivado'}
+                        </span>
+                    </div>
+                `;
+            } else if (info.tipo === 'numero') {
+                valorDisplay = `
+                    <div class="flex items-center gap-3">
+                        <input type="number" value="${valor}" 
+                               onchange="actualizarConfigRapido('${config.id}', this.value)"
+                               class="w-20 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-q19-500 outline-none text-center font-bold">
+                        <span class="text-sm text-gray-500">${info.unidad || ''}</span>
+                    </div>
+                `;
+            } else {
+                valorDisplay = `
+                    <input type="text" value="${valor || ''}" 
+                           onchange="actualizarConfigRapido('${config.id}', this.value)"
+                           class="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-q19-500 outline-none">
+                `;
+            }
 
-    const { value: formValues } = await Swal.fire({
-        title: 'Editar Parámetro',
-        html: `
-            <div class="space-y-4 text-left">
-                <div>
-                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">Clave</label>
-                    <input id="config-clave" class="swal2-input w-full" value="${config.clave}">
+            return `
+                <div class="p-6 hover:bg-gray-50/50 transition flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div class="flex items-start gap-4 flex-1">
+                        <div class="w-10 h-10 rounded-lg bg-q19-50 text-q19-600 flex items-center justify-center flex-shrink-0">
+                            <i class="${info.icono} text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-gray-800 mb-1">${info.nombre}</h4>
+                            <p class="text-sm text-gray-500 leading-relaxed">${info.descripcion}</p>
+                            <code class="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded mt-2 inline-block">${config.clave}</code>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-3">
+                        ${valorDisplay}
+                        <button onclick="eliminarConfiguracion('${config.id}', '${config.clave}')" 
+                                class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-400 hover:text-red-500 hover:border-red-200 hover:bg-red-50 transition" 
+                                title="Eliminar">
+                            <i class="ph-bold ph-trash"></i>
+                        </button>
+                    </div>
                 </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">Valor</label>
-                    <input id="config-valor" class="swal2-input w-full" value="${config.valor || ''}">
-                </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">Descripción</label>
-                    <textarea id="config-descripcion" class="swal2-textarea w-full">${config.descripcion || ''}</textarea>
-                </div>
-            </div>
-        `,
-        focusConfirm: false,
-        showCancelButton: true,
-        confirmButtonText: 'Actualizar',
-        cancelButtonText: 'Cancelar',
-        confirmButtonColor: '#236c6f',
-        preConfirm: () => {
-            return {
-                clave: document.getElementById('config-clave').value,
-                valor: document.getElementById('config-valor').value,
-                descripcion: document.getElementById('config-descripcion').value
-            };
+            `;
         }
-    });
 
-    if (formValues) {
-        const { error } = await client.from('configuracion')
-            .update(formValues)
-            .eq('id', id);
-        
-        if (error) {
-            Swal.fire('Error', error.message, 'error');
-        } else {
-            Swal.fire({
-                icon: 'success',
-                title: 'Actualizado',
-                showConfirmButton: false,
-                timer: 1500
+        async function actualizarConfigRapido(id, nuevoValor) {
+            const { error } = await client.from('configuracion')
+                .update({ valor: nuevoValor })
+                .eq('id', id);
+            
+            if (error) {
+                Swal.fire('Error', error.message, 'error');
+                cargarConfiguracion(); // Recargar para revertir
+            } else {
+                const Toast = Swal.mixin({
+                    toast: true, 
+                    position: 'bottom-end', 
+                    showConfirmButton: false, 
+                    timer: 1500
+                });
+                Toast.fire({icon: 'success', title: 'Configuración actualizada'});
+            }
+        }
+
+        async function agregarConfiguracion() {
+            const { value: formValues } = await Swal.fire({
+                title: 'Nuevo Parámetro',
+                html: `
+                    <div class="space-y-4 text-left">
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">Clave</label>
+                            <input id="config-clave" class="swal2-input w-full" placeholder="ej: max_reservas_dia">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">Valor</label>
+                            <input id="config-valor" class="swal2-input w-full" placeholder="ej: 3">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">Descripción</label>
+                            <textarea id="config-descripcion" class="swal2-textarea w-full" placeholder="Máximo de reservas por día para cada usuario"></textarea>
+                        </div>
+                    </div>
+                `,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: 'Guardar',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#236c6f',
+                preConfirm: () => {
+                    const clave = document.getElementById('config-clave').value;
+                    const valor = document.getElementById('config-valor').value;
+                    const descripcion = document.getElementById('config-descripcion').value;
+                    
+                    if (!clave) {
+                        Swal.showValidationMessage('La clave es obligatoria');
+                        return false;
+                    }
+                    
+                    return { clave, valor, descripcion };
+                }
             });
-            cargarConfiguracion();
+
+            if (formValues) {
+                const { error } = await client.from('configuracion').insert([formValues]);
+                
+                if (error) {
+                    Swal.fire('Error', error.message, 'error');
+                } else {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Parámetro creado',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    cargarConfiguracion();
+                }
+            }
         }
-    }
-}
 
-async function eliminarConfiguracion(id, clave) {
-    const res = await Swal.fire({
-        title: '¿Eliminar parámetro?',
-        text: `Se eliminará la configuración: ${clave}`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#dc2626',
-        cancelButtonColor: '#9ca3af',
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar'
-    });
+        async function editarConfiguracion(id) {
+            const config = allConfigCache.find(c => c.id === id);
+            if (!config) return;
 
-    if (res.isConfirmed) {
-        const { error } = await client.from('configuracion').delete().eq('id', id);
-        
-        if (error) {
-            Swal.fire('Error', error.message, 'error');
-        } else {
-            Swal.fire({
-                icon: 'success',
-                title: 'Eliminado',
-                showConfirmButton: false,
-                timer: 1500
+            const { value: formValues } = await Swal.fire({
+                title: 'Editar Parámetro',
+                html: `
+                    <div class="space-y-4 text-left">
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">Clave</label>
+                            <input id="config-clave" class="swal2-input w-full" value="${config.clave}">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">Valor</label>
+                            <input id="config-valor" class="swal2-input w-full" value="${config.valor || ''}">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">Descripción</label>
+                            <textarea id="config-descripcion" class="swal2-textarea w-full">${config.descripcion || ''}</textarea>
+                        </div>
+                    </div>
+                `,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: 'Actualizar',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#236c6f',
+                preConfirm: () => {
+                    return {
+                        clave: document.getElementById('config-clave').value,
+                        valor: document.getElementById('config-valor').value,
+                        descripcion: document.getElementById('config-descripcion').value
+                    };
+                }
             });
-            cargarConfiguracion();
+
+            if (formValues) {
+                const { error } = await client.from('configuracion')
+                    .update(formValues)
+                    .eq('id', id);
+                
+                if (error) {
+                    Swal.fire('Error', error.message, 'error');
+                } else {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Actualizado',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    cargarConfiguracion();
+                }
+            }
         }
-    }
-}
 
+        async function eliminarConfiguracion(id, clave) {
+            const res = await Swal.fire({
+                title: '¿Eliminar parámetro?',
+                text: `Se eliminará la configuración: ${clave}`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc2626',
+                cancelButtonColor: '#9ca3af',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            });
 
+            if (res.isConfirmed) {
+                const { error } = await client.from('configuracion').delete().eq('id', id);
+                
+                if (error) {
+                    Swal.fire('Error', error.message, 'error');
+                } else {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Eliminado',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    cargarConfiguracion();
+                }
+            }
+        }
     </script>
 </body>
 </html>
