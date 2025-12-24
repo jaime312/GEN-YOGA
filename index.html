@@ -257,16 +257,20 @@
             </div>
             
             <!-- BARRA ADMIN -->
-            <div class="admin-only hidden w-full bg-gray-900 text-white text-xm font-medium shadow-inner">
-                <div class="max-w-7xl mx-auto flex">
-                    <button onclick="switchTab('horarios')" id="tab-horarios" class="px-7 py-4 border-b-2 border-gold-500 bg-gray-800 flex items-center gap-2 transition hover:bg-gray-800">
-                        <i class="ph-bold ph-calendar-check text-gold-400"></i> Gestión Reservas
-                    </button>
-                    <button onclick="switchTab('usuarios')" id="tab-usuarios" class="px-7 py-4 border-b-2 border-transparent text-gray-400 hover:text-white hover:bg-gray-800 transition flex items-center gap-2">
-                        <i class="ph-bold ph-users-three"></i> Usuarios y Bonos
-                    </button>
-                </div>
-            </div>
+<div class="admin-only hidden w-full bg-gray-900 text-white text-xm font-medium shadow-inner">
+    <div class="max-w-7xl mx-auto flex">
+        <button onclick="switchTab('horarios')" id="tab-horarios" class="px-7 py-4 border-b-2 border-gold-500 bg-gray-800 flex items-center gap-2 transition hover:bg-gray-800">
+            <i class="ph-bold ph-calendar-check text-gold-400"></i> Gestión Reservas
+        </button>
+        <button onclick="switchTab('usuarios')" id="tab-usuarios" class="px-7 py-4 border-b-2 border-transparent text-gray-400 hover:text-white hover:bg-gray-800 transition flex items-center gap-2">
+            <i class="ph-bold ph-users-three"></i> Usuarios y Bonos
+        </button>
+        <button onclick="switchTab('configuracion')" id="tab-configuracion" class="px-7 py-4 border-b-2 border-transparent text-gray-400 hover:text-white hover:bg-gray-800 transition flex items-center gap-2">
+            <i class="ph-bold ph-gear"></i> Configuración
+        </button>
+    </div>
+</div>
+
         </header>
 
         <main class="flex-grow max-w-7xl mx-auto px-4 py-8 md:py-12 w-full">
@@ -406,6 +410,37 @@
                     <div id="no-users-found" class="hidden p-12 text-center text-gray-400 italic">No se han encontrado resultados.</div>
                 </div>
             </div>
+
+            <!-- VISTA CONFIGURACIÓN (Admin) -->
+<div id="view-configuracion" class="hidden fade-in">
+    <div class="flex flex-col md:flex-row justify-between items-start mb-8 gap-4">
+        <div>
+            <h2 class="text-3xl brand-font font-bold text-gray-900">Configuración del Sistema</h2>
+            <p class="text-gray-500 mt-1">Gestiona los parámetros de configuración de la aplicación.</p>
+        </div>
+        <button onclick="agregarConfiguracion()" class="flex items-center gap-2 bg-q19-700 text-white px-5 py-3 rounded-xl text-sm font-bold shadow-lg hover:shadow-xl hover:scale-105 transition">
+            <i class="ph-bold ph-plus-circle text-lg"></i> Nuevo Parámetro
+        </button>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+        <table class="w-full text-left border-collapse">
+            <thead class="bg-gray-50 border-b border-gray-100 text-[10px] uppercase text-gray-500 font-bold tracking-wider">
+                <tr>
+                    <th class="px-6 py-4">Clave</th>
+                    <th class="px-6 py-4">Valor</th>
+                    <th class="px-6 py-4">Descripción</th>
+                    <th class="px-6 py-4 text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="config-table-body" class="divide-y divide-gray-50 text-sm text-gray-600">
+                <!-- JS Rellena esto -->
+            </tbody>
+        </table>
+        <div id="no-config-found" class="hidden p-12 text-center text-gray-400 italic">No hay configuraciones disponibles.</div>
+    </div>
+</div>
+
 
         </main>
 
@@ -986,29 +1021,43 @@
         }
 
         // --- 7. GESTIÓN ADMIN ---
-        function switchTab(tabName) {
-            const tHorarios = document.getElementById('tab-horarios');
-            const tUsuarios = document.getElementById('tab-usuarios');
-            const vHorarios = document.getElementById('view-horarios');
-            const vUsuarios = document.getElementById('view-usuarios');
 
-            if(tabName === 'horarios') {
-                vHorarios.classList.remove('hidden');
-                vUsuarios.classList.add('hidden');
-                tHorarios.classList.add('border-gold-500', 'bg-gray-800');
-                tHorarios.classList.remove('border-transparent', 'text-gray-400');
-                tUsuarios.classList.add('border-transparent', 'text-gray-400');
-                tUsuarios.classList.remove('border-gold-500', 'bg-gray-800');
-            } else {
-                vHorarios.classList.add('hidden');
-                vUsuarios.classList.remove('hidden');
-                tUsuarios.classList.add('border-gold-500', 'bg-gray-800', 'text-white');
-                tUsuarios.classList.remove('border-transparent', 'text-gray-400');
-                tHorarios.classList.add('border-transparent', 'text-gray-400');
-                tHorarios.classList.remove('border-gold-500', 'bg-gray-800');
-                cargarUsuariosAdmin();
-            }
-        }
+        function switchTab(tabName) {
+    const tHorarios = document.getElementById('tab-horarios');
+    const tUsuarios = document.getElementById('tab-usuarios');
+    const tConfiguracion = document.getElementById('tab-configuracion');
+    const vHorarios = document.getElementById('view-horarios');
+    const vUsuarios = document.getElementById('view-usuarios');
+    const vConfiguracion = document.getElementById('view-configuracion');
+
+    // Ocultar todas las vistas
+    vHorarios.classList.add('hidden');
+    vUsuarios.classList.add('hidden');
+    vConfiguracion.classList.add('hidden');
+
+    // Reset todos los tabs
+    [tHorarios, tUsuarios, tConfiguracion].forEach(tab => {
+        tab.classList.add('border-transparent', 'text-gray-400');
+        tab.classList.remove('border-gold-500', 'bg-gray-800', 'text-white');
+    });
+
+    // Activar el tab seleccionado
+    if(tabName === 'horarios') {
+        vHorarios.classList.remove('hidden');
+        tHorarios.classList.add('border-gold-500', 'bg-gray-800');
+        tHorarios.classList.remove('border-transparent', 'text-gray-400');
+    } else if(tabName === 'usuarios') {
+        vUsuarios.classList.remove('hidden');
+        tUsuarios.classList.add('border-gold-500', 'bg-gray-800', 'text-white');
+        tUsuarios.classList.remove('border-transparent', 'text-gray-400');
+        cargarUsuariosAdmin();
+    } else if(tabName === 'configuracion') {
+        vConfiguracion.classList.remove('hidden');
+        tConfiguracion.classList.add('border-gold-500', 'bg-gray-800', 'text-white');
+        tConfiguracion.classList.remove('border-transparent', 'text-gray-400');
+        cargarConfiguracion();
+    }
+}
 
         async function cargarUsuariosAdmin() {
             const tbody = document.getElementById('users-table-body');
@@ -1189,6 +1238,201 @@
                 cargarHorarios();
             }
         }).subscribe();
+
+        // --- 8. GESTIÓN DE CONFIGURACIÓN ---
+let allConfigCache = [];
+
+async function cargarConfiguracion() {
+    const tbody = document.getElementById('config-table-body');
+    const noRes = document.getElementById('no-config-found');
+    
+    tbody.innerHTML = '<tr><td colspan="4" class="p-8 text-center text-gray-400 italic"><i class="ph-duotone ph-spinner animate-spin"></i> Cargando...</td></tr>';
+
+    const { data: configs, error } = await client.from('configuracion').select('*').order('clave');
+    
+    if (error) {
+        console.error('Error al cargar configuración:', error);
+        return Swal.fire('Error', 'No se pudo cargar la configuración.', 'error');
+    }
+
+    allConfigCache = configs || [];
+    
+    tbody.innerHTML = '';
+    
+    if(!configs || configs.length === 0) {
+        noRes.classList.remove('hidden');
+        return;
+    }
+    noRes.classList.add('hidden');
+
+    configs.forEach(config => {
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-gray-50 transition border-b border-gray-50 last:border-0';
+        
+        row.innerHTML = `
+            <td class="px-6 py-4">
+                <span class="font-mono text-xs font-bold text-q19-700 bg-q19-50 px-2 py-1 rounded">${config.clave}</span>
+            </td>
+            <td class="px-6 py-4">
+                <span class="font-medium text-gray-700">${config.valor || '-'}</span>
+            </td>
+            <td class="px-6 py-4">
+                <span class="text-gray-500 text-sm">${config.descripcion || '-'}</span>
+            </td>
+            <td class="px-6 py-4 text-center">
+                <div class="flex justify-center items-center gap-2">
+                    <button onclick="editarConfiguracion('${config.id}')" class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-600 hover:text-q19-600 hover:border-q19-300 hover:bg-q19-50 transition" title="Editar">
+                        <i class="ph-bold ph-pencil"></i>
+                    </button>
+                    <button onclick="eliminarConfiguracion('${config.id}', '${config.clave}')" class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 text-gray-400 hover:text-red-500 hover:border-red-200 hover:bg-red-50 transition" title="Eliminar">
+                        <i class="ph-bold ph-trash"></i>
+                    </button>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+async function agregarConfiguracion() {
+    const { value: formValues } = await Swal.fire({
+        title: 'Nuevo Parámetro',
+        html: `
+            <div class="space-y-4 text-left">
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">Clave</label>
+                    <input id="config-clave" class="swal2-input w-full" placeholder="ej: max_reservas_dia">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">Valor</label>
+                    <input id="config-valor" class="swal2-input w-full" placeholder="ej: 3">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">Descripción</label>
+                    <textarea id="config-descripcion" class="swal2-textarea w-full" placeholder="Máximo de reservas por día para cada usuario"></textarea>
+                </div>
+            </div>
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Guardar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#236c6f',
+        preConfirm: () => {
+            const clave = document.getElementById('config-clave').value;
+            const valor = document.getElementById('config-valor').value;
+            const descripcion = document.getElementById('config-descripcion').value;
+            
+            if (!clave) {
+                Swal.showValidationMessage('La clave es obligatoria');
+                return false;
+            }
+            
+            return { clave, valor, descripcion };
+        }
+    });
+
+    if (formValues) {
+        const { error } = await client.from('configuracion').insert([formValues]);
+        
+        if (error) {
+            Swal.fire('Error', error.message, 'error');
+        } else {
+            Swal.fire({
+                icon: 'success',
+                title: 'Parámetro creado',
+                showConfirmButton: false,
+                timer: 1500
+            });
+            cargarConfiguracion();
+        }
+    }
+}
+
+async function editarConfiguracion(id) {
+    const config = allConfigCache.find(c => c.id === id);
+    if (!config) return;
+
+    const { value: formValues } = await Swal.fire({
+        title: 'Editar Parámetro',
+        html: `
+            <div class="space-y-4 text-left">
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">Clave</label>
+                    <input id="config-clave" class="swal2-input w-full" value="${config.clave}">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">Valor</label>
+                    <input id="config-valor" class="swal2-input w-full" value="${config.valor || ''}">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 block">Descripción</label>
+                    <textarea id="config-descripcion" class="swal2-textarea w-full">${config.descripcion || ''}</textarea>
+                </div>
+            </div>
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Actualizar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#236c6f',
+        preConfirm: () => {
+            return {
+                clave: document.getElementById('config-clave').value,
+                valor: document.getElementById('config-valor').value,
+                descripcion: document.getElementById('config-descripcion').value
+            };
+        }
+    });
+
+    if (formValues) {
+        const { error } = await client.from('configuracion')
+            .update(formValues)
+            .eq('id', id);
+        
+        if (error) {
+            Swal.fire('Error', error.message, 'error');
+        } else {
+            Swal.fire({
+                icon: 'success',
+                title: 'Actualizado',
+                showConfirmButton: false,
+                timer: 1500
+            });
+            cargarConfiguracion();
+        }
+    }
+}
+
+async function eliminarConfiguracion(id, clave) {
+    const res = await Swal.fire({
+        title: '¿Eliminar parámetro?',
+        text: `Se eliminará la configuración: ${clave}`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#9ca3af',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    });
+
+    if (res.isConfirmed) {
+        const { error } = await client.from('configuracion').delete().eq('id', id);
+        
+        if (error) {
+            Swal.fire('Error', error.message, 'error');
+        } else {
+            Swal.fire({
+                icon: 'success',
+                title: 'Eliminado',
+                showConfirmButton: false,
+                timer: 1500
+            });
+            cargarConfiguracion();
+        }
+    }
+}
+
 
     </script>
 </body>
