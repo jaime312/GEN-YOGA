@@ -45,7 +45,7 @@
         
         /* Control de Visibilidad Admin */
         .admin-only { display: none !important; }
-        .is-admin .admin-only { display: inline-block !important; }
+        .is-admin .admin-only { display: block !important; }
         .is-admin .admin-flex { display: flex !important; }
         
         .fade-in { animation: fadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
@@ -166,7 +166,6 @@
                         <h2 class="text-3xl font-bold text-gray-900 brand-font">Bienvenido</h2>
                         <p class="text-gray-500 mt-2 text-xs font-bold uppercase tracking-[0.2em]">Accede a tu cuenta</p>
                     </div>
-
                     <form id="form-login" class="space-y-5 relative z-10">
                         <div class="group">
                             <label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1 mb-1.5 block">Email</label>
@@ -220,7 +219,6 @@
             </div>
         </div>
     </div>
-
 
     <!-- ================= APP PRINCIPAL ================= -->
     <div id="app-view" class="hidden min-h-screen flex flex-col bg-[#fafaf9]">
@@ -276,7 +274,7 @@
             <!-- VISTA HORARIOS -->
             <div id="view-horarios" class="fade-in">
                 <!-- Banner Bienvenida / Header Sección -->
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-6 pb-6 border-b border-gray-200/60">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-6 pb-6 border-b border-gray-200">
                     <div>
                         <span class="inline-block py-1 px-3 rounded-full bg-gold-50 text-gold-700 font-bold tracking-widest text-[10px] uppercase mb-3 border border-gold-100">
                             Calendario Semanal
@@ -286,10 +284,12 @@
                             Encuentra el equilibrio perfecto entre cuerpo y mente. Selecciona tu clase y prepárate para desconectar.
                         </p>
                     </div>
-                    <!-- Botón Admin (Generar) -->
-                    <button onclick="generarSemana()" class="admin-only hidden bg-white border border-gray-200 text-indigo-600 px-5 py-3 rounded-xl text-sm font-bold shadow-sm hover:shadow-md hover:border-indigo-200 transition flex items-center gap-2">
-                        <i class="ph-bold ph-magic-wand text-lg"></i> Generar Semana
-                    </button>
+                    <!-- Botón Admin (Crear Clase) -->
+                    <div class="admin-only">
+                        <button onclick="abrirModalCrearClase()" class="flex bg-gradient-to-r from-q19-700 to-q19-600 text-white px-6 py-3 rounded-xl text-sm font-bold shadow-lg hover:shadow-xl hover:scale-105 transition items-center gap-2">
+                            <i class="ph-bold ph-plus-circle text-lg"></i> Crear Clase
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Alerta Sin Bonos -->
@@ -438,6 +438,78 @@
         </footer>
     </div>
 
+    <!-- MODAL CREAR CLASE -->
+    <div id="modal-crear-clase" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="sticky top-0 bg-gradient-to-r from-q19-700 to-q19-600 text-white p-6 rounded-t-3xl flex justify-between items-center">
+                <div>
+                    <h3 class="brand-font text-2xl font-bold">Nueva Clase</h3>
+                    <p class="text-white/80 text-sm mt-1">Completa los datos para crear la clase</p>
+                </div>
+                <button onclick="cerrarModalCrearClase()" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/20 transition">
+                    <i class="ph-bold ph-x text-2xl"></i>
+                </button>
+            </div>
+            
+            <form id="form-crear-clase" class="p-6 space-y-5">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- Nombre de la Clase -->
+                    <div class="md:col-span-2">
+                        <label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1 mb-2 block">Nombre de la Clase</label>
+                        <input type="text" id="clase-nombre" required 
+                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-q19-500 focus:border-q19-500 outline-none transition" 
+                            placeholder="Ej: Pilates Reformer, Vinyasa Flow, Hot Yoga...">
+                    </div>
+                    
+                    <!-- Fecha -->
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1 mb-2 block">Fecha</label>
+                        <input type="date" id="clase-fecha" required 
+                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-q19-500 focus:border-q19-500 outline-none transition">
+                    </div>
+                    
+                    <!-- Hora Inicio -->
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1 mb-2 block">Hora Inicio</label>
+                        <input type="time" id="clase-hora-inicio" required 
+                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-q19-500 focus:border-q19-500 outline-none transition">
+                    </div>
+                    
+                    <!-- Duración (minutos) -->
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1 mb-2 block">Duración (minutos)</label>
+                        <select id="clase-duracion" required 
+                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-q19-500 focus:border-q19-500 outline-none transition">
+                            <option value="45">45 minutos</option>
+                            <option value="50" selected>50 minutos</option>
+                            <option value="60">60 minutos</option>
+                            <option value="75">75 minutos</option>
+                            <option value="90">90 minutos</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Capacidad Máxima -->
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1 mb-2 block">Capacidad Máxima</label>
+                        <input type="number" id="clase-capacidad" min="1" max="30" value="10" required 
+                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-q19-500 focus:border-q19-500 outline-none transition">
+                    </div>
+                </div>
+                
+                <div class="flex gap-3 pt-4 border-t border-gray-100">
+                    <button type="button" onclick="cerrarModalCrearClase()" 
+                        class="flex-1 bg-gray-100 text-gray-600 py-3 rounded-xl font-bold hover:bg-gray-200 transition">
+                        Cancelar
+                    </button>
+                    <button type="submit" 
+                        class="flex-1 bg-gradient-to-r from-q19-700 to-q19-600 text-white py-3 rounded-xl font-bold hover:shadow-lg transition flex items-center justify-center gap-2">
+                        <i class="ph-bold ph-check-circle"></i> Crear Clase
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- JS LOGIC -->
     <script>
         // --- 1. CONFIGURACIÓN ---
@@ -528,8 +600,14 @@
             location.reload(); 
         }
 
-
         // --- 3. APP INIT & PROFILE ---
+
+        function formatDateLocal(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
         async function initApp() {
             document.getElementById('auth-container').classList.add('hidden');
             document.getElementById('app-view').classList.remove('hidden');
@@ -595,7 +673,7 @@
             // Grid
             const firstDay = new Date(year, month, 1);
             const lastDay = new Date(year, month + 1, 0);
-            const startDayOfWeek = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1; // Lunes = 0
+            const startDayOfWeek = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
             const daysInMonth = lastDay.getDate();
             
             const grid = document.getElementById('calendar-grid');
@@ -616,11 +694,11 @@
             // Días del mes actual
             for (let day = 1; day <= daysInMonth; day++) {
                 const dateObj = new Date(year, month, day);
-                const dateKey = dateObj.toISOString().split('T')[0];
+                const dateKey = formatDateLocal(dateObj);
                 const isToday = dateObj.getTime() === today.getTime();
                 const isPast = dateObj < today;
                 const hasClasses = allClasesCache.some(c => {
-                    const claseDate = new Date(c.fecha_inicio).toISOString().split('T')[0];
+                    const claseDate = formatDateLocal(new Date(c.fecha_inicio));
                     return claseDate === dateKey;
                 });
                 const isSelected = selectedDate === dateKey;
@@ -633,7 +711,7 @@
                 grid.appendChild(dayEl);
             }
             
-            // Días del mes siguiente (para completar la grid)
+            // Días del mes siguiente
             const totalCells = grid.children.length;
             const remainingCells = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
             for (let day = 1; day <= remainingCells; day++) {
@@ -714,11 +792,20 @@
         function renderizarClases() {
             const container = document.getElementById('schedule-container');
             
-            // Filtrar clases
-            let clasesAMostrar = allClasesCache;
+            // Obtener fecha actual (sin horas)
+            const hoy = new Date();
+            hoy.setHours(0, 0, 0, 0);
+            
+            // Filtrar clases (solo de hoy en adelante)
+            let clasesAMostrar = allClasesCache.filter(c => {
+                const fechaClase = new Date(c.fecha_inicio);
+                fechaClase.setHours(0, 0, 0, 0);
+                return fechaClase >= hoy;
+            });
+            
             if (selectedDate) {
-                clasesAMostrar = allClasesCache.filter(c => {
-                    const claseDate = new Date(c.fecha_inicio).toISOString().split('T')[0];
+                clasesAMostrar = clasesAMostrar.filter(c => {
+                    const claseDate = formatDateLocal(new Date(c.fecha_inicio));
                     return claseDate === selectedDate;
                 });
             }
@@ -736,7 +823,7 @@
             // Agrupar por fecha
             const grupos = {};
             clasesAMostrar.forEach(c => {
-                const dateKey = new Date(c.fecha_inicio).toISOString().split('T')[0];
+                const dateKey = formatDateLocal(new Date(c.fecha_inicio));
                 if (!grupos[dateKey]) grupos[dateKey] = [];
                 grupos[dateKey].push(c);
             });
@@ -829,7 +916,6 @@
                                         <span class="font-bold text-gray-700">${c.ocupadas}</span>
                                         <span class="text-gray-300 text-[10px]">/ ${c.capacidad_max}</span>
                                     </div>
-
                                     ${reservada ? '<span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-md uppercase tracking-wide flex items-center gap-1"><i class="ph-fill ph-check-circle"></i> Tu Plaza</span>' : ''}
                                 </div>
                             </div>
@@ -898,7 +984,6 @@
                 }
             }
         }
-
 
         // --- 7. GESTIÓN ADMIN ---
         function switchTab(tabName) {
@@ -1009,51 +1094,78 @@
             }
         }
 
-        // --- 8. UTILS ADMIN (GENERADOR) ---
-        async function generarSemana() {
-            Swal.fire({ title: 'Planificando...', didOpen: () => Swal.showLoading() });
+        // --- 8. CREAR CLASE INDIVIDUAL ---
+        function abrirModalCrearClase() {
+            const modal = document.getElementById('modal-crear-clase');
+            modal.classList.remove('hidden');
             
-            const hoy = new Date();
-            const slots = [];
-            const diaSemana = hoy.getDay();
-            const diff = diaSemana === 0 ? -6 : 1 - diaSemana; 
-            const lunes = new Date(hoy);
-            lunes.setDate(hoy.getDate() + diff);
-
-            for(let i=0; i<5; i++) { 
-               let d = new Date(lunes); 
-               d.setDate(lunes.getDate() + i);
-
-               const getEnd = (dateObj) => {
-                   const fin = new Date(dateObj);
-                   fin.setMinutes(fin.getMinutes() + 50); 
-                   return fin.toISOString();
-               };
-
-               let m1 = new Date(d); m1.setHours(9,30,0,0);
-               slots.push({nombre: 'Pilates Reformer', fecha_inicio: m1.toISOString(), fecha_fin: getEnd(m1), capacidad_max: 6});
-               
-               let m2 = new Date(d); m2.setHours(11,0,0,0);
-               slots.push({nombre: 'Vinyasa Flow', fecha_inicio: m2.toISOString(), fecha_fin: getEnd(m2), capacidad_max: 10});
-
-               let t1 = new Date(d); t1.setHours(18,0,0,0);
-               slots.push({nombre: 'Pilates Reformer', fecha_inicio: t1.toISOString(), fecha_fin: getEnd(t1), capacidad_max: 6});
-               
-               let t2 = new Date(d); t2.setHours(19,30,0,0);
-               const claseTarde = (i % 2 === 0) ? 'Hot Yoga' : 'Hatha Yoga';
-               slots.push({nombre: claseTarde, fecha_inicio: t2.toISOString(), fecha_fin: getEnd(t2), capacidad_max: 12});
-            }
+            const hoy = new Date().toISOString().split('T')[0];
+            document.getElementById('clase-fecha').min = hoy;
+            document.getElementById('clase-fecha').value = hoy;
             
-            const { error } = await client.from('clases').insert(slots);
+            const ahora = new Date();
+            const horaActual = `${String(ahora.getHours()).padStart(2, '0')}:${String(ahora.getMinutes()).padStart(2, '0')}`;
+            document.getElementById('clase-hora-inicio').value = horaActual;
+        }
+
+        function cerrarModalCrearClase() {
+            const modal = document.getElementById('modal-crear-clase');
+            modal.classList.add('hidden');
+            document.getElementById('form-crear-clase').reset();
+        }
+
+        document.getElementById('form-crear-clase').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const nombre = document.getElementById('clase-nombre').value;
+            const fecha = document.getElementById('clase-fecha').value;
+            const horaInicio = document.getElementById('clase-hora-inicio').value;
+            const duracion = parseInt(document.getElementById('clase-duracion').value);
+            const capacidad = parseInt(document.getElementById('clase-capacidad').value);
+            
+            const fechaInicio = new Date(`${fecha}T${horaInicio}`);
+            const fechaFin = new Date(fechaInicio.getTime() + duracion * 60000);
+            
+            Swal.fire({
+                title: 'Creando clase...',
+                didOpen: () => Swal.showLoading()
+            });
+            
+            const { data, error } = await client.from('clases').insert([{
+                nombre: nombre,
+                fecha_inicio: fechaInicio.toISOString(),
+                fecha_fin: fechaFin.toISOString(),
+                capacidad_max: capacidad
+            }]).select();
+            
             Swal.close();
             
-            if(error) Swal.fire('Error', error.message, 'error');
-            else {
-                Swal.fire({ icon: 'success', title: '¡Semana creada!', showConfirmButton: false, timer: 1500 });
-                cargarHorarios();
+            if (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error al crear clase',
+                    text: error.message,
+                    confirmButtonColor: '#1a4d4f'
+                });
+            } else {
+                cerrarModalCrearClase();
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Clase creada!',
+                    text: `${nombre} ha sido añadida al calendario.`,
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                await cargarHorarios();
             }
-        }
-        
+        });
+
+        document.getElementById('modal-crear-clase').addEventListener('click', (e) => {
+            if (e.target.id === 'modal-crear-clase') {
+                cerrarModalCrearClase();
+            }
+        });
+
         async function borrarClase(id) {
             const res = await Swal.fire({ 
                 title: '¿Eliminar clase?', 
