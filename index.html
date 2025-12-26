@@ -204,14 +204,27 @@
                         <h2 class="text-2xl font-bold text-gray-900 brand-font">Crear Cuenta</h2>
                         <p class="text-gray-500 text-xs font-bold uppercase tracking-[0.2em] mt-2">Únete a la comunidad</p>
                     </div>
-                    <form id="form-register" class="space-y-5">
+                    <form id="form-register" class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Nombre</label>
+                                <input type="text" id="reg-nombre" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-gold-500 transition" placeholder="Nombre" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Apellidos</label>
+                                <input type="text" id="reg-apellidos" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-gold-500 transition" placeholder="Apellidos" required>
+                            </div>
+                        </div>
+
                         <div>
-                            <input type="email" id="reg-email" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-gold-500 transition" placeholder="Introduce tu email" required>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Email</label>
+                            <input type="email" id="reg-email" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-gold-500 transition" placeholder="tu@email.com" required>
                         </div>
                         <div>
-                            <input type="password" id="reg-password" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-gold-500 transition" placeholder="Crea una contraseña segura" required>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Contraseña</label>
+                            <input type="password" id="reg-password" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-gold-500 transition" placeholder="Contraseña segura" required>
                         </div>
-                        <button type="submit" class="w-full bg-gray-900 text-white py-4 rounded-xl font-bold hover:bg-black transition shadow-lg transform active:scale-[0.98] tracking-wide text-sm">REGISTRARME</button>
+                        <button type="submit" class="w-full bg-gray-900 text-white py-4 rounded-xl font-bold hover:bg-black transition shadow-lg transform active:scale-[0.98] tracking-wide text-sm">CREAR CUENTA</button>
                     </form>
                     <div class="mt-6 text-center">
                         <button onclick="toggleAuth('login')" class="text-gray-500 font-medium text-sm hover:text-gray-800 transition">← Volver a Iniciar Sesión</button>
@@ -301,9 +314,11 @@
             
             <!-- VISTA HORARIOS -->
             <div id="view-horarios" class="fade-in">
+                
                 <!-- Banner Bienvenida / Header Sección -->
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-6 pb-6 border-b border-gray-200">
-                    <div>
+                    <!-- IZQUIERDA: título -->
+                    <div class="flex-1">
                         <span class="inline-block py-1 px-3 rounded-full bg-gold-50 text-gold-700 font-bold tracking-widest text-[10px] uppercase mb-3 border border-gold-100">
                             Calendario Semanal
                         </span>
@@ -312,20 +327,610 @@
                             Encuentra el equilibrio perfecto entre cuerpo y mente. Selecciona tu clase y prepárate para desconectar.
                         </p>
                     </div>
-                    <!-- Botón Admin (Crear Clase) -->
-<div class="admin-only">
-  <button
-    onclick="abrirModalCrearClase()"
-    class="flex bg-q19-700 hover:bg-q19-800 text-white px-6 py-3 rounded-xl text-sm font-bold shadow-lg hover:shadow-xl hover:scale-105 transition items-center gap-2"
-  >
-    <i class="ph-bold ph-plus-circle text-lg"></i>
-    Crear Clase
-  </button>
-</div>
 
+                    <!-- DERECHA: Ficha compacta + botón admin -->
+                    <div class="w-full md:w-auto flex flex-col md:items-end gap-3">
+
+                        <!-- FICHA CLIENTE COMPACTA -->
+                        <!-- FICHA CLIENTE AVANZADA V5 -->
+                        <!-- WRAPPER FICHAS PERFIL V7 -->
+                        <div id="profile-cards-wrapper" class="hidden flex flex-col sm:flex-row gap-4 w-full max-w-2xl">
+
+                             <!-- FICHA 1: ESTATUS ACTUAL -->
+                             <div class="glass-panel rounded-3xl p-4 border border-white/60 shadow-lg flex flex-col items-center justify-center gap-2 bg-white/70 backdrop-blur-xl min-w-[140px] relative transition-transform hover:scale-105 group">
+                                <span class="text-[12px] font-black uppercase tracking-widest text-gray-700 text-center w-full">NIVEL ACTUAL</span>
+
+                                <div class="relative w-24 h-24 flex items-center justify-center filter drop-shadow-md my-1 transition-transform group-hover:rotate-3">
+                                    <img id="rank-badge-current" src="" alt="Rango" class="w-full h-full object-contain" onerror="this.style.opacity='1'">
+                                </div>
+
+                                <span id="current-rank-name" class="text-xs font-bold uppercase tracking-wider">BRONCE</span>
+                                <span id="discount-badge" class="hidden text-[9px] font-bold text-white bg-emerald-500 px-2 py-0.5 rounded-full shadow-sm">
+                                    -5%
+                                </span>
+                             </div>
+
+                             <!-- FICHA 2: PROGRESO Y DATOS -->
+                             <div class="glass-panel rounded-3xl p-5 border border-white/60 shadow-lg flex flex-col justify-center gap-1 bg-white/70 backdrop-blur-xl flex-grow relative">
+
+                                <!-- Header: Nombre -->
+                                <div class="flex justify-between items-start w-full mb-3">
+                                    <div class="flex items-center gap-2">
+                                        <span id="profile-nombre-full" class="font-bold text-gray-900 text-2xl leading-tight font-serif"></span>
+                                        <button onclick="abrirEditarPerfil()" class="text-gray-300 hover:text-gold-500 transition p-1 rounded-full hover:bg-gold-50" title="Editar Nombre">
+                                            <i class="ph-bold ph-gear text-lg"></i>
+                                        </button>
+                                    </div>
+                                    <!-- Contador Clases Mes Actual -->
+                                    <div class="text-right leading-none bg-white/50 p-2 rounded-xl border border-white/40">
+                                        <span class="block text-3xl font-bold text-gray-800" id="clases-count-num">0</span>
+                                        <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wide block">Clases<br>Este Mes</span>
+                                    </div>
+                                </div>
+
+                                <!-- Info Proyección Nivel -->
+                                <div class="mb-2 mt-1">
+                                    <span class="text-[11px] font-bold text-gray-700 uppercase tracking-wide">NIVEL MES SIGUIENTE:</span>
+                                    <span id="projected-rank-name" class="text-sm font-black uppercase tracking-widest ml-1">PLATA</span>
+                                    <span id="projected-discount-badge" class="hidden text-8px font-bold text-white bg-emerald-500 px-2 py-0.5 rounded-full shadow-sm"></span>
+</span>
+                                </div>
+
+                                <!-- Barra de Progreso -->
+                                <div class="w-full">
+                                    <div class="h-3 w-full bg-gray-100 rounded-full overflow-hidden shadow-inner border border-gray-200 relative">
+                                        <div id="rank-progress-bar" class="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full transition-all duration-1000 ease-out relative" style="width: 0%">
+                                            <div class="absolute inset-0 bg-white/20 animate-pulse"></div>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-end mt-1.5">
+                                        <span id="next-level-info" class="text-[10px] font-bold text-gray-500">Calculando...</span>
+                                    </div>
+                                </div>
+                             </div>
+                        </div>
+
+                        <div class="admin-only">
+                            <button
+                                onclick="abrirModalCrearClase()"
+                                class="flex bg-q19-700 hover:bg-q19-800 text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-lg hover:shadow-xl hover:scale-105 transition items-center gap-2"
+                            >
+                                <i class="ph-bold ph-plus-circle text-lg"></i>
+                                Crear Clase
+                            </button>
+                        </div>
+                    </div>
+                </div>
+<!-- Alerta Sin Bonos -->
+                <div id="no-bonos-alert" class="hidden mb-10 bg-orange-50/80 backdrop-blur-sm border border-orange-100 p-5 rounded-2xl flex flex-col sm:flex-row justify-between items-center gap-4 shadow-sm animate-pulse">
+                    <div class="flex items-center gap-4">
+                        <div class="bg-white p-2.5 rounded-full text-orange-500 shadow-sm">
+                            <i class="ph-fill ph-warning-circle text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-orange-900 text-lg">Saldo agotado</p>
+                            <p class="text-sm text-orange-800/80">Recarga tus bonos en la farmacia para seguir reservando.</p>
+                        </div>
+                    </div>
+                    <a href="https://maps.google.com/?q=Farmacia+Q19+Albacete" target="_blank" class="text-xs bg-white text-orange-800 px-5 py-2.5 rounded-xl border border-orange-200 font-bold hover:bg-orange-50 hover:border-orange-300 transition uppercase tracking-wide shadow-sm">
+                        Cómo llegar
+                    </a>
                 </div>
 
-                <!-- Alerta Sin Bonos -->
+                <!-- LAYOUT: CLASES (IZQUIERDA) + CALENDARIO (DERECHA) -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    
+                    <!-- CLASES (IZQUIERDA) -->
+                    <div class="lg:col-span-8">
+                        <div id="schedule-container" class="space-y-6"></div>
+                        
+                        <!-- Empty State -->
+                        <div id="empty-state" class="hidden flex flex-col items-center justify-center py-24 text-center">
+                            <div class="bg-white p-8 rounded-full mb-6 shadow-sm border border-gray-100">
+                                <i class="ph-duotone ph-calendar-slash text-5xl text-gray-300"></i>
+                            </div>
+                            <h3 class="brand-font text-2xl font-bold text-gray-800 mb-2">No hay clases disponibles</h3>
+                            <p class="text-gray-500 text-sm font-light max-w-xs mx-auto">
+                                Estamos planificando la próxima semana. Vuelve a consultar en breve.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- CALENDARIO (DERECHA) -->
+                    <div class="lg:col-span-4">
+                        <div class="sticky top-24">
+                            <div class="bg-white rounded-3xl shadow-lg border border-gray-100 p-6">
+                                <!-- Header Calendario -->
+                                <div class="flex items-center justify-between mb-6">
+                                    <button onclick="cambiarMes(-1)" class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 transition text-gray-600">
+                                        <i class="ph-bold ph-caret-left text-lg"></i>
+                                    </button>
+                                    
+                                    <div class="text-center">
+                                        <h3 id="calendar-month-year" class="brand-font text-xl font-bold text-gray-900"></h3>
+                                        <p class="text-xs text-gray-400 uppercase tracking-wider mt-0.5">Selecciona un día</p>
+                                    </div>
+                                    
+                                    <button onclick="cambiarMes(1)" class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 transition text-gray-600">
+                                        <i class="ph-bold ph-caret-right text-lg"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Días de la Semana -->
+                                <div class="grid grid-cols-7 gap-1 mb-2">
+                                    <div class="text-center text-xs font-bold text-gray-400 py-2">L</div>
+                                    <div class="text-center text-xs font-bold text-gray-400 py-2">M</div>
+                                    <div class="text-center text-xs font-bold text-gray-400 py-2">X</div>
+                                    <div class="text-center text-xs font-bold text-gray-400 py-2">J</div>
+                                    <div class="text-center text-xs font-bold text-gray-400 py-2">V</div>
+                                    <div class="text-center text-xs font-bold text-gray-400 py-2">S</div>
+                                    <div class="text-center text-xs font-bold text-gray-400 py-2">D</div>
+                                </div>
+
+                                <!-- Grid Días -->
+                                <div id="calendar-grid" class="grid grid-cols-7 gap-1"></div>
+
+                                <!-- Botón Limpiar Filtro -->
+                                <button onclick="limpiarFiltroFecha()" class="mt-6 w-full bg-gray-100 text-gray-600 py-3 rounded-xl text-sm font-bold hover:bg-gray-200 transition flex items-center justify-center gap-2">
+                                    <i class="ph-bold ph-x-circle"></i>
+                                    Ver todas las clases
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- VISTA ASISTENCIAS (Alumnos por clase) -->
+            <div id="view-asistencias" class="hidden fade-in">
+                <div class="flex flex-col md:flex-row justify-between items-start mb-8 gap-4">
+                    <div>
+                        <h2 class="text-3xl brand-font font-bold text-gray-900">Alumnos por clase</h2>
+                        <p class="text-gray-500 mt-1">Revisa qué alumnos están apuntados en cada sesión.</p>
+                    </div>
+                </div>
+
+                <div id="asistencias-container" class="space-y-6">
+                    <!-- JS rellena aquí las clases con sus alumnos -->
+                </div>
+
+                <div id="asistencias-empty" class="hidden bg-white rounded-2xl p-12 text-center border border-gray-100 mt-4">
+                    <i class="ph-duotone ph-users text-5xl text-gray-300 mb-4"></i>
+                    <p class="text-gray-500 font-medium">No hay clases registradas o reservas aún.</p>
+                </div>
+            </div>
+
+            <!-- VISTA USUARIOS (Admin) -->
+            <div id="view-usuarios" class="hidden fade-in">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+                    <div>
+                        <h2 class="text-3xl brand-font font-bold text-gray-900">Cartera de Clientes</h2>
+                        <p class="text-gray-500 mt-1">Gestión manual de bonos y accesos.</p>
+                    </div>
+                    <div class="relative w-full md:w-80 group">
+                        <i class="ph-bold ph-magnifying-glass absolute left-4 top-3.5 text-gray-400 group-focus-within:text-q19-500 transition"></i>
+                        <input type="text" id="user-search" onkeyup="filtrarUsuarios()" 
+                            class="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-q19-500 outline-none shadow-sm transition placeholder-gray-400" 
+                            placeholder="Buscar email...">
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-50 border-b border-gray-100 text-[10px] uppercase text-gray-500 font-bold tracking-wider">
+                            <tr>
+                                <th class="px-6 py-4">Usuario</th>
+                                <th class="px-6 py-4 text-center">Rol</th>
+                                <th class="px-6 py-4 text-center">Saldo</th>
+                                <th class="px-6 py-4 text-right">Añadir / Quitar</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body" class="divide-y divide-gray-50 text-sm text-gray-600">
+                            <!-- JS Rellena esto -->
+                        </tbody>
+                    </table>
+                    <div id="no-users-found" class="hidden p-12 text-center text-gray-400 italic">No se han encontrado resultados.</div>
+                </div>
+            </div>
+
+            <!-- VISTA CONFIGURACIÓN (Admin) -->
+            <div id="view-configuracion" class="hidden fade-in">
+                <div class="flex flex-col md:flex-row justify-between items-start mb-8 gap-4">
+                    <div>
+                        <h2 class="text-3xl brand-font font-bold text-gray-900">Configuración del Sistema</h2>
+                        <p class="text-gray-500 mt-1">Gestiona los parámetros de configuración de la aplicación.</p>
+                    </div>
+                    <button onclick="agregarConfiguracion()" class="flex items-center gap-2 bg-q19-700 text-white px-5 py-3 rounded-xl text-sm font-bold shadow-lg hover:shadow-xl hover:scale-105 transition">
+                        <i class="ph-bold ph-plus-circle text-lg"></i> Nuevo Parámetro
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-50 border-b border-gray-100 text-[10px] uppercase text-gray-500 font-bold tracking-wider">
+                            <tr>
+                                <th class="px-6 py-4">Clave</th>
+                                <th class="px-6 py-4">Valor</th>
+                                <th class="px-6 py-4">Descripción</th>
+                                <th class="px-6 py-4 text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="config-table-body" class="divide-y divide-gray-50 text-sm text-gray-600">
+                            <!-- JS Rellena esto -->
+                        </tbody>
+                    </table>
+                    <div id="no-config-found" class="hidden p-12 text-center text-gray-400 italic">No hay configuraciones disponibles.</div>
+                </div>
+            </div>
+
+
+        </main>
+
+        <footer class="bg-white border-t border-gray-200 py-12 mt-auto">
+            <div class="max-w-6xl mx-auto px-4 text-center">
+                <div class="w-14 h-14 bg-gray-50 rounded-full flex items-center justify-center text-gray-400 mx-auto mb-5 border border-gray-100">
+                    <span class="brand-font font-bold text-2xl pb-1 italic text-gray-300">H</span>
+                </div>
+                <p class="brand-font font-bold text-gray-900 text-xl mb-1">HAM Yoga</p>
+                <p class="text-[10px] uppercase tracking-[0.25em] text-gold-500 font-bold mb-6">by Farmacia Q19</p>
+                
+                <p class="text-gray-400 text-sm mb-8 max-w-md mx-auto leading-relaxed">
+                    Un espacio dedicado al bienestar integral, la salud física y la paz mental. <br>
+                    Cuidamos de ti desde el interior.
+                </p>
+                
+                <div class="flex justify-center gap-8 text-2xl text-q19-600 mb-8">
+    <!-- Instagram -->
+    <a href="https://www.instagram.com/farmaciaq19/" target="_blank"
+       class="hover:text-q19-800 hover:scale-110 transition duration-300"
+       aria-label="Instagram Farmacia Q19">
+        <i class="ph-fill ph-instagram-logo"></i>
+    </a>
+
+    <!-- Farmacia online -->
+    <a href="https://maps.google.com/?q=Farmacia+Q19+Albacete" target="_blank"
+       class="hover:text-q19-800 hover:scale-110 transition duration-300 inline-flex items-center gap-2 text-base"
+       aria-label="Farmacia online Q19">
+        <i class="ph-fill ph-shopping-bag text-2xl"></i>
+        <span class="text-sm font-semibold tracking-wide uppercase">Farmacia online</span>
+    </a>
+
+    <!-- WhatsApp (ajusta el teléfono si quieres) -->
+    <a href="https://api.whatsapp.com/send?phone=+34967511449" target="_blank"
+       class="hover:text-q19-800 hover:scale-110 transition duration-300"
+       aria-label="WhatsApp Farmacia Q19">
+        <i class="ph-fill ph-whatsapp-logo"></i>
+    </a>
+</div>
+                <div class="border-t border-gray-100 pt-8 mt-8 flex flex-col md:flex-row justify-center items-center gap-4 text-xs text-gray-400">
+                    <span>&copy; 2025 HAM Yoga by Q19. Todos los derechos reservados.</span>
+                    <span class="hidden md:inline text-gray-300">•</span>
+                    <a href="#" class="hover:text-gray-600">Política de Privacidad</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- MODAL CREAR CLASE -->
+    <div id="modal-crear-clase" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="sticky top-0 bg-gradient-to-r from-q19-700 to-q19-600 text-white p-6 rounded-t-3xl flex justify-between items-center">
+                <div>
+                    <h3 class="brand-font text-2xl font-bold">Nueva Clase</h3>
+                    <p class="text-white/80 text-sm mt-1">Completa los datos para crear la clase</p>
+                </div>
+                <button onclick="cerrarModalCrearClase()" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/20 transition">
+                    <i class="ph-bold ph-x text-2xl"></i>
+                </button>
+            </div>
+            
+            <form id="form-crear-clase" class="p-6 space-y-5">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- Nombre de la Clase -->
+                    <div class="md:col-span-2">
+                        <label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1 mb-2 block">Nombre de la Clase</label>
+                        <input type="text" id="clase-nombre" required 
+                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-q19-500 focus:border-q19-500 outline-none transition" 
+                            placeholder="Ej: Pilates Reformer, Vinyasa Flow, Hot Yoga...">
+                    </div>
+                    
+                    <!-- Fecha -->
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1 mb-2 block">Fecha</label>
+                        <input type="date" id="clase-fecha" required 
+                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-q19-500 focus:border-q19-500 outline-none transition">
+                    </div>
+                    
+                    <!-- Hora Inicio -->
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1 mb-2 block">Hora Inicio</label>
+                        <input type="time" id="clase-hora-inicio" required 
+                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-q19-500 focus:border-q19-500 outline-none transition">
+                    </div>
+                    
+                    <!-- Duración (minutos) -->
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1 mb-2 block">Duración (minutos)</label>
+                        <select id="clase-duracion" required 
+                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-q19-500 focus:border-q19-500 outline-none transition">
+                            <option value="45">45 minutos</option>
+                            <option value="50" selected>50 minutos</option>
+                            <option value="60">60 minutos</option>
+                            <option value="75">75 minutos</option>
+                            <option value="90">90 minutos</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Capacidad Máxima -->
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1 mb-2 block">Capacidad Máxima</label>
+                        <input type="number" id="clase-capacidad" min="1" max="30" value="10" required 
+                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-q19-500 focus:border-q19-500 outline-none transition">
+                    </div>
+                </div>
+                
+                <div class="flex gap-3 pt-4 border-t border-gray-100">
+                    <button type="button" onclick="cerrarModalCrearClase()" 
+                        class="flex-1 bg-gray-100 text-gray-600 py-3 rounded-xl font-bold hover:bg-gray-200 transition">
+                        Cancelar
+                    </button>
+                    <button type="submit" 
+                        class="flex-1 bg-gradient-to-r from-q19-700 to-q19-600 text-white py-3 rounded-xl font-bold hover:shadow-lg transition flex items-center justify-center gap-2">
+                        <i class="ph-bold ph-check-circle"></i> Crear Clase
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+ 
+    <style>
+
+        body { 
+            font-family: 'Lato', sans-serif; 
+            background: #fafaf9; 
+            color: #374151;
+            background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+        h1, h2, h3, .brand-font { font-family: 'Playfair Display', serif; }
+        
+        /* Control de Visibilidad Admin */
+        .admin-only { display: none !important; }
+        .is-admin .admin-only { display: block !important; }
+        .is-admin .admin-flex { display: flex !important; }
+        
+        .fade-in { animation: fadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Scrollbar elegante */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; border: 2px solid #fafaf9; }
+        ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* ESTILOS DEL CALENDARIO */
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        
+        .calendar-day:hover:not(.disabled):not(.other-month) {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #2d8a8e, #236c6f);
+            color: white;
+        }
+        
+        .calendar-day.selected {
+            background: linear-gradient(135deg, #2d8a8e, #236c6f) !important;
+            color: white !important;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(45, 138, 142, 0.3);
+        }
+        
+        .calendar-day.has-classes::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            width: 4px;
+            height: 4px;
+            background: #d4af37;
+            border-radius: 50%;
+        }
+        
+        .calendar-day.selected.has-classes::after {
+            background: white;
+        }
+        
+        .calendar-day.disabled {
+            color: #d1d5db;
+            cursor: not-allowed;
+            opacity: 0.4;
+        }
+        
+        .calendar-day.other-month {
+            color: #e5e7eb;
+        }
+        
+        .calendar-day.today {
+            border: 2px solid #d4af37;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- ================= APP PRINCIPAL ================= -->
+    <div id="app-view" class="hidden min-h-screen flex flex-col bg-[#fafaf9]">
+        
+        <!-- HEADER -->
+        <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
+                <!-- LOGO BRANDING -->
+                <div class="flex items-center gap-3 group cursor-default">
+                    <div class="w-11 h-11 bg-gradient-to-br from-q19-800 to-q19-600 rounded-full flex items-center justify-center text-grey shadow-lg group-hover:scale-105 transition duration-300">
+                        <span class="brand-font font-bold text-3xl pb-1 italic">H</span>
+                    </div>
+                    <a href="https://maps.google.com/?q=Farmacia+Q19+Albacete" class="flex flex-col hover:opacity-80 transition-opacity">
+    <h1 class="brand-font font-bold text-3xl text-gray-900 leading-none tracking-tight">
+        HAM Yoga
+    </h1>
+    <span class="text-[12px] tracking-[0.25em] text-gold-600 uppercase font-bold mt-0.5">
+        by Farmacia Q19
+    </span>
+</a>
+                </div>
+                
+                <!-- MENU DERECHA -->
+<div class="flex items-center gap-4 sm:gap-8">
+    <!-- CONTADOR DE BONOS -->
+    <div class="flex flex-col items-end">
+        <span class="text-[9px] text-gray-400 font-bold uppercase tracking-widest mb-0.5">Mis Bonos</span>
+        <div class="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full border border-gray-200 shadow-sm hover:border-gold-300 transition cursor-default">
+            <i class="ph-fill ph-ticket text-gold-500 text-lg"></i>
+            <span id="bonos-count" class="font-bold text-gray-800 text-lg leading-none">0</span>
+        </div>
+    </div>
+
+    <!-- ENLACES RÁPIDOS FARMACIA / INSTAGRAM (solo desktop) -->
+    <div class="hidden md:flex items-center gap-2 text-[11px] font-medium text-gray-500">
+        <a href="https://maps.google.com/?q=Farmacia+Q19+Albacete" target="_blank"
+           class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-gray-200 shadow-sm hover:border-q19-500 hover:text-q19-700 hover:shadow-md transition">
+            <i class="ph-fill ph-shopping-bag text-q19-600 text-sm"></i>
+            <span>Farmacia Q19</span>
+        </a>
+        <a href="https://www.instagram.com/farmaciaq19/" target="_blank"
+           class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-gray-200 shadow-sm hover:border-pink-500 hover:text-pink-600 hover:shadow-md transition">
+            <i class="ph-fill ph-instagram-logo text-pink-500 text-sm"></i>
+            <span>@farmaciaq19</span>
+        </a>
+    </div>
+
+    <div class="h-8 w-px bg-gray-200 hidden sm:block"></div>
+
+    <!-- Botón logout -->
+    <button onclick="logout()" class="text-gray-400 hover:text-red-500 transition p-2.5 hover:bg-red-50 rounded-full group" title="Cerrar Sesión">
+        <i class="ph-bold ph-sign-out text-xl group-hover:-translate-x-0.5 transition"></i>
+    </button>
+</div>
+            </div>
+            
+            <!-- BARRA ADMIN -->
+            <div class="admin-only hidden w-full bg-gray-900 text-white text-xm font-medium shadow-inner">
+                <div class="max-w-7xl mx-auto flex">
+                    <button onclick="switchTab('horarios')" id="tab-horarios" class="px-7 py-4 border-b-2 border-gold-500 bg-gray-800 flex items-center gap-2 transition hover:bg-gray-800">
+                        <i class="ph-bold ph-calendar-check text-gold-400"></i> Gestión Reservas
+                    </button>
+                    <button onclick="switchTab('asistencias')" id="tab-asistencias" class="px-7 py-4 border-b-2 border-transparent text-gray-400 hover:text-white hover:bg-gray-800 transition flex items-center gap-2">
+                        <i class="ph-bold ph-list-checks text-gold-400"></i> Alumnos por clase
+                    </button>
+                    <button onclick="switchTab('usuarios')" id="tab-usuarios" class="px-7 py-4 border-b-2 border-transparent text-gray-400 hover:text-white hover:bg-gray-800 transition flex items-center gap-2">
+                        <i class="ph-bold ph-users-three text-gold-400"></i> Usuarios y Bonos
+                    </button>
+                    <button onclick="switchTab('configuracion')" id="tab-configuracion" class="px-7 py-4 border-b-2 border-transparent text-gray-400 hover:text-white hover:bg-gray-800 transition flex items-center gap-2">
+                        <i class="ph-bold ph-gear text-gold-400"></i> Configuración
+                    </button>
+                </div>
+            </div>
+
+        </header>
+
+        <main class="flex-grow max-w-7xl mx-auto px-4 py-8 md:py-12 w-full">
+            
+            <!-- VISTA HORARIOS -->
+            <div id="view-horarios" class="fade-in">
+                
+                <!-- Banner Bienvenida / Header Sección -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-6 pb-6 border-b border-gray-200">
+                    <!-- IZQUIERDA: título -->
+                    <div class="flex-1">
+                        <span class="inline-block py-1 px-3 rounded-full bg-gold-50 text-gold-700 font-bold tracking-widest text-[10px] uppercase mb-3 border border-gold-100">
+                            Calendario Semanal
+                        </span>
+                        <h2 class="text-4xl md:text-5xl brand-font font-bold text-gray-900 mb-3">Reserva tu práctica</h2>
+                        <p class="text-gray-500 font-light text-lg max-w-xl leading-relaxed">
+                            Encuentra el equilibrio perfecto entre cuerpo y mente. Selecciona tu clase y prepárate para desconectar.
+                        </p>
+                    </div>
+
+                    <!-- DERECHA: Ficha compacta + botón admin -->
+                    <div class="w-full md:w-auto flex flex-col md:items-end gap-3">
+
+                        <!-- FICHA CLIENTE COMPACTA -->
+                        <!-- FICHA CLIENTE AVANZADA V5 -->
+                        <div id="profile-card" class="glass-panel rounded-3xl p-4 pr-6 border border-white/60 shadow-lg hidden flex items-start gap-5 bg-white/70 backdrop-blur-xl max-w-lg relative group transition-all hover:bg-white/80">
+
+                             <!-- BADGE RANGO (Grande: w-28 = 7rem) -->
+                             <div class="relative w-28 h-28 shrink-0 flex items-center justify-center -ml-2 filter drop-shadow-lg">
+                                <img id="rank-badge" src="" alt="Rango" class="w-full h-full object-contain transition transform group-hover:scale-105" onerror="this.style.display='none'">
+                             </div>
+
+                             <!-- Datos + Progreso -->
+                             <div class="flex flex-col justify-center w-full pt-1">
+
+                                <!-- Header: Nombre + Gear -->
+                                <div class="flex justify-between items-start w-full mb-1">
+                                    <div>
+                                        <div class="flex items-center gap-2">
+                                            <!-- Usamos un span único para nombre completo ahora para facilitar diseño -->
+                                            <span id="profile-nombre-full" class="font-bold text-gray-900 text-xl leading-tight font-serif"></span>
+                                            <button onclick="abrirEditarPerfil()" class="text-gray-300 hover:text-gold-500 transition p-1 rounded-full hover:bg-gold-50" title="Editar Nombre">
+                                                <i class="ph-bold ph-gear text-sm"></i>
+                                            </button>
+                                        </div>
+                                        <div class="flex items-center gap-2 mt-0.5">
+                                            <span class="text-xs font-black uppercase tracking-widest text-gold-600" id="rank-name">BRONCE</span>
+                                            <span id="discount-badge" class="hidden text-[10px] font-bold text-white bg-emerald-500 px-2 py-0.5 rounded-full shadow-sm">
+                                                -5%
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Clases mes actual -->
+                                    <div class="text-right leading-none">
+                                        <span class="block text-2xl font-bold text-gray-800" id="clases-count-num">0</span>
+                                        <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wide">Clases Mes</span>
+                                    </div>
+                                </div>
+
+                                <!-- Barra de Progreso -->
+                                <div class="mt-3 w-full">
+                                    <div class="flex justify-between text-[10px] font-bold text-gray-400 mb-1 uppercase tracking-wider">
+                                        <span id="progress-text" class="text-gray-400">Progreso nivel</span>
+                                        <span id="next-level-info" class="text-q19-600 font-bold">Calculando...</span>
+                                    </div>
+                                    <div class="h-2.5 w-full bg-gray-200 rounded-full overflow-hidden shadow-inner">
+                                        <div id="rank-progress-bar" class="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                             </div>
+                        </div>
+
+                        <div class="admin-only">
+                            <button
+                                onclick="abrirModalCrearClase()"
+                                class="flex bg-q19-700 hover:bg-q19-800 text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-lg hover:shadow-xl hover:scale-105 transition items-center gap-2"
+                            >
+                                <i class="ph-bold ph-plus-circle text-lg"></i>
+                                Crear Clase
+                            </button>
+                        </div>
+                    </div>
+                </div>
+<!-- Alerta Sin Bonos -->
                 <div id="no-bonos-alert" class="hidden mb-10 bg-orange-50/80 backdrop-blur-sm border border-orange-100 p-5 rounded-2xl flex flex-col sm:flex-row justify-between items-center gap-4 shadow-sm animate-pulse">
                     <div class="flex items-center gap-4">
                         <div class="bg-white p-2.5 rounded-full text-orange-500 shadow-sm">
@@ -642,16 +1247,22 @@
         }
 
         client.auth.onAuthStateChange((event, session) => {
-            if (session) {
-                currentUser = session.user;
-                initApp();
-            } else {
-                currentUser = null;
-                document.getElementById('auth-container').classList.remove('hidden');
-                document.getElementById('app-view').classList.add('hidden');
-                document.body.classList.remove('is-admin');
-            }
-        });
+  const auth = document.getElementById('auth-container');
+  const app  = document.getElementById('app-view');
+
+  if (session) {
+    auth.classList.add('hidden');
+    app.classList.remove('hidden');
+    currentUser = session.user;
+    initApp();
+    loadProfileCard();
+  } else {
+    app.classList.add('hidden');
+    auth.classList.remove('hidden');
+    currentUser = null;
+    document.body.classList.remove('is-admin');
+  }
+});
 
         document.getElementById('form-login').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -889,41 +1500,61 @@
         }
 
         // --- 5. HORARIOS (CLASES) ---
-        async function cargarHorarios() {
-            const container = document.getElementById('schedule-container');
-            container.innerHTML = `
-                <div class="flex flex-col items-center justify-center py-20 gap-4 opacity-50">
-                    <i class="ph-duotone ph-spinner animate-spin text-4xl text-q19-600"></i>
-                    <span class="text-xs uppercase tracking-widest font-bold text-gray-500">Cargando clases...</span>
-                </div>`;
+        
+        // --- 5. HORARIOS (CLASES) ---
+async function cargarHorarios() {
+  const container = document.getElementById('schedule-container');
+  container.innerHTML = `
+    <div class="flex flex-col items-center justify-center py-20 gap-4 opacity-50">
+      <i class="ph-duotone ph-spinner animate-spin text-4xl text-q19-600"></i>
+      <span class="text-xs uppercase tracking-widest font-bold text-gray-500">Cargando clases...</span>
+    </div>`;
 
-            const { data: clases } = await client.from('clases').select('*').order('fecha_inicio');
-            const { data: reservas } = await client.from('reservas').select('*');
+  const { data: clases, error: errClases } =
+    await client.from('clases').select('*').order('fecha_inicio');
 
-            if (!clases || clases.length === 0) {
-                container.innerHTML = '';
-                document.getElementById('empty-state').classList.remove('hidden');
-                allClasesCache = [];
-                return;
-            }
-            document.getElementById('empty-state').classList.add('hidden');
+  const { data: reservas, error: errReservas } =
+    await client.from('reservas').select('*');
 
-            const reservasMap = {};
-            (reservas || []).forEach(r => {
-                if(!reservasMap[r.clase_id]) reservasMap[r.clase_id] = [];
-                reservasMap[r.clase_id].push(r);
-            });
+  if (errClases || errReservas) {
+    console.error('Error cargando datos', { errClases, errReservas });
+    container.innerHTML = '';
+    document.getElementById('empty-state').classList.remove('hidden');
+    allClasesCache = [];
+    return;
+  }
 
-            clases.forEach(c => {
-                const misRes = reservasMap[c.id] || [];
-                c.ocupadas = misRes.length;
-                c.miReserva = misRes.find(r => r.user_id === (currentUser && currentUser.id));
-            });
+  if (!clases || clases.length === 0) {
+    container.innerHTML = '';
+    document.getElementById('empty-state').classList.remove('hidden');
+    allClasesCache = [];
+    return;
+  }
+  document.getElementById('empty-state').classList.add('hidden');
 
-            allClasesCache = clases;
-            renderizarCalendario();
-            renderizarClases();
-        }
+  // Map por clase_id => [reservas]
+  const reservasMap = {};
+  (reservas || []).forEach(r => {
+    if (!reservasMap[r.clase_id]) reservasMap[r.clase_id] = [];
+    reservasMap[r.clase_id].push(r);
+  });
+
+  // Enriquecer clases con ocupadas y miReserva (solo confirmadas)
+  clases.forEach(c => {
+    const resClase = reservasMap[c.id] || [];
+
+    // Ocupación real: SOLO confirmadas
+    const confirmadas = resClase.filter(r => r.estado === 'confirmada');
+    c.ocupadas = confirmadas.length;
+
+    // Mi reserva activa: confirmada y del usuario actual
+    c.miReserva = confirmadas.find(r => r.user_id === currentUser.id) || null;
+  });
+
+  allClasesCache = clases;
+  renderizarCalendario();
+  renderizarClases();
+}
 
         function renderizarClases() {
             const container = document.getElementById('schedule-container');
@@ -1816,6 +2447,178 @@
                 }
             }
         }
+    
+        
+        
+        // ================= PERFIL & RANGO V7 =================
+        function getRankConfig(count) {
+            // URLs RAW github
+            const images = {
+                bronce: 'https://raw.githubusercontent.com/jaime312/Q19/main/images/ham_bronce.png',
+                plata: 'https://raw.githubusercontent.com/jaime312/Q19/main/images/ham_plata.png',
+                oro: 'https://raw.githubusercontent.com/jaime312/Q19/main/images/ham_oro.png',
+                platino: 'https://raw.githubusercontent.com/jaime312/Q19/main/images/ham_platino.png',
+                diamante: 'https://raw.githubusercontent.com/jaime312/Q19/main/images/ham_diamante.png'
+            };
+
+            // Colores Texto
+            const colors = {
+                bronce: 'text-amber-700',
+                plata: 'text-gray-400',
+                oro: 'text-yellow-500',
+                platino: 'text-slate-500',
+                diamante: 'text-blue-500'
+            };
+
+            let level = {};
+
+            if (count > 16) {
+                level = { name: 'Diamante', color: colors.diamante, img: images.diamante, discount: 20, min: 17, next: null, nextName: null };
+            } else if (count >= 12) {
+                level = { name: 'Platino', color: colors.platino, img: images.platino, discount: 15, min: 12, next: 17, nextName: 'Diamante' };
+            } else if (count >= 7) {
+                level = { name: 'Oro', color: colors.oro, img: images.oro, discount: 10, min: 7, next: 12, nextName: 'Platino' };
+            } else if (count >= 3) {
+                level = { name: 'Plata', color: colors.plata, img: images.plata, discount: 5, min: 3, next: 7, nextName: 'Oro' };
+            } else {
+                level = { name: 'Bronce', color: colors.bronce, img: images.bronce, discount: 0, min: 0, next: 3, nextName: 'Plata' };
+            }
+            return level;
+        }
+
+        function renderProfileCard(profile) {
+  const wrapper = document.getElementById('profile-cards-wrapper');
+  if (!wrapper) return;
+
+  if (!profile) {
+    wrapper.classList.add('hidden');
+    return;
+  }
+
+  // Nombre completo
+  const nombre = profile.nombre ?? '';
+  const apellidos = profile.apellidos ?? '';
+  const fullNameEl = document.getElementById('profile-nombre-full');
+  if (fullNameEl) fullNameEl.textContent = `${nombre} ${apellidos}`.trim();
+
+  // =========================
+  // 1) NIVEL ACTUAL (Mes anterior)
+  // =========================
+  const countLastMonth = profile.clases_mes_anterior || 0;
+  const currentLevel = getRankConfig(countLastMonth);
+
+  const badgeCurrent = document.getElementById('rank-badge-current');
+  if (badgeCurrent) badgeCurrent.src = currentLevel.img;
+
+  const curNameEl = document.getElementById('current-rank-name');
+  if (curNameEl) {
+    curNameEl.textContent = currentLevel.name;
+    curNameEl.className = `text-xs font-bold uppercase tracking-wider ${currentLevel.color}`;
+  }
+
+  // Badge descuento nivel actual
+  const disc = document.getElementById('discount-badge');
+  if (disc) {
+    if ((currentLevel.discount || 0) > 0) {
+      disc.textContent = `-${currentLevel.discount}% en Bonos`;
+      disc.classList.remove('hidden');
+    } else {
+      disc.classList.add('hidden');
+    }
+  }
+
+  // =========================
+  // 2) PROGRESO (Mes actual) -> NIVEL MES SIGUIENTE
+  // =========================
+  const countThisMonth = profile.clases_completadas_mes || 0;
+  const countEl = document.getElementById('clases-count-num');
+  if (countEl) countEl.textContent = countThisMonth;
+
+  const projectedLevel = getRankConfig(countThisMonth);
+
+  const projNameEl = document.getElementById('projected-rank-name');
+  if (projNameEl) {
+    projNameEl.textContent = projectedLevel.name;
+    projNameEl.className = `text-sm font-black uppercase tracking-widest ml-1 ${projectedLevel.color}`;
+  }
+
+  // Badge descuento nivel proyectado (mes siguiente)
+  const projDisc = document.getElementById('projected-discount-badge');
+  if (projDisc) {
+    if ((projectedLevel.discount || 0) > 0) {
+      projDisc.textContent = `-${projectedLevel.discount}% en Bonos`;
+      projDisc.classList.remove('hidden');
+    } else {
+      projDisc.classList.add('hidden');
+    }
+  }
+
+  // Barra progreso + texto “faltan X para …”
+  const progressBar = document.getElementById('rank-progress-bar');
+  const nextInfo = document.getElementById('next-level-info');
+
+  if (projectedLevel.next) {
+    const target = projectedLevel.next;
+    const faltan = target - countThisMonth;
+
+    const range = projectedLevel.next - projectedLevel.min;
+    const doneInTier = countThisMonth - projectedLevel.min;
+
+    const pct = range > 0 ? Math.min(100, Math.max(5, (doneInTier / range) * 100)) : 100;
+    if (progressBar) progressBar.style.width = `${pct}%`;
+
+    // Color para el nombre del siguiente nivel
+    const nextLvlConfig = getRankConfig(target);
+    if (nextInfo) {
+      nextInfo.innerHTML =
+        `Faltan ${faltan} para <span class="${nextLvlConfig.color}">${projectedLevel.nextName}</span>`;
+    }
+  } else {
+    if (progressBar) progressBar.style.width = '100%';
+    if (nextInfo) nextInfo.textContent = '¡Nivel Máximo!';
+  }
+
+  wrapper.classList.remove('hidden');
+}
+        async function loadProfileCard() {
+            try {
+                if (!currentUser?.id) { renderProfileCard(null); return; }
+                const { data } = await client
+                    .from('profiles')
+                    .select('nombre, apellidos, clases_completadas_mes, clases_mes_anterior') 
+                    .eq('id', currentUser.id)
+                    .single();
+                renderProfileCard(data);
+            } catch (e) { renderProfileCard(null); }
+        }
+
+        async function abrirEditarPerfil() {
+            const fullName = document.getElementById('profile-nombre-full').textContent.trim();
+            const parts = fullName.split(' ');
+            const currentNombre = parts[0] || '';
+            const currentApellidos = parts.slice(1).join(' ') || '';
+
+            const { value: formValues } = await Swal.fire({
+                title: 'Editar Perfil',
+                html: `
+                    <div class="flex flex-col gap-3 text-left">
+                        <div><label class="text-xs font-bold text-gray-500 uppercase">Nombre</label><input id="swal-nombre" class="swal-input-custom w-full px-4 py-2 border rounded-lg bg-gray-50" value="${currentNombre}"></div>
+                        <div><label class="text-xs font-bold text-gray-500 uppercase">Apellidos</label><input id="swal-apellidos" class="swal-input-custom w-full px-4 py-2 border rounded-lg bg-gray-50" value="${currentApellidos}"></div>
+                    </div>
+                `,
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonColor: '#d4af37',
+                preConfirm: () => [document.getElementById('swal-nombre').value, document.getElementById('swal-apellidos').value]
+            });
+
+            if (formValues) {
+                const [newNombre, newApellidos] = formValues;
+                await client.from('profiles').update({ nombre: newNombre, apellidos: newApellidos }).eq('id', currentUser.id);
+                loadProfileCard();
+            }
+        }
+
     </script>
 </body>
 </html>
