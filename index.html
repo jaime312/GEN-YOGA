@@ -255,7 +255,7 @@
                         <p class="text-gray-400 text-sm">¿Aún no tienes cuenta?</p>
                         <button onclick="toggleAuth('register')"
                             class="text-q19-700 font-bold text-xl hover:underline mt-1">Regístrate gratis aquí</button>
-                        <p class="text-[10px] text-gray-400 mt-6 font-mono tracking-widest uppercase opacity-60">v1.1.4
+                        <p class="text-[10px] text-gray-500 mt-6 font-mono tracking-widest uppercase opacity-60">v1.1.6
                         </p>
                     </div>
 
@@ -407,6 +407,20 @@
             </div>
 
         </header>
+
+        <!-- BARRA NAVEGACIÓN PÚBLICA (responsive) -->
+        <nav id="public-nav" class="sticky top-20 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100 mb-6">
+            <div class="max-w-7xl mx-auto flex justify-center">
+                <button onclick="switchPublicView('horarios')" id="nav-public-horarios"
+                    class="px-8 py-4 text-sm font-bold uppercase tracking-widest border-b-2 border-q19-600 text-q19-800 transition hover:bg-white/50">
+                    <i class="ph-bold ph-calendar-check mr-2"></i> Clases
+                </button>
+                <button onclick="switchPublicView('profesores')" id="nav-public-profesores"
+                    class="px-8 py-4 text-sm font-bold uppercase tracking-widest border-b-2 border-transparent text-gray-400 hover:text-q19-600 transition hover:bg-white/50">
+                    <i class="ph-bold ph-users mr-2"></i> Profesores
+                </button>
+            </div>
+        </nav>
 
         <main class="flex-grow max-w-7xl mx-auto px-4 py-8 md:py-12 w-full">
 
@@ -597,7 +611,27 @@
                 </div>
             </div>
 
-            <!-- VISTA ASISTENCIAS (Alumnos por clase) -->
+            <!-- VISTA PROFESORES (PUBLIC) -->
+            <div id="view-profesores" class="hidden fade-in">
+                <!-- Header Sección -->
+                <div class="text-center mb-12">
+                    <span
+                        class="inline-block py-1 px-3 rounded-full bg-gold-50 text-gold-700 font-bold tracking-widest text-[10px] uppercase mb-4 border border-gold-100">
+                        Instructores Expertos
+                    </span>
+                    <h2 class="text-4xl md:text-5xl brand-font font-bold text-gray-900 mb-4">Nuestro Equipo</h2>
+                    <p class="text-gray-500 font-light text-lg max-w-2xl mx-auto leading-relaxed">
+                        Conoce a los profesionales que guiarán tu práctica. Cada uno aporta una energía única y años de
+                        experiencia para ayudarte a crecer.
+                    </p>
+                </div>
+
+                <!-- Grid Profesores Public -->
+                <div id="public-profesores-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- JS Injected Cards -->
+                </div>
+            </div>
+
             <div id="view-asistencias" class="hidden fade-in">
                 <div class="flex flex-col md:flex-row justify-between items-start mb-8 gap-4">
                     <div>
@@ -1021,9 +1055,14 @@
                 if (data.rol === 'admin') {
                     isAdmin = true;
                     document.body.classList.add('is-admin');
+                    const pubNav = document.getElementById('public-nav');
+                    if (pubNav) pubNav.classList.add('hidden');
                 } else {
                     isAdmin = false;
                     document.body.classList.remove('is-admin');
+                    const pubNav = document.getElementById('public-nav');
+                    if (pubNav) pubNav.classList.remove('hidden');
+
                     const vUsuarios = document.getElementById('view-usuarios');
                     if (!vUsuarios.classList.contains('hidden')) switchTab('horarios');
                 }
@@ -2714,6 +2753,100 @@
                     cargarProfesoresCache();
                 }
             }
+        }
+
+        // --- 11. GESTIÓN PÚBLICA (PROFESORES / CLASES) ---
+        function switchPublicView(viewName) {
+            const vHorarios = document.getElementById('view-horarios');
+            const vProfesores = document.getElementById('view-profesores');
+            const btnHorarios = document.getElementById('nav-public-horarios');
+            const btnProfesores = document.getElementById('nav-public-profesores');
+
+            // Hide all
+            vHorarios.classList.add('hidden');
+            if (vProfesores) vProfesores.classList.add('hidden');
+
+            // Reset btns
+            btnHorarios.classList.remove('border-q19-600', 'text-q19-800');
+            btnHorarios.classList.add('border-transparent', 'text-gray-400');
+
+            btnProfesores.classList.remove('border-q19-600', 'text-q19-800');
+            btnProfesores.classList.add('border-transparent', 'text-gray-400');
+
+            if (viewName === 'horarios') {
+                vHorarios.classList.remove('hidden');
+                btnHorarios.classList.add('border-q19-600', 'text-q19-800');
+                btnHorarios.classList.remove('border-transparent', 'text-gray-400');
+            } else if (viewName === 'profesores') {
+                if (vProfesores) {
+                    vProfesores.classList.remove('hidden');
+                    renderProfesoresPublic();
+                }
+                btnProfesores.classList.add('border-q19-600', 'text-q19-800');
+                btnProfesores.classList.remove('border-transparent', 'text-gray-400');
+            }
+        }
+
+        function renderProfesoresPublic() {
+            const grid = document.getElementById('public-profesores-grid');
+            if (!grid) return;
+
+            if (!allProfesoresCache || allProfesoresCache.length === 0) {
+                grid.innerHTML = '<div class="col-span-full text-center text-gray-400 italic py-10">No hay información de instructores disponible.</div>';
+                return;
+            }
+
+            grid.innerHTML = allProfesoresCache.map(p => {
+                // Generar Iniciales
+                const nombres = (p.nombre || 'Instructor').split(' ');
+                const iniciales = nombres.length > 1
+                    ? (nombres[0][0] + nombres[1][0]).toUpperCase()
+                    : (nombres[0][0] + (nombres[0][1] || '')).toUpperCase();
+
+                // Color Base (usar el del admin o uno por defecto)
+                const baseColor = p.color || '#d4af37'; // Gold default
+
+                return `
+                <div class="group relative bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-700 transform hover:-translate-y-2 border border-gray-100">
+                    
+                    <!-- Fondo Artístico (Initials) -->
+                    <div class="h-[28rem] w-full relative overflow-hidden bg-gray-50 flex items-center justify-center">
+                        
+                        <!-- Gradiente Suave "Yoga" -->
+                        <div class="absolute inset-0 opacity-20 group-hover:opacity-30 transition duration-700"
+                             style="background: radial-gradient(circle at 70% 20%, ${baseColor}, transparent 60%), radial-gradient(circle at 0% 100%, ${baseColor}, transparent 50%);">
+                        </div>
+
+                        <!-- Iniciales Grandes "Flotantes" -->
+                         <span class="brand-font text-[12rem] leading-none font-bold opacity-10 select-none transform transition duration-1000 group-hover:scale-110 group-hover:rotate-6 group-hover:opacity-20"
+                               style="color: ${baseColor}; text-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                            ${iniciales}
+                        </span>
+                        
+                        <!-- Overlay Decorativo Vidrio -->
+                        <div class="absolute inset-0 bg-white/10 backdrop-blur-[1px]"></div>
+
+                        <!-- Información (Bottom) -->
+                        <div class="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-white via-white/90 to-transparent pt-24">
+                             <div class="relative transform translate-y-2 group-hover:translate-y-0 transition duration-500">
+                                <span class="inline-block px-3 py-1 mb-3 text-[10px] font-bold tracking-[0.2em] uppercase text-gray-500 bg-gray-100 rounded-full border border-gray-200">
+                                    ${p.especialidad || 'Instructor'}
+                                </span>
+                                <h3 class="text-4xl brand-font font-bold text-gray-900 mb-2 leading-tight" style="color: ${baseColor}">
+                                    ${p.nombre}
+                                </h3>
+                                
+                                <div class="h-0 group-hover:h-auto overflow-hidden transition-all duration-500 opacity-0 group-hover:opacity-100">
+                                    <p class="text-gray-500 text-sm font-light leading-relaxed mt-4 pt-4 border-t border-gray-100">
+                                         ${p.descripcion || 'Instructor certificado apasionado por el bienestar y la enseñanza de técnicas avanzadas.'}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
         }
     </script>
 </body>
