@@ -67,6 +67,8 @@
             display: block !important;
         }
 
+
+
         .is-admin .admin-flex {
             display: flex !important;
         }
@@ -255,7 +257,7 @@
                         <p class="text-gray-400 text-sm">¿Aún no tienes cuenta?</p>
                         <button onclick="toggleAuth('register')"
                             class="text-q19-700 font-bold text-xl hover:underline mt-1">Regístrate gratis aquí</button>
-                        <p class="text-[10px] text-gray-500 mt-6 font-mono tracking-widest uppercase opacity-60">v1.1.6
+                        <p class="text-[10px] text-gray-500 mt-6 font-mono tracking-widest uppercase opacity-60">v1.2.0
                         </p>
                     </div>
 
@@ -302,7 +304,7 @@
                             <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Contraseña</label>
                             <input type="password" id="reg-password"
                                 class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-gold-500 transition"
-                                placeholder="Contraseña segura" required>
+                                placeholder="Contraseña" required>
                         </div>
                         <button type="submit"
                             class="w-full bg-gray-900 text-white py-4 rounded-xl font-bold hover:bg-black transition shadow-lg transform active:scale-[0.98] tracking-wide text-sm">CREAR
@@ -419,6 +421,10 @@
                     class="px-8 py-4 text-sm font-bold uppercase tracking-widest border-b-2 border-transparent text-gray-400 hover:text-q19-600 transition hover:bg-white/50">
                     <i class="ph-bold ph-users mr-2"></i> Profesores
                 </button>
+                <button onclick="switchPublicView('mis-clases')" id="nav-public-mis-clases"
+                    class="hidden px-8 py-4 text-sm font-bold uppercase tracking-widest border-b-2 border-transparent text-gray-400 hover:text-q19-600 transition hover:bg-white/50">
+                    <i class="ph-bold ph-list-checks mr-2"></i> Mis Clases
+                </button>
             </div>
         </nav>
 
@@ -449,63 +455,74 @@
 
                         <!-- FICHA CLIENTE COMPACTA -->
                         <!-- FICHA CLIENTE AVANZADA V5 -->
-                        <div id="profile-card"
-                            class="glass-panel rounded-3xl p-4 pr-6 border border-white/60 shadow-lg hidden flex items-start gap-5 bg-white/70 backdrop-blur-xl max-w-lg relative group transition-all hover:bg-white/80">
+                        <!-- CONTENEDOR TARJETAS PERFIL (ID wrapper general para ocultar si no hay usuario) -->
+                        <div id="profile-card" class="flex flex-col md:flex-row gap-5 max-w-4xl transition-all">
 
-                            <!-- BADGE RANGO (Grande: w-28 = 7rem) -->
+                            <!-- TARJETA 1: RANGO & NIVEL -->
                             <div
-                                class="relative w-28 h-28 shrink-0 flex items-center justify-center -ml-2 filter drop-shadow-lg">
-                                <img id="rank-badge" src="" alt="Rango"
-                                    class="w-full h-full object-contain transition transform group-hover:scale-105 rounded-2xl"
-                                    onerror="this.style.display='none'">
+                                class="glass-panel rounded-3xl p-5 border border-white/60 shadow-lg flex flex-col items-center justify-center bg-white/70 backdrop-blur-xl w-full md:w-auto md:min-w-[200px] relative group hover:bg-white/80 transition-all">
+                                <div class="relative h-24 mb-2 filter drop-shadow-md">
+                                    <img id="rank-badge" src="" alt="Rango"
+                                        class="h-full w-auto object-contain transition transform group-hover:scale-105 rounded-xl shadow-sm"
+                                        onerror="this.style.display='none'">
+                                </div>
+                                <div class="text-center">
+                                    <span
+                                        class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Nivel
+                                        Actual</span>
+                                    <div class="flex items-center justify-center gap-2">
+                                        <span class="text-lg font-black uppercase tracking-tight"
+                                            id="rank-name">--</span>
+                                        <span id="discount-badge"
+                                            class="hidden text-[10px] font-bold text-white bg-emerald-500 px-2 py-0.5 rounded-full shadow-sm"></span>
+                                    </div>
+                                </div>
                             </div>
 
-                            <!-- Datos + Progreso -->
-                            <div class="flex flex-col justify-center w-full pt-1">
+                            <!-- TARJETA 2: DATOS & PROGRESO -->
+                            <div
+                                class="glass-panel rounded-3xl p-6 border border-white/60 shadow-lg flex flex-col justify-center bg-white/70 backdrop-blur-xl flex-grow relative group hover:bg-white/80 transition-all">
 
                                 <!-- Header: Nombre + Gear -->
-                                <div class="flex justify-between items-start w-full mb-1">
-                                    <div>
-                                        <div class="flex items-center gap-2">
-                                            <!-- Usamos un span único para nombre completo ahora para facilitar diseño -->
-                                            <span id="profile-nombre-full"
-                                                class="font-bold text-gray-900 text-xl leading-tight font-serif"></span>
-                                            <button onclick="abrirEditarPerfil()"
-                                                class="text-gray-300 hover:text-gold-500 transition p-1 rounded-full hover:bg-gold-50"
-                                                title="Editar Nombre">
-                                                <i class="ph-bold ph-gear text-sm"></i>
-                                            </button>
-                                        </div>
-                                        <div class="flex items-center gap-2 mt-0.5">
-                                            <span class="text-xs font-black uppercase tracking-widest text-gold-600"
-                                                id="rank-name">BRONCE</span>
-                                            <span id="discount-badge"
-                                                class="hidden text-[10px] font-bold text-white bg-emerald-500 px-2 py-0.5 rounded-full shadow-sm">
-                                                -5%
-                                            </span>
-                                        </div>
+                                <div class="flex justify-between items-start mb-4">
+                                    <div class="flex items-center gap-3">
+                                        <span id="profile-nombre-full"
+                                            class="font-bold text-gray-900 text-2xl leading-tight font-serif truncate max-w-[250px] block">--</span>
+                                        <button onclick="abrirEditarPerfil()"
+                                            class="text-gray-300 hover:text-gold-500 transition p-1.5 rounded-full hover:bg-gold-50"
+                                            title="Editar Nombre">
+                                            <i class="ph-bold ph-gear text-lg"></i>
+                                        </button>
                                     </div>
 
-                                    <!-- Clases mes actual -->
-                                    <div class="text-right leading-none">
-                                        <span class="block text-2xl font-bold text-gray-800"
+                                    <!-- Clases Count -->
+                                    <div class="text-right">
+                                        <span class="block text-3xl font-bold text-gray-800 leading-none"
                                             id="clases-count-num">0</span>
-                                        <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wide">Clases
-                                            Mes</span>
+                                        <span
+                                            class="text-[9px] font-bold text-gray-400 uppercase tracking-wide block mt-1">Clases
+                                            mes actual</span>
                                     </div>
                                 </div>
 
-                                <!-- Barra de Progreso -->
-                                <div class="mt-3 w-full">
-                                    <div
-                                        class="flex justify-between text-[10px] font-bold text-gray-400 mb-1 uppercase tracking-wider">
-                                        <span id="progress-text" class="text-gray-400">Progreso nivel</span>
-                                        <span id="next-level-info" class="text-q19-600 font-bold">Calculando...</span>
+                                <!-- Barra Progreso + Next Info -->
+                                <div class="w-full space-y-3">
+                                    <div class="flex justify-between items-end">
+                                        <span id="progress-text"
+                                            class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Progreso
+                                            nivel</span>
+                                        <div class="text-right">
+                                            <span id="next-level-info"
+                                                class="block text-xs font-bold text-q19-700">--</span>
+                                            <span id="next-discount-text"
+                                                class="block text-[10px] font-bold text-emerald-600 mt-0.5"></span>
+                                        </div>
                                     </div>
-                                    <div class="h-2.5 w-full bg-gray-200 rounded-full overflow-hidden shadow-inner">
+
+                                    <div class="h-3 w-full bg-gray-200 rounded-full overflow-hidden shadow-inner">
                                         <div id="rank-progress-bar"
                                             class="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full transition-all duration-1000 ease-out"
-                                            style="width: 0%"></div>
+                                            style="width: 0%;"></div>
                                     </div>
                                 </div>
                             </div>
@@ -695,10 +712,13 @@
                         <p class="text-gray-500 mt-1">Administra el equipo docente. Nombres, especialidades y fotos.
                         </p>
                     </div>
+                    <!-- BOTÓN ELIMINADO: La creación de profesores se hace asignando rol a usuario existente en Configuración -->
+                    <!-- 
                     <button onclick="nuevoProfesor()"
                         class="flex bg-q19-700 hover:bg-q19-800 text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-lg hover:shadow-xl hover:scale-105 transition items-center gap-2">
                         <i class="ph-bold ph-plus-circle text-lg"></i> Nuevo Profesor
                     </button>
+                    -->
                 </div>
 
                 <!-- Grid de Profesores "Estéticamente Bonito" -->
@@ -808,12 +828,15 @@
             <form id="form-crear-clase" class="p-6 space-y-5">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <!-- Nombre de la Clase -->
+                    <!-- Tipo de Clase (Replaces Nombre Text Input) -->
                     <div class="md:col-span-2">
-                        <label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1 mb-2 block">Nombre
-                            de la Clase</label>
-                        <input type="text" id="clase-nombre" required
-                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-q19-500 focus:border-q19-500 outline-none transition"
-                            placeholder="Ej: Pilates Reformer, Vinyasa Flow, Hot Yoga...">
+                        <label class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1 mb-2 block">Tipo de
+                            Clase</label>
+                        <select id="clase-tipo-select" required
+                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-q19-500 focus:border-q19-500 outline-none transition">
+                            <option value="" disabled selected>Cargando tipos...</option>
+                        </select>
+                        <p class="text-[10px] text-gray-400 mt-1 ml-1">Debes configurar los tipos en "Configuración"</p>
                     </div>
 
                     <!-- Fecha -->
@@ -830,6 +853,17 @@
                             Inicio</label>
                         <input type="time" id="clase-hora-inicio" required
                             class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-q19-500 focus:border-q19-500 outline-none transition">
+                    </div>
+
+                    <!-- PROFESOR SELECT -->
+                    <div>
+                        <label
+                            class="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1 mb-2 block">Profesor</label>
+                        <select id="clase-profesor-id" required
+                            class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-q19-500 focus:border-q19-500 outline-none transition">
+                            <option value="" disabled selected>Selecciona un profesor</option>
+                            <!-- Se llena dinámicamente -->
+                        </select>
                     </div>
 
                     <!-- Duración (minutos) -->
@@ -949,19 +983,37 @@
             e.preventDefault();
             const email = document.getElementById('reg-email').value;
             const password = document.getElementById('reg-password').value;
+            const nombre = document.getElementById('reg-nombre').value;
+            const apellidos = document.getElementById('reg-apellidos').value;
 
             if (password.length < 6) return Swal.fire('Contraseña débil', 'Usa al menos 6 caracteres.', 'warning');
 
             Swal.showLoading();
-            const { error } = await client.auth.signUp({ email, password });
 
-            if (error) Swal.fire('Error', error.message, 'error');
-            else Swal.fire({
-                icon: 'success',
-                title: '¡Bienvenido a HAM Yoga!',
-                text: '¡Tu cuenta ha sido creada con éxito!.',
-                confirmButtonColor: '#1a4d4f'
+            // Enviamos metadatos y luego actualizamos tabla profiles
+            const { data, error } = await client.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: { nombre, apellidos }
+                }
             });
+
+            if (error) {
+                Swal.fire('Error', error.message, 'error');
+            } else {
+                // Intentar asegurar que los datos estén en profiles
+                if (data?.user) {
+                    await client.from('profiles').update({ nombre, apellidos }).eq('id', data.user.id);
+                }
+
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Bienvenido a HAM Yoga!',
+                    text: '¡Tu cuenta ha sido creada con éxito!.',
+                    confirmButtonColor: '#1a4d4f'
+                });
+            }
         });
 
         async function logout() {
@@ -1052,19 +1104,80 @@
                 userBonos = data.bonos || 0;
                 animateValue("bonos-count", parseInt(document.getElementById('bonos-count').innerText), userBonos, 500);
 
-                if (data.rol === 'admin') {
+                // Normalizar rol
+                const rol = (data.rol || '').toLowerCase().trim();
+
+                if (rol === 'admin') {
                     isAdmin = true;
                     document.body.classList.add('is-admin');
+                    document.body.classList.remove('is-profesor');
+
                     const pubNav = document.getElementById('public-nav');
                     if (pubNav) pubNav.classList.add('hidden');
-                } else {
+
+                    // Mostrar todos los tabs
+                    ['tab-horarios', 'tab-admin-profesores', 'tab-asistencias', 'tab-usuarios', 'tab-configuracion'].forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.classList.remove('hidden');
+                    });
+
+                    // Resetear nombre tab asistencias
+                    const tAsist = document.getElementById('tab-asistencias');
+                    if (tAsist) tAsist.innerHTML = '<i class="ph-bold ph-list-checks text-gold-400"></i> Alumnos por clase';
+
+                    const btnMisClases = document.getElementById('nav-public-mis-clases');
+                    if (btnMisClases) btnMisClases.classList.add('hidden');
+
+                    // Resetear estilo forzado por si acaso
+                    const adminBar = document.querySelector('.admin-only');
+                    if (adminBar) adminBar.style.removeProperty('display');
+
+                } else if (rol === 'profesor') {
                     isAdmin = false;
                     document.body.classList.remove('is-admin');
+                    document.body.classList.add('is-profesor');
+
+                    // Mostrar barra admin? NO, el usuario pidio quitarla para profesores.
+                    // Mostrar public nav SI.
                     const pubNav = document.getElementById('public-nav');
                     if (pubNav) pubNav.classList.remove('hidden');
 
+                    // Mostrar botón "Mis Clases" en Nav Pública
+                    const btnMisClases = document.getElementById('nav-public-mis-clases');
+                    if (btnMisClases) btnMisClases.classList.remove('hidden');
+
+                    // OCULTAR tabs admin (aunque la barra esté oculta, por seguridad)
+                    ['tab-horarios', 'tab-admin-profesores', 'tab-usuarios', 'tab-configuracion'].forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.classList.add('hidden');
+                    });
+
+                    // Asegurar que la barra negra NO se vea (ya quitamos el CSS override)
+                    const adminBar = document.querySelector('.admin-only');
+                    if (adminBar) {
+                        adminBar.style.removeProperty('display');
+                        // adminBar.classList.add('hidden'); // default
+                    }
+
+                } else {
+                    isAdmin = false;
+                    document.body.classList.remove('is-admin');
+                    document.body.classList.remove('is-profesor');
+
+                    const pubNav = document.getElementById('public-nav');
+                    if (pubNav) pubNav.classList.remove('hidden');
+
+                    const btnMisClases = document.getElementById('nav-public-mis-clases');
+                    if (btnMisClases) btnMisClases.classList.add('hidden');
+
                     const vUsuarios = document.getElementById('view-usuarios');
                     if (!vUsuarios.classList.contains('hidden')) switchTab('horarios');
+
+                    const adminBar = document.querySelector('.admin-only');
+                    if (adminBar) {
+                        adminBar.style.display = '';
+                        adminBar.classList.add('hidden');
+                    }
                 }
 
                 const alertBox = document.getElementById('no-bonos-alert');
@@ -1190,7 +1303,7 @@
     </div>`;
 
             const { data: clases, error: errClases } =
-                await client.from('clases').select('*').order('fecha_inicio');
+                await client.from('clases').select('*, profesores(*)').order('fecha_inicio');
 
             const { data: reservas, error: errReservas } =
                 await client.from('reservas').select('*');
@@ -1338,6 +1451,12 @@
 
                     const adminTrash = `<button onclick="borrarClase(${c.id})" class="admin-only hidden text-gray-300 hover:text-red-500 transition ml-2 p-1" title="Eliminar Clase"><i class="ph-bold ph-trash"></i></button>`;
 
+                    // PROFESOR INFO
+                    const profesorName = c.profesores ? c.profesores.nombre : 'Staff Q19';
+                    const profesorFoto = c.profesores && c.profesores.foto_url ? c.profesores.foto_url : null;
+                    const profesorAvatar = profesorFoto ? `<img src="${profesorFoto}" class="w-full h-full object-cover">` : `<div class="w-full h-full bg-q19-100 flex items-center justify-center text-q19-600 text-[10px] font-bold">${profesorName.charAt(0)}</div>`;
+
+
                     const row = document.createElement('div');
                     row.className = 'p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-gray-50/50 transition duration-300 group';
 
@@ -1349,20 +1468,31 @@
                             </div>
                             
                             <div class="flex-grow">
-                                <div class="flex items-start justify-between">
-                                    <h4 class="brand-font font-bold text-lg text-gray-800 group-hover:text-q19-700 transition leading-tight">
-                                        ${c.nombre}
+                                <div class="flex flex-col gap-1">
+                                    <div class="flex flex-wrap items-center gap-3">
+                                        <h4 class="brand-font font-bold text-lg text-gray-800 group-hover:text-q19-700 transition leading-tight">
+                                            ${c.nombre}
+                                        </h4>
+                                        
+                                        <!-- PROFESOR CHIP (Moved & Resized) -->
+                                        <div class="flex items-center gap-2 bg-gray-50 px-2.5 py-1 rounded-full border border-gray-200 shadow-sm order-last sm:order-none" title="Instructor">
+                                            <div class="w-6 h-6 rounded-full overflow-hidden border border-gray-200 shadow-sm flex-shrink-0">
+                                                ${profesorAvatar}
+                                            </div>
+                                            <span class="text-xs sm:text-sm font-bold text-gray-700 truncate max-w-[150px]">${profesorName}</span>
+                                        </div>
+
                                         ${adminTrash}
-                                    </h4>
-                                </div>
-                                
-                                <div class="flex items-center gap-2 mt-2">
-                                    <div class="flex items-center gap-1.5 text-xs text-gray-500 bg-white border border-gray-200 px-2 py-0.5 rounded-md shadow-sm" title="Aforo">
-                                        <i class="ph-bold ph-users text-gray-300 text-sm"></i>
-                                        <span class="font-bold text-gray-700">${c.ocupadas}</span>
-                                        <span class="text-gray-300 text-[10px]">/ ${c.capacidad_max}</span>
                                     </div>
-                                    ${reservada ? '<span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-md uppercase tracking-wide flex items-center gap-1"><i class="ph-fill ph-check-circle"></i> Tu Plaza</span>' : ''}
+
+                                    <div class="flex items-center gap-2 mt-1">
+                                         <div class="flex items-center gap-1.5 text-xs text-gray-500 bg-white border border-gray-200 px-2 py-0.5 rounded-md shadow-sm" title="Aforo">
+                                            <i class="ph-bold ph-users text-gray-300 text-sm"></i>
+                                            <span class="font-bold text-gray-700">${c.ocupadas}</span>
+                                            <span class="text-gray-300 text-[10px]">/ ${c.capacidad_max}</span>
+                                        </div>
+                                        ${reservada ? '<span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-md uppercase tracking-wide flex items-center gap-1"><i class="ph-fill ph-check-circle"></i> Tu Plaza</span>' : ''}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1504,8 +1634,9 @@
                     <span class="text-xs uppercase tracking-widest font-bold text-gray-400">Cargando asistencias...</span>
                 </div>`;
 
-            // Obtener clases + reservas + profiles
-            const { data: clases, error: errClases } = await client.from('clases').select('*').order('fecha_inicio');
+            // Obtener clases + reservas + profiles + PROFESORES
+            // FIX: Añadimos profesores(*) para poder filtrar
+            const { data: clases, error: errClases } = await client.from('clases').select('*, profesores(*)').order('fecha_inicio');
             if (errClases) {
                 console.error(errClases);
                 cont.innerHTML = '';
@@ -1549,15 +1680,26 @@
 
             cont.innerHTML = '';
 
-            // Agrupar clases futuras por fecha para que quede más legible
+            // Agrupar clases futuras
             const hoy = new Date();
             hoy.setHours(0, 0, 0, 0);
 
-            const clasesFuturas = clases.filter(c => {
+            let clasesFuturas = clases.filter(c => {
                 const d = new Date(c.fecha_inicio);
                 d.setHours(0, 0, 0, 0);
                 return d >= hoy;
             });
+
+            // FILTRO PARA PROFESORES
+            // Si no es admin y es profesor, solo ve SUS clases (match email)
+            // Asumimos que currentUser tiene el email correcto
+            const isProfesor = document.body.classList.contains('is-profesor');
+            if (!isAdmin && isProfesor && currentUser) {
+                clasesFuturas = clasesFuturas.filter(c => {
+                    // Verificamos si la clase tiene profesor asignado y si coincide el email
+                    return c.profesores && c.profesores.email === currentUser.email;
+                });
+            }
 
             if (clasesFuturas.length === 0) {
                 cont.innerHTML = '';
@@ -1597,6 +1739,25 @@
 
                 grupos[dateKey].forEach(c => {
                     const hora = new Date(c.fecha_inicio).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+
+                    // PROFESOR INFO (Exact layout from cargarHorarios)
+                    const p = c.profesores;
+                    const profesorName = p ? p.nombre : 'Staff Q19';
+                    const profesorFoto = p && p.foto_url ? p.foto_url : null;
+                    const profesorAvatar = profesorFoto
+                        ? `<img src="${profesorFoto}" class="w-full h-full object-cover">`
+                        : `<div class="w-full h-full bg-q19-100 flex items-center justify-center text-q19-600 text-[10px] font-bold">${profesorName.charAt(0)}</div>`;
+
+                    let profHTML = '';
+                    if (p) {
+                        profHTML = `
+                        <div class="flex items-center gap-2 bg-gray-50 px-2.5 py-1 rounded-full border border-gray-200 shadow-sm ml-2" title="Instructor">
+                            <div class="w-6 h-6 rounded-full overflow-hidden border border-gray-200 shadow-sm flex-shrink-0">
+                                ${profesorAvatar}
+                            </div>
+                            <span class="text-xs sm:text-sm font-bold text-gray-700 truncate max-w-[150px]">${profesorName}</span>
+                        </div>`;
+                    }
                     const listadoReservas = reservasPorClase[c.id] || [];
                     const totalReservas = listadoReservas.length;
 
@@ -1654,7 +1815,10 @@
                                 
                                 <!-- Title & Badges -->
                                 <div class="flex-grow pt-1 sm:pt-0">
-                                    <h4 class="brand-font text-lg font-bold text-gray-900 leading-tight">${c.nombre}</h4>
+                                    <h4 class="brand-font text-lg font-bold text-gray-900 leading-tight flex items-center flex-wrap gap-1">
+                                        ${c.nombre}
+                                        ${profHTML}
+                                    </h4>
                                     <div class="flex flex-wrap items-center gap-2 mt-1.5">
                                          <span class="flex items-center gap-1.5 text-xs font-semibold text-gray-600 bg-white border border-gray-200 px-2.5 py-1 rounded-lg shadow-sm">
                                             <i class="ph-bold ph-users text-gray-400"></i> ${totalReservas} / ${c.capacidad_max}
@@ -1714,9 +1878,14 @@
                 const row = document.createElement('tr');
                 row.className = 'hover:bg-gray-50 transition border-b border-gray-50 last:border-0';
 
-                const roleBadge = isAdminRow
-                    ? '<span class="bg-gray-900 text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-widest border border-gray-800">Admin</span>'
-                    : '<span class="bg-gray-100 text-gray-400 text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-widest border border-gray-200">Cliente</span>';
+                let roleBadge = '<span class="bg-gray-100 text-gray-400 text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-widest border border-gray-200">Cliente</span>';
+
+                if (u.rol === 'admin') {
+                    roleBadge = '<span class="bg-gray-900 text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-widest border border-gray-800">Admin</span>';
+                } else if (u.rol === 'profesor') {
+                    // Estilo Plateado para Profesor
+                    roleBadge = '<span class="bg-slate-200 text-slate-600 text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-widest border border-slate-300">Profesor</span>';
+                }
 
                 // Calcular Nivel Anterior
                 const clasesAnt = u.clases_mes_anterior || 0;
@@ -1756,6 +1925,12 @@
                             
                             <button onclick="sumarBono('${u.id}', 5)" class="px-3 h-8 flex items-center gap-1 rounded-lg bg-gold-500 text-white text-xs font-bold hover:bg-gold-600 transition shadow-sm" title="Pack 5">
                                 <i class="ph-bold ph-ticket"></i> +5
+                            </button>
+
+                            <div class="w-px h-6 bg-gray-200 mx-1"></div>
+
+                            <button onclick="borrarUsuario('${u.id}')" class="w-8 h-8 flex items-center justify-center rounded-lg border border-red-200 text-red-500 hover:bg-red-50 hover:text-red-700 transition" title="Eliminar Usuario Completo">
+                                <i class="ph-bold ph-trash"></i>
                             </button>
                         </div>
                     </td>
@@ -1813,6 +1988,8 @@
                 `).join('');
         }
 
+        /* FUNCIÓN ELIMINADA: nuevoProfesor (Duplicada y obsoleta) */
+        /*
         async function nuevoProfesor() {
             const { value: formValues } = await Swal.fire({
                 title: 'Nuevo Profesor',
@@ -1867,6 +2044,7 @@
                 }
             }
         }
+        */
 
         async function editarProfesor(id) {
             const profesor = allProfesoresCache.find(p => p.id === id);
@@ -1968,8 +2146,49 @@
             }
         }
 
+        async function borrarUsuario(uid) {
+            const res = await Swal.fire({
+                title: '¿Eliminar usuario?',
+                text: "Se borrará el perfil y sus reservas. (Nota: Esto no borra la cuenta de autenticación si existen restricciones).",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminar'
+            });
+
+            if (res.isConfirmed) {
+                Swal.showLoading();
+
+                // 1. Borrar reservas (por si acaso no hay cascade delete)
+                const { error: errReservas, count: countReservas } = await client.from('reservas').delete().eq('user_id', uid);
+                if (errReservas) console.error("Error borrar reservas:", errReservas);
+
+                // 2. Borrar perfil
+                // IMPORTANTE: Usamos 'select()' para que nos devuelva las filas borradas. S
+                const { data, error } = await client.from('profiles').delete().eq('id', uid).select();
+
+                if (error) {
+                    console.error("Error borrar perfil:", error);
+                    Swal.fire('Error', 'No se pudo eliminar: ' + error.message, 'error');
+                } else if (!data || data.length === 0) {
+                    // Si data es vacío, significa que NO se borró nada (bloqueo RLS)
+                    console.warn("Borrado retornó 0 filas. Bloqueo RLS activo.");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Permiso Denegado',
+                        text: 'El usuario NO fue borrado. Tu usuario administrador no tiene permisos en la base de datos para eliminar perfiles.',
+                        footer: 'Ejecuta el SQL de Políticas RLS que te he proporcionado.'
+                    });
+                } else {
+                    Swal.fire('Eliminado', 'El usuario ha sido eliminado correctamente.', 'success');
+                    await cargarUsuariosAdmin();
+                }
+            }
+        }
+
         // --- 8. CREAR CLASE INDIVIDUAL ---
-        function abrirModalCrearClase() {
+        async function abrirModalCrearClase() {
             const modal = document.getElementById('modal-crear-clase');
             modal.classList.remove('hidden');
 
@@ -1985,6 +2204,55 @@
             const ahora = new Date();
             const horaActual = `${String(ahora.getHours()).padStart(2, '0')}:${String(ahora.getMinutes()).padStart(2, '0')}`;
             document.getElementById('clase-hora-inicio').value = horaActual;
+
+            // 1. CARGAR TIPOS DE CLASE
+            const selectTipo = document.getElementById('clase-tipo-select');
+            selectTipo.innerHTML = '<option value="" disabled selected>Cargando...</option>';
+
+            const { data: tipos, error: errTipos } = await client.from('tipos_clases').select('*').eq('activo', true).order('orden');
+
+            selectTipo.innerHTML = '<option value="" disabled selected>Selecciona tipo de clase</option>';
+            if (tipos && tipos.length > 0) {
+                tipos.forEach(t => {
+                    const opt = document.createElement('option');
+                    opt.value = t.id;
+                    opt.text = t.nombre;
+                    // Dataset para auto-fill duración/capacidad si quisiéramos
+                    opt.dataset.duracion = t.duracion_predeterminada;
+                    selectTipo.appendChild(opt);
+                });
+
+                // Listener para auto-fill duración
+                selectTipo.onchange = (e) => {
+                    const opt = selectTipo.options[selectTipo.selectedIndex];
+                    if (opt.dataset.duracion) {
+                        document.getElementById('clase-duracion').value = opt.dataset.duracion;
+                    }
+                };
+            } else {
+                const opt = document.createElement('option');
+                opt.text = "No hay tipos definidos (Crear en Configuración)";
+                opt.disabled = true;
+                selectTipo.appendChild(opt);
+            }
+
+            // 2. LLENAR SELECT DE PROFESORES
+            const selectProfesor = document.getElementById('clase-profesor-id');
+            selectProfesor.innerHTML = '<option value="" disabled selected>Selecciona un profesor</option>';
+
+            if (allProfesoresCache && allProfesoresCache.length > 0) {
+                allProfesoresCache.forEach(p => {
+                    const option = document.createElement('option');
+                    option.value = p.id;
+                    option.textContent = p.nombre + (p.especialidad ? ` (${p.especialidad})` : '');
+                    selectProfesor.appendChild(option);
+                });
+            } else {
+                const option = document.createElement('option');
+                option.disabled = true;
+                option.textContent = 'No hay profesores disponibles';
+                selectProfesor.appendChild(option);
+            }
         }
 
         function cerrarModalCrearClase() {
@@ -1996,11 +2264,20 @@
         document.getElementById('form-crear-clase').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const nombre = document.getElementById('clase-nombre').value;
+            const tipoSelect = document.getElementById('clase-tipo-select');
+            const nombre = tipoSelect.options[tipoSelect.selectedIndex].text; // Usamos el nombre del tipo
+            // Opcional: Podríamos guardar tipo_id si la tabla clases tuviera la columna. Por ahora nombre.
+
             const fecha = document.getElementById('clase-fecha').value;
             const horaInicio = document.getElementById('clase-hora-inicio').value;
             const duracion = parseInt(document.getElementById('clase-duracion').value);
             const capacidad = parseInt(document.getElementById('clase-capacidad').value);
+            const profesorId = document.getElementById('clase-profesor-id').value;
+
+            if (!profesorId) {
+                Swal.fire('Error', 'Debes seleccionar un profesor', 'error');
+                return;
+            }
 
             const fechaInicio = new Date(`${fecha}T${horaInicio}`);
             const fechaFin = new Date(fechaInicio.getTime() + duracion * 60000);
@@ -2014,7 +2291,8 @@
                 nombre: nombre,
                 fecha_inicio: fechaInicio.toISOString(),
                 fecha_fin: fechaFin.toISOString(),
-                capacidad_max: capacidad
+                capacidad_max: capacidad,
+                profesor_id: profesorId
             }]).select();
 
             Swal.close();
@@ -2093,53 +2371,551 @@
 
             allConfigCache = configs || [];
 
-            // Agrupar por categoría
-            const porCategoria = {};
-            configs.forEach(config => {
-                const info = CONFIG_INFO[config.clave] || {
-                    nombre: config.clave,
-                    descripcion: config.descripcion || 'Sin descripción',
-                    icono: 'ph-gear',
-                    categoria: 'Otros'
-                };
+            // FILTRAR: Solo queremos 'horas_limite_cancelacion'
+            const targetConfig = configs.find(c => c.clave === 'horas_limite_cancelacion');
 
-                if (!porCategoria[info.categoria]) {
-                    porCategoria[info.categoria] = [];
-                }
-
-                porCategoria[info.categoria].push({ ...config, info });
-            });
-
-            // Renderizar vista mejorada
-            container.innerHTML = `
-                <div class="fade-in">
-                    <div class="flex flex-col md:flex-row justify-between items-start mb-8 gap-4">
-                        <div>
-                            <h2 class="text-3xl brand-font font-bold text-gray-900">Configuración del Sistema</h2>
-                            <p class="text-gray-500 mt-1">Ajusta los parámetros de funcionamiento de la aplicación</p>
-                        </div>
-                        <button onclick="agregarConfiguracion()" class="flex items-center gap-2 bg-q19-700 text-white px-5 py-3 rounded-xl text-sm font-bold shadow-lg hover:shadow-xl hover:scale-105 transition">
-                            <i class="ph-bold ph-plus-circle text-lg"></i> Nuevo Parámetro
-                        </button>
+            if (!targetConfig) {
+                container.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-20 text-center">
+                        <i class="ph-duotone ph-warning-circle text-4xl text-gray-300 mb-4"></i>
+                        <h3 class="text-lg font-bold text-gray-700">Configuración no encontrada</h3>
+                        <p class="text-gray-500 text-sm">No se encontró el parámetro 'horas_limite_cancelacion'.</p>
                     </div>
-                    <div class="space-y-6">
-                        ${Object.keys(porCategoria).map(categoria => `
-                            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                                <div class="bg-gradient-to-r from-black to-gray-500 px-6 py-4 border-b border-gray-100">
-                                    <h3 class="font-bold text-lg text-white flex items-center gap-2">
-                                        <i class="ph-fill ph-folder text-q19-600"></i>
-                                        ${categoria}
-                                    </h3>
+                `;
+                return;
+            }
+
+            const info = CONFIG_INFO['horas_limite_cancelacion'];
+
+            // Renderizar vista simplificada y friendly
+            container.innerHTML = `
+                <div class="fade-in max-w-5xl mx-auto mt-8">
+                    <div class="text-center mb-10">
+                        <h2 class="text-3xl brand-font font-bold text-gray-900 mb-3">Ajustes del Sistema</h2>
+                        <p class="text-gray-500 text-lg">Personaliza las reglas principales de tu aplicación.</p>
+                    </div>
+                    
+                    <div class="space-y-8">
+                    
+                    <!-- ROW 1: STAFF & LIMITS (Compactos) -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                        
+                        <!-- 1. GESTIÓN DE STAFF (Purple) -->
+                        <div class="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden group hover:shadow-xl transition flex flex-col h-full">
+                            <div class="w-full h-1.5 bg-gradient-to-r from-purple-400 to-purple-600"></div>
+                            
+                            <div class="p-6 md:p-8 flex flex-col items-center text-center">
+                                <div class="flex flex-col sm:flex-row items-center gap-6 mb-6 w-full">
+                                    <div class="w-16 h-16 shrink-0 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center shadow-sm">
+                                        <i class="ph-bold ph-graduation-cap text-3xl"></i>
+                                    </div>
+                                    <div class="text-left flex-1 w-full">
+                                        <h3 class="font-bold text-gray-900 text-lg leading-tight mb-1">Gestión de Staff</h3>
+                                        <p class="text-xs text-gray-500 mb-3">Busca usuarios por email para otorgar permisos.</p>
+                                        
+                                        <div class="relative group/input w-full">
+                                            <input type="text" id="input-search-promo" 
+                                                   class="w-full pl-9 pr-10 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition text-sm font-medium"
+                                                   placeholder="usuario@email.com..."
+                                                   onkeyup="if(event.key === 'Enter') buscarUsuariosPromocion()">
+                                            <i class="ph-bold ph-magnifying-glass absolute left-3 top-3 text-gray-400 group-focus-within/input:text-purple-500 transition"></i>
+                                            <button onclick="buscarUsuariosPromocion()" class="absolute right-1.5 top-1.5 bg-purple-600 text-white w-7 h-7 rounded-lg hover:bg-purple-700 transition shadow-sm flex items-center justify-center">
+                                                <i class="ph-bold ph-arrow-right"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                                
-                                <div class="divide-y-2 divide-gray-500">
-                                    ${porCategoria[categoria].map(config => renderConfigItem(config)).join('')}
+                                <div id="results-promo-container" class="w-full"></div>
+                            </div>
+                        </div>
+
+                        <!-- 2. TIEMPO LÍMITE (Emerald) -->
+                        <div class="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden group hover:shadow-xl transition flex flex-col h-full">
+                            <div class="w-full h-1.5 bg-gradient-to-r from-emerald-400 to-emerald-600"></div>
+                            
+                            <div class="p-6 md:p-8 flex flex-col items-center text-center">
+                                <div class="flex flex-col sm:flex-row items-center gap-6 mb-6 w-full">
+                                    <div class="w-16 h-16 shrink-0 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shadow-sm group-hover:scale-110 transition duration-300">
+                                        <i class="ph-bold ph-clock-countdown text-3xl"></i>
+                                    </div>
+                                    <div class="text-left flex-1">
+                                        <h3 class="font-bold text-gray-900 text-lg leading-tight mb-1">Tiempo Límite</h3>
+                                        <p class="text-xs text-gray-500 mb-3">Antelación mínima para cancelar reservas.</p>
+                                        
+                                        <div class="flex items-center gap-3 bg-gray-50 p-1.5 rounded-xl border border-gray-200 w-fit">
+                                            <button onclick="ajustarValor(-1)" class="w-8 h-8 rounded-lg bg-white text-gray-600 shadow-sm border border-gray-100 hover:bg-emerald-600 hover:text-white transition flex items-center justify-center active:scale-95">
+                                                <i class="ph-bold ph-minus"></i>
+                                            </button>
+                                            
+                                            <div class="flex items-center gap-1 px-2">
+                                                <input type="number" id="input-horas-cancelacion" value="${targetConfig.valor}" 
+                                                       onchange="actualizarConfigRapido('${targetConfig.id}', this.value)"
+                                                       class="w-10 bg-transparent text-center font-black text-xl text-gray-800 outline-none p-0 remove-arrow">
+                                                <span class="text-gray-400 font-bold text-[10px] uppercase tracking-wide pt-1">H</span>
+                                            </div>
+                                            
+                                            <button onclick="ajustarValor(1)" class="w-8 h-8 rounded-lg bg-white text-gray-600 shadow-sm border border-gray-100 hover:bg-emerald-600 hover:text-white transition flex items-center justify-center active:scale-95">
+                                                <i class="ph-bold ph-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="text-[10px] text-emerald-600/80 font-bold uppercase tracking-wider flex items-center gap-1 self-end sm:self-auto">
+                                    <i class="ph-bold ph-check-circle"></i> Guardado Auto
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- ROW 2: TIPOS DE CLASES (Grande / Full Width) -->
+                    <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden relative group hover:shadow-2xl transition">
+                        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-400 to-blue-600"></div>
+
+                        <div class="p-8 pb-10">
+                            <!-- Header -->
+                            <div class="flex items-center justify-center gap-4 mb-8">
+                                <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shadow-sm">
+                                    <i class="ph-fill ph-bookmarks text-3xl"></i>
+                                </div>
+                                <div class="text-left">
+                                    <h3 class="text-2xl font-bold text-gray-900">Catálogo de Clases</h3>
+                                    <p class="text-gray-500 text-sm">Gestiona los tipos, colores e iconos de tus actividades.</p>
                                 </div>
                             </div>
-                        `).join('')}
+
+                            <!-- Layout Interno: 2 Columnas (Lista | Formulario) -->
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                                
+                                <!-- COL 1: LISTA (Visual) -->
+                                <div class="bg-gray-50 rounded-2xl p-6 border border-gray-200">
+                                    <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                        <i class="ph-bold ph-list"></i> Tipos Activos
+                                    </h4>
+                                    <div class="max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
+                                        <div id="tipos-clases-list" class="space-y-3">
+                                            <!-- Loader Inicial -->
+                                            <div class="flex flex-col items-center justify-center py-10 opacity-50">
+                                                <i class="ph-duotone ph-spinner animate-spin text-3xl text-blue-600"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- COL 2: FORMULARIO (Creación) -->
+                                <div>
+                                    <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                        <i class="ph-bold ph-plus-circle text-blue-500"></i> Crear Nuevo Tipo
+                                    </h4>
+                                    <form id="form-crear-tipo" class="space-y-5" onsubmit="crearTipoClase(event)">
+                                        <!-- Nombre y Duración -->
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1 block pl-1">Nombre</label>
+                                                <input type="text" id="new-tipo-nombre" placeholder="Ej: Pilates" required 
+                                                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition hover:bg-white text-gray-800">
+                                            </div>
+                                            <div>
+                                                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1 block pl-1">Duración (min)</label>
+                                                <input type="number" id="new-tipo-duracion" value="60" required 
+                                                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition hover:bg-white text-gray-800">
+                                            </div>
+                                        </div>
+
+                                        <!-- Selectores -->
+                                        <div class="space-y-4 pt-2">
+                                            <div>
+                                                 <label class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2 block pl-1">Seleccionar Color</label>
+                                                 <div class="flex flex-wrap gap-2" id="color-picker-container"></div>
+                                                 <input type="hidden" id="new-tipo-color" value="#EF4444">
+                                            </div>
+                                            <div>
+                                                 <label class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2 block pl-1">Seleccionar Icono</label>
+                                                 <div class="flex flex-wrap gap-2" id="icon-picker-container"></div>
+                                                 <input type="hidden" id="new-tipo-icono" value="ph-person-simple-tai-chi">
+                                            </div>
+                                        </div>
+
+                                        <button type="submit" class="w-full py-4 mt-2 bg-gray-900 hover:bg-black text-white rounded-xl font-bold text-sm shadow-lg hover:shadow-xl transform active:scale-[0.98] transition flex items-center justify-center gap-2 group/btn">
+                                            <span>Guardar Nuevo Tipo</span>
+                                            <i class="ph-bold ph-arrow-right group-hover/btn:translate-x-1 transition-transform"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             `;
+
+            // --- FUNCTION: Render Color Picker ---
+            window.renderColorPicker = () => {
+                const container = document.getElementById('color-picker-container');
+
+                /* 10 Colores Típicos y Distintivos */
+                const standardColors = [
+                    '#EF4444', // Rojo
+                    '#F97316', // Naranja
+                    '#F59E0B', // Amarillo (Amber)
+                    '#10B981', // Verde
+                    '#3B82F6', // Azul
+                    '#6366F1', // Indigo
+                    '#8B5CF6', // Violeta
+                    '#EC4899', // Rosa
+                    '#14B8A6', // Turquesa
+                    '#64748B'  // Gris Azulado
+                ];
+
+                container.innerHTML = standardColors.map((color, index) => `
+                    <button type="button" onclick="selectColor('${color}')" 
+                        class="w-8 h-8 rounded-full border-2 border-white shadow-sm hover:scale-110 transition flex items-center justify-center color-swatch ${index === 0 ? 'ring-2 ring-offset-2 ring-gray-300' : ''}"
+                        style="background-color: ${color};"
+                        data-color="${color}"
+                        title="${color}">
+                        ${index === 0 ? '<i class="ph-bold ph-check text-white text-xs"></i>' : ''}
+                    </button>
+                `).join('');
+
+                // Set default
+                document.getElementById('new-tipo-color').value = standardColors[0];
+            };
+
+            window.selectColor = (color) => {
+                document.getElementById('new-tipo-color').value = color;
+                // Update UI
+                const btns = document.querySelectorAll('.color-swatch');
+                btns.forEach(btn => {
+                    btn.classList.remove('ring-2', 'ring-offset-2', 'ring-gray-300');
+                    btn.innerHTML = '';
+                    if (btn.dataset.color === color) {
+                        btn.classList.add('ring-2', 'ring-offset-2', 'ring-gray-300');
+                        btn.innerHTML = '<i class="ph-bold ph-check text-white text-xs"></i>';
+                    }
+                });
+            };
+
+            window.renderTiposClases = async () => {
+                const listContainer = document.getElementById('tipos-clases-list');
+                if (!listContainer) return;
+
+                try {
+                    const { data, error } = await client.from('tipos_clases').select('*').order('orden', { ascending: true });
+
+                    if (error) {
+                        console.error('Error fetching tipos_clases:', error);
+                        if (error.code === '42P01') {
+                            listContainer.innerHTML = `
+                                <div class="text-center p-4 bg-red-50 rounded-xl border border-red-100">
+                                    <p class="text-red-600 text-xs font-bold mb-2">Tabla no encontrada</p>
+                                    <p class="text-red-500 text-[10px] mb-2">La tabla 'tipos_clases' no existe en Supabase.</p>
+                                    <button onclick="copiarSQLTabla()" class="text-[10px] bg-red-100 text-red-700 px-2 py-1 rounded hover:bg-red-200 transaction">
+                                        Isnsertar SQL de creación
+                                    </button>
+                                </div>`;
+                            return;
+                        }
+                        listContainer.innerHTML = `<p class="text-red-400 text-xs text-center">Error: ${error.message}</p>`;
+                        return;
+                    }
+
+                    if (!data || data.length === 0) {
+                        listContainer.innerHTML = `<p class="text-gray-400 text-xs text-center py-4 bg-gray-50 rounded-xl border border-dashed border-gray-200">No hay tipos de clase creados.</p>`;
+                        return;
+                    }
+
+                    listContainer.innerHTML = data.map(t => {
+                        const color = t.color || '#2d8a8e';
+                        return `
+                        <div class="flex items-center justify-between bg-white p-3 rounded-xl border border-gray-100 shadow-sm hover:border-gray-200 transition group">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-inner" style="background-color: ${color}20; color: ${color}">
+                                    <i class="ph-fill ${t.icono || 'ph-hash'} text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-gray-800 text-sm leading-tight">${t.nombre}</p>
+                                    <p class="text-[10px] text-gray-400 font-bold tracking-wide">${t.duracion_predeterminada} MIN</p>
+                                </div>
+                            </div>
+                            <button onclick="borrarTipoClase(${t.id})" class="text-gray-300 hover:text-red-500 hover:bg-red-50 p-2 rounded-lg transition opacity-0 group-hover:opacity-100">
+                                <i class="ph-bold ph-trash"></i>
+                            </button>
+                        </div>`;
+                    }).join('');
+                } catch (err) {
+                    console.error('Unexpected error in renderTiposClases:', err);
+                    listContainer.innerHTML = `<p class="text-red-400 text-xs text-center">Error inesperado al cargar.</p>`;
+                }
+            };
+
+            window.copiarSQLTabla = () => {
+                const sql = `create table tipos_clases (
+  id bigint generated by default as identity primary key,
+  nombre text not null,
+  duracion_predeterminada int default 60,
+  color text default '#2d8a8e',
+  icono text default 'ph-hash',
+  orden int default 0,
+  activo boolean default true,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);`;
+                navigator.clipboard.writeText(sql).then(() => Swal.fire('Copiado', 'SQL copiado al portapapeles. Ejecútalo en Supabase SQL Editor.', 'success'));
+            };
+
+
+            window.crearTipoClase = async (e) => {
+                e.preventDefault();
+                const nombre = document.getElementById('new-tipo-nombre').value;
+                const duracion = document.getElementById('new-tipo-duracion').value;
+                const color = document.getElementById('new-tipo-color').value;
+                const icono = document.getElementById('new-tipo-icono').value;
+
+                console.log('Intentando crear tipo:', { nombre, duracion, color, icono });
+
+                try {
+                    const { data, error } = await client.from('tipos_clases').insert([{
+                        nombre,
+                        duracion_predeterminada: parseInt(duracion),
+                        color,
+                        icono,
+                        activo: true
+                    }]); // Removing .select() as we don't need the return value strictly and sometimes it causes policy errors if select policy is different
+
+                    if (error) {
+                        console.error('Error creando tipo:', error);
+                        if (error.code === '42P01') {
+                            Swal.fire('Error de Tabla', 'La tabla "tipos_clases" no existe. Copia el SQL desde el panel superior para crearla.', 'error');
+                        } else {
+                            Swal.fire('Error', 'No se pudo crear el tipo: ' + error.message, 'error');
+                        }
+                    } else {
+                        document.getElementById('form-crear-tipo').reset();
+                        // Reset color picker default to first color #EF4444
+                        selectColor('#EF4444');
+                        selectIcon('ph-person-simple-tai-chi'); // Reset icon default
+                        await renderTiposClases(); // Wait for this
+
+                        const toast = Swal.mixin({
+                            toast: true, position: 'top-end', showConfirmButton: false, timer: 2000
+                        });
+                        toast.fire({ icon: 'success', title: 'Tipo creado exitosamente' });
+                    }
+                } catch (err) {
+                    console.error('Excepción creando tipo:', err);
+                    Swal.fire('Error inesperado', err.message, 'error');
+                }
+            };
+
+            // --- FUNCTION: Render Icon Picker ---
+            window.renderIconPicker = () => {
+                const container = document.getElementById('icon-picker-container');
+                if (!container) return;
+
+                const icons = [
+                    'ph-person-simple-tai-chi', // Yoga/Extension
+                    'ph-barbell',               // Force
+                    'ph-heart-beat',            // Cardio
+                    'ph-fire',                  // Hot/Intensity
+                    'ph-drop',                  // Sweat
+                    'ph-smiley-blank',          // Mind
+                    'ph-yin-yang',              // Balance
+                    'ph-bicycle',               // Cycling
+                    'ph-waves',                 // Pool/Relax
+                    'ph-star'                   // Special
+                ];
+
+                const currentIcon = document.getElementById('new-tipo-icono').value;
+
+                container.innerHTML = icons.map(icon => `
+                    <button type="button" onclick="selectIcon('${icon}')" 
+                        class="w-8 h-8 rounded-xl bg-gray-50 text-gray-400 border border-gray-100 hover:bg-gray-100 hover:text-gray-600 transition flex items-center justify-center icon-swatch ${icon === currentIcon ? 'ring-2 ring-offset-2 ring-gray-300 !bg-gray-800 !text-white' : ''}"
+                        data-icon="${icon}">
+                        <i class="ph-fill ${icon} text-lg"></i>
+                    </button>
+                `).join('');
+            };
+
+            window.selectIcon = (icon) => {
+                document.getElementById('new-tipo-icono').value = icon;
+                const btns = document.querySelectorAll('.icon-swatch');
+                btns.forEach(btn => {
+                    btn.classList.remove('ring-2', 'ring-offset-2', 'ring-gray-300', '!bg-gray-800', '!text-white');
+                    if (btn.dataset.icon === icon) {
+                        btn.classList.add('ring-2', 'ring-offset-2', 'ring-gray-300', '!bg-gray-800', '!text-white');
+                    }
+                });
+            };
+
+            window.borrarTipoClase = async (id) => {
+                const { isConfirmed } = await Swal.fire({
+                    title: '¿Borrar Tipo?',
+                    text: 'No podrás crear nuevas clases de este tipo.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, borrar',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonColor: '#ef4444'
+                });
+
+                if (isConfirmed) {
+                    // Soft delete o hard delete? User schema has 'activo'. Maybe update Active?
+                    // User said: "create table... activo boolean null default true".
+                    // Most systems prevent hard delete if used. I'll DELETE row for now as user asked to "borrar",
+                    // but DB might enforce constraints. If constraint error, I should handle it.
+                    // Let's try DELETE first.
+                    const { error } = await client.from('tipos_clases').delete().eq('id', id);
+                    if (error) {
+                        Swal.fire('Error', 'No se puede borrar (quizás esté en uso). Intenta desactivarlo.', 'error');
+                    } else {
+                        renderTiposClases();
+                    }
+                }
+            };
+
+            // Helper function for the +/- buttons within this scope or global
+            window.ajustarValor = async (delta) => {
+                const input = document.getElementById('input-horas-cancelacion');
+                let val = parseInt(input.value) || 0;
+                val += delta;
+                if (val < 0) val = 0;
+                input.value = val;
+                // Trigger update
+                await actualizarConfigRapido(targetConfig.id, val.toString());
+            };
+
+            window.buscarUsuariosPromocion = async () => {
+                const query = document.getElementById('input-search-promo').value.trim();
+                const container = document.getElementById('results-promo-container');
+
+                if (query.length < 3) {
+                    container.innerHTML = '<p class="text-center text-sm text-gray-400 py-2">Escribe al menos 3 caracteres...</p>';
+                    return;
+                }
+
+                container.innerHTML = '<div class="text-center py-4"><i class="ph-duotone ph-spinner animate-spin text-purple-600 text-xl"></i></div>';
+
+                const { data: users, error } = await client
+                    .from('profiles')
+                    .select('*')
+                    .ilike('email', `%${query}%`)
+                    .limit(5);
+
+                if (error) {
+                    container.innerHTML = `<p class="text-center text-sm text-red-500">Error: ${error.message}</p>`;
+                    return;
+                }
+
+                if (!users || users.length === 0) {
+                    container.innerHTML = '<p class="text-center text-sm text-gray-500 py-2">No se encontraron usuarios.</p>';
+                    return;
+                }
+
+                container.innerHTML = users.map(u => {
+                    const esProfe = u.rol === 'profesor' || u.rol === 'admin';
+                    return `
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl border border-gray-100 hover:border-purple-200 transition group">
+                            <div class="flex items-center gap-3 overflow-hidden">
+                                <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 flex-shrink-0">
+                                    ${u.avatar_url ? `<img src="${u.avatar_url}" class="w-full h-full rounded-full object-cover">` : '<i class="ph-bold ph-user text-lg"></i>'}
+                                </div>
+                                <div class="min-w-0">
+                                    <p class="font-bold text-gray-800 text-sm truncate">${u.nombre || 'Sin nombre'} ${u.apellidos || ''}</p>
+                                    <p class="text-xs text-gray-500 truncate">${u.email}</p>
+                                </div>
+                            </div>
+                            <div>
+                                ${esProfe
+                            ? `<span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full border border-green-200">Ya es Staff</span>`
+                            : `<button onclick="promoverAProfesor('${u.id}', '${u.email}')" class="px-3 py-1.5 bg-white border border-gray-200 text-purple-600 text-xs font-bold rounded-lg hover:bg-purple-600 hover:text-white hover:border-purple-600 transition shadow-sm">
+                                         Promover
+                                       </button>`
+                        }
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            };
+
+            // Función duplicada eliminada para usar la versión robusta de abajo.
+
+            window.promoverAProfesor = async (uid, email) => {
+                const res = await Swal.fire({
+                    title: '¿Promover a Profesor?',
+                    text: `El usuario ${email} tendrá acceso al panel de profesores y será añadido a la lista pública.`,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#9333ea',
+                    confirmButtonText: 'Sí, promover',
+                    cancelButtonText: 'Cancelar'
+                });
+
+                if (res.isConfirmed) {
+                    Swal.fire({
+                        title: 'Procesando...',
+                        text: 'Actualizando rol y sincronizando datos...',
+                        allowOutsideClick: false,
+                        didOpen: () => Swal.showLoading()
+                    });
+
+                    try {
+                        // 1. Obtener datos del usuario
+                        const { data: userData, error: userError } = await client
+                            .from('profiles')
+                            .select('*')
+                            .eq('id', uid)
+                            .single();
+
+                        if (userError) throw new Error('Error obteniendo datos del usuario: ' + userError.message);
+
+                        // 2. Actualizar rol en profiles
+                        const { error: updateError } = await client
+                            .from('profiles')
+                            .update({ rol: 'profesor' })
+                            .eq('id', uid);
+
+                        if (updateError) throw new Error('Error actualizando rol: ' + updateError.message);
+
+                        // 3. Crear entrada en tabla profesores (Sincronización)
+                        const { error: insertError } = await client.from('profesores').insert([{
+                            nombre: userData.nombre || 'Profesor',
+                            apellidos: userData.apellidos || '',
+                            email: userData.email,
+                            foto_url: userData.avatar_url,
+                            especialidad: 'General',
+                            // user_id: uid 
+                        }]);
+
+                        if (insertError) {
+                            console.warn('Error al insertar en profesores:', insertError);
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Rol actualizado parcialmente',
+                                text: 'El usuario ya es profesor, pero hubo un error creando el perfil público: ' + insertError.message
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡Promoción Completada!',
+                                text: 'El usuario es ahora profesor y aparece en la lista pública.',
+                                timer: 2500,
+                                showConfirmButton: false
+                            });
+                        }
+
+                        // Recargar búsqueda para actualizar UI
+                        window.buscarUsuariosPromocion();
+
+                    } catch (err) {
+                        console.error(err);
+                        Swal.fire('Error', err.message, 'error');
+                    }
+                }
+            };
+
+            // Initial Execution
+            await renderTiposClases();
+            renderColorPicker();
+            renderIconPicker();
         }
 
         function renderConfigItem(config) {
@@ -2402,7 +3178,8 @@
         }
 
         function renderProfileCard(profile) {
-            const wrapper = document.getElementById('profile-cards-wrapper');
+            // FIX: Usamos el ID correcto del HTML (V5)
+            const wrapper = document.getElementById('profile-card');
             if (!wrapper) return;
 
             if (!profile) {
@@ -2417,25 +3194,30 @@
             if (fullNameEl) fullNameEl.textContent = `${nombre} ${apellidos}`.trim();
 
             // =========================
-            // 1) NIVEL ACTUAL (Mes anterior)
+            // 1) NIVEL ACTUAL (Basado en mes anterior)
             // =========================
             const countLastMonth = profile.clases_mes_anterior || 0;
             const currentLevel = getRankConfig(countLastMonth);
 
-            const badgeCurrent = document.getElementById('rank-badge-current');
-            if (badgeCurrent) badgeCurrent.src = currentLevel.img;
-
-            const curNameEl = document.getElementById('current-rank-name');
-            if (curNameEl) {
-                curNameEl.textContent = currentLevel.name;
-                curNameEl.className = `text-xs font-bold uppercase tracking-wider ${currentLevel.color}`;
+            // Badge Imagen
+            const badgeImg = document.getElementById('rank-badge');
+            if (badgeImg) {
+                badgeImg.src = currentLevel.img;
+                badgeImg.style.display = 'block'; // Asegurar que se ve si hubo error antes
             }
 
-            // Badge descuento nivel actual
+            // Nombre Nivel
+            const rankNameEl = document.getElementById('rank-name');
+            if (rankNameEl) {
+                rankNameEl.textContent = currentLevel.name;
+                rankNameEl.className = `text-xs font-black uppercase tracking-widest ${currentLevel.color}`;
+            }
+
+            // Badge descuento (Nivel Actual)
             const disc = document.getElementById('discount-badge');
             if (disc) {
                 if ((currentLevel.discount || 0) > 0) {
-                    disc.textContent = `-${currentLevel.discount}% en Bonos`;
+                    disc.textContent = `-${currentLevel.discount}%`;
                     disc.classList.remove('hidden');
                 } else {
                     disc.classList.add('hidden');
@@ -2443,54 +3225,54 @@
             }
 
             // =========================
-            // 2) PROGRESO (Mes actual) -> NIVEL MES SIGUIENTE
+            // 2) PROGRESO (Mes actual)
             // =========================
             const countThisMonth = profile.clases_completadas_mes || 0;
             const countEl = document.getElementById('clases-count-num');
             if (countEl) countEl.textContent = countThisMonth;
 
-            const projectedLevel = getRankConfig(countThisMonth);
+            // Calculamos el "nivel proyectado" según lo que llevas este mes
+            // para saber cuál es el siguiente paso.
+            const progressConfig = getRankConfig(countThisMonth);
 
-            const projNameEl = document.getElementById('projected-rank-name');
-            if (projNameEl) {
-                projNameEl.textContent = projectedLevel.name;
-                projNameEl.className = `text-sm font-black uppercase tracking-widest ml-1 ${projectedLevel.color}`;
-            }
-
-            // Badge descuento nivel proyectado (mes siguiente)
-            const projDisc = document.getElementById('projected-discount-badge');
-            if (projDisc) {
-                if ((projectedLevel.discount || 0) > 0) {
-                    projDisc.textContent = `-${projectedLevel.discount}% en Bonos`;
-                    projDisc.classList.remove('hidden');
-                } else {
-                    projDisc.classList.add('hidden');
-                }
-            }
-
-            // Barra progreso + texto “faltan X para …”
             const progressBar = document.getElementById('rank-progress-bar');
             const nextInfo = document.getElementById('next-level-info');
+            const nextDiscountText = document.getElementById('next-discount-text');
 
-            if (projectedLevel.next) {
-                const target = projectedLevel.next;
+            if (progressConfig.next) {
+                const target = progressConfig.next;
                 const faltan = target - countThisMonth;
 
-                const range = projectedLevel.next - projectedLevel.min;
-                const doneInTier = countThisMonth - projectedLevel.min;
+                // Rango del nivel actual para la barra
+                const range = progressConfig.next - progressConfig.min;
+                const doneInTier = countThisMonth - progressConfig.min;
 
                 const pct = range > 0 ? Math.min(100, Math.max(5, (doneInTier / range) * 100)) : 100;
+
                 if (progressBar) progressBar.style.width = `${pct}%`;
 
                 // Color para el nombre del siguiente nivel
                 const nextLvlConfig = getRankConfig(target);
                 if (nextInfo) {
                     nextInfo.innerHTML =
-                        `Faltan ${faltan} para <span class="${nextLvlConfig.color}">${projectedLevel.nextName}</span>`;
+                        `Faltan ${faltan} para <span class="${nextLvlConfig.color}">${progressConfig.nextName}</span>`;
                 }
+
+                // MOSTRAR DESCUENTO SIGUIENTE NIVEL
+                if (nextDiscountText) {
+                    if (nextLvlConfig.discount > 0) {
+                        nextDiscountText.textContent = `Próximo descuento: -${nextLvlConfig.discount}%`;
+                        nextDiscountText.classList.remove('hidden');
+                    } else {
+                        nextDiscountText.classList.add('hidden');
+                    }
+                }
+
             } else {
+                // Nivel máximo alcanzado
                 if (progressBar) progressBar.style.width = '100%';
                 if (nextInfo) nextInfo.textContent = '¡Nivel Máximo!';
+                if (nextDiscountText) nextDiscountText.textContent = 'Máximo beneficio alcanzado';
             }
 
             wrapper.classList.remove('hidden');
@@ -2608,6 +3390,8 @@
             });
         }
 
+        /* FUNCIÓN ELIMINADA: nuevoProfesor (Versión 2 - Obsoleta) */
+        /*
         async function nuevoProfesor() {
             const { value: formValues } = await Swal.fire({
                 title: 'Nuevo Profesor',
@@ -2656,10 +3440,10 @@
                     }
                 }
             });
-
+ 
             if (formValues) {
                 if (!formValues.nombre) return Swal.fire('Error', 'El nombre es obligatorio', 'error');
-
+ 
                 const { error } = await client.from('profesores').insert([formValues]);
                 if (error) Swal.fire('Error', error.message, 'error');
                 else {
@@ -2669,6 +3453,7 @@
                 }
             }
         }
+        */
 
         async function editarProfesor(id) {
             // Buscar profesor actual
@@ -2759,12 +3544,16 @@
         function switchPublicView(viewName) {
             const vHorarios = document.getElementById('view-horarios');
             const vProfesores = document.getElementById('view-profesores');
+            const vAsistencias = document.getElementById('view-asistencias'); // Reutilizamos esta vista para "Mis Clases"
+
             const btnHorarios = document.getElementById('nav-public-horarios');
             const btnProfesores = document.getElementById('nav-public-profesores');
+            const btnMisClases = document.getElementById('nav-public-mis-clases');
 
             // Hide all
             vHorarios.classList.add('hidden');
             if (vProfesores) vProfesores.classList.add('hidden');
+            if (vAsistencias) vAsistencias.classList.add('hidden');
 
             // Reset btns
             btnHorarios.classList.remove('border-q19-600', 'text-q19-800');
@@ -2772,6 +3561,11 @@
 
             btnProfesores.classList.remove('border-q19-600', 'text-q19-800');
             btnProfesores.classList.add('border-transparent', 'text-gray-400');
+
+            if (btnMisClases) {
+                btnMisClases.classList.remove('border-q19-600', 'text-q19-800');
+                btnMisClases.classList.add('border-transparent', 'text-gray-400');
+            }
 
             if (viewName === 'horarios') {
                 vHorarios.classList.remove('hidden');
@@ -2784,6 +3578,15 @@
                 }
                 btnProfesores.classList.add('border-q19-600', 'text-q19-800');
                 btnProfesores.classList.remove('border-transparent', 'text-gray-400');
+            } else if (viewName === 'mis-clases') {
+                if (vAsistencias) {
+                    vAsistencias.classList.remove('hidden');
+                    cargarAsistenciasPorClase();
+                }
+                if (btnMisClases) {
+                    btnMisClases.classList.add('border-q19-600', 'text-q19-800');
+                    btnMisClases.classList.remove('border-transparent', 'text-gray-400');
+                }
             }
         }
 
