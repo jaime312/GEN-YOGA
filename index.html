@@ -167,6 +167,38 @@
             border: 2px solid #d4af37;
             font-weight: bold;
         }
+
+        /* Custom Cursor Styles */
+        body {
+            cursor: none;
+            /* Hide default cursor */
+        }
+
+        /* Ensure specific elements also hide cursor if they override body */
+        a,
+        button,
+        input,
+        select,
+        textarea,
+        .cursor-pointer {
+            cursor: none !important;
+        }
+
+        .wink-cursor {
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            font-size: 24px;
+            transform: translate(-50%, -50%);
+            /* Center the emoji on the pointer */
+            transition: transform 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+            user-select: none;
+            /* Initial state */
+        }
+
+        .wink-cursor.clicking {
+            transform: translate(-50%, -50%) scale(0.8) rotate(-10deg);
+        }
     </style>
 </head>
 
@@ -257,7 +289,7 @@
                         <p class="text-gray-400 text-sm">¿Aún no tienes cuenta?</p>
                         <button onclick="toggleAuth('register')"
                             class="text-q19-700 font-bold text-xl hover:underline mt-1">Regístrate gratis aquí</button>
-                        <p class="text-[10px] text-gray-500 mt-6 font-mono tracking-widest uppercase opacity-60">v1.2.0
+                        <p class="text-[10px] text-gray-500 mt-6 font-mono tracking-widest uppercase opacity-60">v1.2.1
                         </p>
                     </div>
 
@@ -1524,10 +1556,13 @@
             if (error) {
                 Swal.fire({ icon: 'error', title: 'Error al reservar', text: error.message });
             } else {
+                // Play ASMR Sound
+                playYogaSound();
+
                 Swal.fire({
                     icon: 'success',
-                    title: '¡Reserva Confirmada!',
-                    text: 'Te esperamos en clase.',
+                    title: '¡Clase Reservada!',
+                    text: 'Tu esterilla te espera. Namasté. 🙏',
                     showConfirmButton: false,
                     timer: 1500,
                     backdrop: `rgba(0,0,0,0.4)`
@@ -3652,6 +3687,133 @@
             }).join('');
         }
     </script>
+    <style>
+        body {
+            cursor: none;
+            /* Hide default cursor */
+        }
+
+        .wink-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            font-size: 2rem;
+            /* Adjust size as needed */
+            line-height: 1;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: transform 0.1s ease-out;
+            /* Smooth follow */
+            user-select: none;
+        }
+
+        .wink-cursor.clicking {
+            transform: translate(-50%, -50%) scale(0.8);
+            /* Shrink on click */
+        }
+    </style>
+    <script>
+        // --- Custom Wink Cursor Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const cursor = document.createElement('div');
+            cursor.classList.add('wink-cursor');
+            cursor.innerText = '🧘🏼'; // Yoga emoji
+            document.body.appendChild(cursor);
+
+            let mouseX = 0;
+            let mouseY = 0;
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                cursor.style.left = mouseX + 'px';
+                cursor.style.top = mouseY + 'px';
+            });
+
+            document.addEventListener('mousedown', () => {
+                cursor.classList.add('clicking');
+                // Optional: Change emoji on click for a "wink" effect if desired
+                // cursor.innerText = '😉'; 
+            });
+
+            document.addEventListener('mouseup', () => {
+                cursor.classList.remove('clicking');
+                // cursor.innerText = '🧘🏼';
+            });
+
+            // Handle cursor leaving the window
+            document.addEventListener('mouseout', (e) => {
+                if (!e.relatedTarget && !e.toElement) {
+                    cursor.style.display = 'none';
+                }
+            });
+            document.addEventListener('mouseover', (e) => {
+                cursor.style.display = 'block';
+            });
+        });
+
+        // --- ASMR "Tibetan Singing Bowl" Sound Generator (Web Audio API) ---
+        // Generates a deep, resonant Tibetan bowl sound with complex harmonics
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playYogaSound() {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            const now = audioCtx.currentTime;
+
+            // Fundamental frequency (lower for a deeper, more grounding bowl)
+            const fundamental = 180;
+
+            // Tibetan bowls have inharmonic partials. These ratios approximate the complex metal resonance.
+            // 1.0 (Fund), ~2.7-3.0 (Octave+5th), ~5.4 (Two Octaves+3rd), etc.
+            const ratios = [1, 2.76, 5.4, 8.9];
+            const gains = [0.2, 0.1, 0.05, 0.02]; // Softer overall mixes
+            // Different decay times for each partial
+            const decays = [8.0, 6.0, 4.0, 3.0];
+
+            // Master Gain to control overall volume and prevent clipping
+            const masterGain = audioCtx.createGain();
+            masterGain.gain.setValueAtTime(0, now);
+            masterGain.gain.linearRampToValueAtTime(0.5, now + 1.5); // Very soft, slow attack (swelling sound)
+            masterGain.gain.exponentialRampToValueAtTime(0.001, now + 8.0); // Long, meditative tail
+            masterGain.connect(audioCtx.destination);
+
+            ratios.forEach((ratio, index) => {
+                const osc = audioCtx.createOscillator();
+                // Sine waves are purest, but we could add slight detuning for "beating"
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(fundamental * ratio, now);
+
+                // Add slight frequency modulation for the "wobble" or "beating" characteristic of bowls
+                if (index === 0) {
+                    const lfo = audioCtx.createOscillator();
+                    lfo.frequency.value = 2; // 2Hz wobble
+                    const lfoGain = audioCtx.createGain();
+                    lfoGain.gain.value = 3; // Depth of vibrato
+                    lfo.connect(lfoGain);
+                    lfoGain.connect(osc.frequency);
+                    lfo.start(now);
+                    lfo.stop(now + decays[index]);
+                }
+
+                const gainNode = audioCtx.createGain();
+                gainNode.gain.setValueAtTime(0, now);
+                // Individual partial envelope
+                gainNode.gain.linearRampToValueAtTime(gains[index], now + 0.1 * (index + 1)); // Staggered entry
+                gainNode.gain.exponentialRampToValueAtTime(0.001, now + decays[index]);
+
+                osc.connect(gainNode);
+                gainNode.connect(masterGain);
+
+                osc.start(now);
+                osc.stop(now + decays[index] + 1); // Stop osc after decay finishes
+            });
+        }
+    </script>
 </body>
 
 </html>
+```
