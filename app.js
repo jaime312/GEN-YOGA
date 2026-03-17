@@ -1,55 +1,49 @@
 // script.js
 
-// 1. INICIALIZAR ICONOS
-lucide.createIcons();
+// --- CONFIGURACIÓN SUPABASE ---
+const SUPA_URL = 'https://jkjifmrrlyncuwpjhxvk.supabase.co';
+const SUPA_KEY = 'sb_publishable_xnIELom1ouXaBDJNYaWDAQ_VJNjlnIK';
+const client = window.supabase.createClient(SUPA_URL, SUPA_KEY);
 
-// 2. TEXTO ROTATIVO (CORREGIDO Y PROBADO)
+// 1. INICIALIZAR E INTERACCIONES BÁSICAS
+document.addEventListener('DOMContentLoaded', () => {
+    lucide.createIcons();
+    fetchClasesLanding();
+    fetchProfesoresLanding();
+    setupProfileLink();
+});
+
+// 2. TEXTO ROTATIVO
 const words = ["🔥", "🤸", "🏃🏼", "🧘🏼", "🧎🏽‍♀️‍➡️"];
-
 let wordIndex = 0;
 const textElement = document.getElementById("dynamic-text");
 
 function changeWord() {
     if (!textElement) return;
-
-    // 1. Desvanecer
     textElement.style.opacity = "0";
-    textElement.style.transform = "translateY(10px)"; // Pequeño movimiento hacia abajo
-
-    // 2. Cambiar texto y reaparecer después de 500ms
+    textElement.style.transform = "translateY(10px)";
     setTimeout(() => {
         wordIndex = (wordIndex + 1) % words.length;
         textElement.innerText = words[wordIndex];
-
-        // Reaparecer
         textElement.style.opacity = "1";
         textElement.style.transform = "translateY(0)";
     }, 500);
 }
 
-// Iniciar intervalo cada 3 segundos
-if (textElement) {
-    setInterval(changeWord, 3000);
-}
+if (textElement) setInterval(changeWord, 3000);
 
-
-// 3. SISTEMA DE MODALES (Gestión de apertura/cierre)
+// 3. SISTEMA DE MODALES
 const modalOverlay = document.getElementById('modal-overlay');
 const modalContents = document.querySelectorAll('.modal-content');
 
 window.openModal = function (modalId) {
-    // Resetear
     modalContents.forEach(el => el.classList.add('hidden'));
-
     const target = document.getElementById(`modal-${modalId}`);
     if (target) {
         target.classList.remove('hidden');
         modalOverlay.classList.remove('hidden');
-
-        // Pequeño delay para permitir transición CSS
-        setTimeout(() => {
-            modalOverlay.classList.remove('opacity-0');
-        }, 10);
+        setTimeout(() => modalOverlay.classList.remove('opacity-0'), 10);
+        history.pushState({ modalOpen: true }, "", `#${modalId}`);
     }
 }
 
@@ -59,55 +53,47 @@ window.closeModal = function () {
         modalOverlay.classList.add('hidden');
         modalContents.forEach(el => el.classList.add('hidden'));
     }, 300);
+    if (window.location.hash) history.replaceState(null, "", " ");
 }
 
-// Cerrar con tecla ESC
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeModal();
 });
 
-// Cerrar click fuera
+window.addEventListener('popstate', () => {
+    if (!modalOverlay.classList.contains('hidden')) {
+        modalOverlay.classList.add('opacity-0');
+        setTimeout(() => {
+            modalOverlay.classList.add('hidden');
+            modalContents.forEach(el => el.classList.add('hidden'));
+        }, 300);
+    }
+});
+
 if (modalOverlay) {
     modalOverlay.addEventListener('click', (e) => {
         if (e.target === modalOverlay) closeModal();
     });
 }
 
-// 4. LOGICA DEL CURSOR PERSONALIZADO Y DETECCIÓN DE PLATAFORMA
+// 4. DETECCIÓN DE PLATAFORMA Y CURSOR
 document.addEventListener('DOMContentLoaded', () => {
-
-    // --- DETECCIÓN DE PLATAFORMA ---
     const ua = navigator.userAgent.toLowerCase();
     const body = document.body;
-
-    // Variables de control global
     window.isIOS = /ipad|iphone|ipod/.test(ua) && !window.MSStream;
     window.isAndroid = /android/.test(ua);
-    window.isWeb = !window.isIOS && !window.isAndroid; // Si no es móvil, asumimos Web/Desktop
+    window.isWeb = !window.isIOS && !window.isAndroid;
 
-    // Limpiar clases previas
     body.classList.remove('platform-ios', 'platform-android', 'platform-web');
+    if (window.isIOS) body.classList.add('platform-ios');
+    else if (window.isAndroid) body.classList.add('platform-android');
+    else body.classList.add('platform-web');
 
-    if (window.isIOS) {
-        body.classList.add('platform-ios');
-        console.log("Modo: iOS App");
-    } else if (window.isAndroid) {
-        body.classList.add('platform-android');
-        console.log("Modo: Android App");
-    } else {
-        body.classList.add('platform-web');
-        console.log("Modo: Web Desktop");
-    }
-
-    // --- CURSOR EMOJI ---
-    // Solo creamos el cursor si estamos en web para ahorrar recursos, 
-    // aunque CSS ya lo oculta en móvil.
     if (window.isWeb) {
         const cursor = document.createElement('div');
         cursor.classList.add('wink-cursor');
         cursor.innerText = '🧘🏼';
         document.body.appendChild(cursor);
-
         document.addEventListener('mousemove', (e) => {
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
@@ -118,3 +104,197 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('mouseover', () => cursor.style.display = 'block');
     }
 });
+
+// 5. HOVER IMAGES
+// 5. HOVER IMAGES
+window.showHoverImage = function (side, imgName) {
+    const container = document.getElementById(`hover-image-${side}`);
+    // Hide all images in this container first
+    if (container) {
+        const images = container.querySelectorAll('img');
+        images.forEach(img => img.classList.add('hidden'));
+
+        // Show specific image
+        const targetImg = document.getElementById(`img-${imgName}`);
+        if (targetImg) {
+            targetImg.classList.remove('hidden');
+        }
+
+        container.classList.remove('opacity-0');
+    }
+}
+
+window.hideHoverImage = function (side) {
+    const container = document.getElementById(`hover-image-${side}`);
+    if (container) {
+        container.classList.add('opacity-0');
+    }
+}
+
+// 6. DATOS DINÁMICOS (LOGICA NUEVA)
+
+async function fetchClasesLanding() {
+    const container = document.getElementById('landing-clases-container');
+    if (!container) return;
+
+    console.log("Fetching classes (no date filter on DB)...");
+
+    // Traemos más clases para filtrar en cliente y evitar problemas de zona horaria en DB
+    const { data: clases, error } = await client
+        .from('clases')
+        .select('*, profesores(*)')
+        .order('fecha_inicio', { ascending: true })
+        .limit(50);
+
+    if (error) {
+        console.error('Error fetching classes:', error);
+        container.innerHTML = `<div class="p-4 bg-red-50 border border-red-100 rounded-lg text-red-800 text-center">
+            <p class="font-bold">Error cargando clases</p>
+            <p class="text-xs mt-1">${error.message}</p>
+            <p class="text-[10px] mt-2 opacity-75">Posible bloqueo de permisos (RLS) para usuarios públicos.</p>
+        </div>`;
+        return;
+    }
+
+    if (!clases || clases.length === 0) {
+        // Si llega aquí sin error, es que la tabla está vacía O RLS está bloqueando la lectura pública
+        container.innerHTML = `<div class="flex flex-col items-center justify-center py-10 gap-2 opacity-60">
+            <i data-lucide="lock" class="w-8 h-8 text-cocoa"></i>
+            <p class="text-center text-cocoa text-sm">No se encontraron clases públicas.</p>
+            <p class="text-[10px] text-cocoa/50">Si eres admin, revisa las políticas RLS de Supabase tabla 'clases'.</p>
+        </div>`;
+        lucide.createIcons();
+        return;
+    }
+
+    // Filtrar en cliente: Solo futuras (o de hoy)
+    const now = new Date();
+    // Restamos unas horas para permitir ver clases que acaban de empezar o del día
+    now.setHours(now.getHours() - 2);
+
+    const clasesFuturas = clases.filter(c => {
+        const fecha = new Date(c.fecha_inicio);
+        return fecha >= now;
+    });
+
+    if (clasesFuturas.length === 0) {
+        container.innerHTML = `<div class="flex flex-col items-center justify-center py-10 gap-2 opacity-60">
+            <i data-lucide="calendar-x" class="w-8 h-8 text-cocoa"></i>
+            <p class="text-center text-cocoa text-sm">No hay clases próximas.</p>
+        </div>`;
+        lucide.createIcons();
+        return;
+    }
+
+    renderClassesLanding(clasesFuturas.slice(0, 20));
+}
+
+function renderClassesLanding(clases) {
+    const container = document.getElementById('landing-clases-container');
+    container.innerHTML = '';
+
+    clases.forEach(clase => {
+        const fecha = new Date(clase.fecha_inicio);
+        const horaStr = fecha.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+        const diaStr = fecha.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric' });
+
+        const profName = clase.profesores ? clase.profesores.nombre : 'Staff';
+
+        const card = document.createElement('div');
+        card.className = "flex flex-col md:flex-row items-center justify-between p-8 border border-cocoa/10 hover:border-olive/50 hover:bg-cocoa/5 transition duration-300 group cursor-pointer";
+        card.innerHTML = `
+            <div class="flex items-center gap-8 w-full md:w-auto">
+                <div class="flex flex-col items-center text-olive group-hover:text-cocoa transition min-w-[80px]">
+                    <span class="text-3xl font-serif leading-none">${horaStr}</span>
+                    <span class="text-xs uppercase tracking-widest opacity-60 mt-1 text-center">${diaStr}</span>
+                </div>
+                <div class="text-left">
+                    <span class="block text-xl uppercase tracking-widest font-light text-cocoa">${clase.nombre}</span>
+                    <span class="text-sm text-slate capitalize">Sala Aire • ${clase.duracion_min || 60} min</span>
+                </div>
+            </div>
+            <div class="mt-4 md:mt-0 flex items-center gap-6 w-full md:w-auto justify-between md:justify-end">
+                <span class="text-lg font-serif italic text-cocoa/60 text-right md:text-left">con ${profName}</span>
+                <a href="profile.html" class="px-6 py-2 bg-cocoa text-ivory text-xs uppercase tracking-widest hover:bg-olive hover:text-white transition rounded-full text-center">Reservar</a>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+async function fetchProfesoresLanding() {
+    const container = document.getElementById('landing-profesores-container');
+    if (!container) return;
+
+    const { data: profesores, error } = await client
+        .from('profesores')
+        .select('*')
+        .order('nombre');
+
+    if (error) {
+        console.error('Error fetching teachers:', error);
+        container.innerHTML = `<div class="col-span-full p-4 bg-red-50 border border-red-100 rounded-lg text-red-800 text-center">
+            <p class="font-bold">Error cargando maestros</p>
+            <p class="text-xs mt-1">${error.message}</p>
+             <p class="text-[10px] mt-2 opacity-75">Posible bloqueo de permisos (RLS) para usuarios públicos.</p>
+        </div>`;
+        return;
+    }
+
+    if (!profesores || profesores.length === 0) {
+        container.innerHTML = `<div class="col-span-full flex flex-col items-center justify-center py-10 gap-2 opacity-60">
+            <i data-lucide="lock" class="w-8 h-8 text-cocoa"></i>
+             <p class="text-center text-cocoa text-sm">No hay maestros visible.</p>
+            <p class="text-[10px] text-cocoa/50">Si eres admin, revisa las políticas RLS de Supabase tabla 'profesores'.</p>
+        </div>`;
+        lucide.createIcons();
+        return;
+    }
+
+    renderProfesoresLanding(profesores);
+}
+
+function renderProfesoresLanding(profesores) {
+    const container = document.getElementById('landing-profesores-container');
+    container.innerHTML = '';
+
+    profesores.forEach(prof => {
+        const fotoUrl = prof.foto_url || null;
+        const avatarHtml = fotoUrl
+            ? `<img src="${fotoUrl}" alt="${prof.nombre}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500">`
+            : `<div class="w-full h-full bg-cocoa/5 flex items-center justify-center text-cocoa text-4xl font-serif">${prof.nombre.charAt(0)}</div>`;
+
+        const card = document.createElement('div');
+        card.className = "group text-center";
+        card.innerHTML = `
+            <div class="w-48 h-64 mx-auto mb-6 relative overflow-hidden rounded-full border border-cocoa/10 shadow-sm group-hover:shadow-md transition">
+                ${avatarHtml}
+            </div>
+            <h3 class="text-2xl font-serif text-cocoa mb-1">${prof.nombre}</h3>
+            <p class="text-xs uppercase tracking-widest text-olive">${prof.especialidad || 'Yoga Instructor'}</p>
+            <p class="text-sm text-cocoa/60 mt-4 px-4 font-light leading-relaxed hidden group-hover:block transition-all fade-in">
+                ${prof.bio || 'Instructor certificado de GEN Yoga.'}
+            </p>
+        `;
+        container.appendChild(card);
+    });
+}
+
+async function setupProfileLink() {
+    const { data: { session } } = await client.auth.getSession();
+
+    // Links de Mi Perfil
+    const profileLinks = document.querySelectorAll('a[href="profile.html"]');
+
+    // Si queremos redirigir dinámicamente, por ahora los dejamos apuntar a profile.html
+    // que ya maneja la autenticación internamente (si no hay sesión muestra login).
+    // Pero podríamos cambiar el texto si hay sesión.
+
+    if (session) {
+        profileLinks.forEach(link => {
+            if (link.innerText.includes('PERFIL')) {
+                // Opcional: Cambiar texto o estilo si ya está logueado
+            }
+        });
+    }
+}

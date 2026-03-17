@@ -127,7 +127,7 @@ document.getElementById('form-register').addEventListener('submit', async (e) =>
 
         Swal.fire({
             icon: 'success',
-            title: '¡Bienvenido a HAM Yoga!',
+            title: '¡Bienvenido a gen Yoga!',
             text: '¡Tu cuenta ha sido creada con éxito!.',
             confirmButtonColor: '#A4A05D'
         });
@@ -373,7 +373,7 @@ function renderizarCalendario() {
 
 function crearDiaCalendario(day, isOtherMonth, isToday, isPast, dateKey) {
     const div = document.createElement('div');
-    div.className = 'calendar-day rounded-lg text-sm font-medium text-gray-700 bg-gray-50';
+    div.className = 'calendar-day rounded-lg text-sm font-medium text-cocoa bg-white/60 backdrop-blur-sm border border-white/20';
     div.textContent = day;
 
     if (isToday) div.classList.add('today');
@@ -474,7 +474,7 @@ function renderizarClases() {
 
     if (clasesAMostrar.length === 0) {
         container.innerHTML = `
-                    <div class="bg-ivory rounded-2xl p-12 text-center border border-cocoa/10">
+                    <div class="bg-white/90 backdrop-blur-md rounded-2xl p-12 text-center border border-white/20 shadow-lg">
                         <i class="ph-duotone ph-calendar-x text-5xl text-cocoa/20 mb-4"></i>
                         <p class="text-cocoa/60 font-medium">No hay clases en esta fecha</p>
                         <button onclick="limpiarFiltroFecha()" class="mt-4 text-olive hover:underline text-sm font-bold">Ver todas</button>
@@ -498,7 +498,7 @@ function renderizarClases() {
         const mes = dateObj.toLocaleDateString('es-ES', { month: 'long' });
 
         const section = document.createElement('div');
-        section.className = 'bg-ivory rounded-3xl border border-cocoa/10 shadow-sm overflow-hidden';
+        section.className = 'bg-white/90 backdrop-blur-md rounded-3xl border border-white/20 shadow-lg overflow-hidden';
 
         section.innerHTML = `
                     <div class="bg-gradient-to-r from-cocoa/10 to-sand/5 px-6 py-4 border-b border-cocoa/5 flex items-center justify-between">
@@ -1905,11 +1905,11 @@ async function agregarConfiguracion() {
 // ================= PERFIL & RANGO =================
 function getRankConfig(count) {
     const images = {
-        bronce: 'https://raw.githubusercontent.com/jaime312/Q19/main/images/ham_bronce.png',
-        plata: 'https://raw.githubusercontent.com/jaime312/Q19/main/images/ham_plata.png',
-        oro: 'https://raw.githubusercontent.com/jaime312/Q19/main/images/ham_oro.png',
-        platino: 'https://raw.githubusercontent.com/jaime312/Q19/main/images/ham_platino.png',
-        diamante: 'https://raw.githubusercontent.com/jaime312/Q19/main/images/ham_diamante.png'
+        bronce: 'https://raw.githubusercontent.com/jaime312/Q19/main/images/gen_bronce.png',
+        plata: 'https://raw.githubusercontent.com/jaime312/Q19/main/images/gen_plata.png',
+        oro: 'https://raw.githubusercontent.com/jaime312/Q19/main/images/gen_oro.png',
+        platino: 'https://raw.githubusercontent.com/jaime312/Q19/main/images/gen_platino.png',
+        diamante: 'https://raw.githubusercontent.com/jaime312/Q19/main/images/gen_diamante.png'
     };
     const colors = {
         bronce: 'text-amber-700',
@@ -2048,34 +2048,34 @@ function switchPublicView(viewName) {
     if (vProfesores) vProfesores.classList.add('hidden');
     if (vAsistencias) vAsistencias.classList.add('hidden');
 
-    btnHorarios.classList.remove('border-q19-600', 'text-q19-800');
-    btnHorarios.classList.add('border-transparent', 'text-gray-400');
-    btnProfesores.classList.remove('border-q19-600', 'text-q19-800');
-    btnProfesores.classList.add('border-transparent', 'text-gray-400');
+    btnHorarios.classList.remove('border-white', 'text-white');
+    btnHorarios.classList.add('border-transparent', 'text-white/60');
+    btnProfesores.classList.remove('border-white', 'text-white');
+    btnProfesores.classList.add('border-transparent', 'text-white/60');
     if (btnMisClases) {
-        btnMisClases.classList.remove('border-q19-600', 'text-q19-800');
-        btnMisClases.classList.add('border-transparent', 'text-gray-400');
+        btnMisClases.classList.remove('border-white', 'text-white');
+        btnMisClases.classList.add('border-transparent', 'text-white/60');
     }
 
     if (viewName === 'horarios') {
         vHorarios.classList.remove('hidden');
-        btnHorarios.classList.add('border-q19-600', 'text-q19-800');
-        btnHorarios.classList.remove('border-transparent', 'text-gray-400');
+        btnHorarios.classList.add('border-white', 'text-white');
+        btnHorarios.classList.remove('border-transparent', 'text-white/60');
     } else if (viewName === 'profesores') {
         if (vProfesores) {
             vProfesores.classList.remove('hidden');
             renderProfesoresPublic();
         }
-        btnProfesores.classList.add('border-q19-600', 'text-q19-800');
-        btnProfesores.classList.remove('border-transparent', 'text-gray-400');
+        btnProfesores.classList.add('border-white', 'text-white');
+        btnProfesores.classList.remove('border-transparent', 'text-white/60');
     } else if (viewName === 'mis-clases') {
         if (vAsistencias) {
             vAsistencias.classList.remove('hidden');
             cargarAsistenciasPorClase();
         }
         if (btnMisClases) {
-            btnMisClases.classList.add('border-q19-600', 'text-q19-800');
-            btnMisClases.classList.remove('border-transparent', 'text-gray-400');
+            btnMisClases.classList.add('border-white', 'text-white');
+            btnMisClases.classList.remove('border-transparent', 'text-white/60');
         }
     }
 }

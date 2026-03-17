@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HAM Yoga</title>
+    <title>GEN Yoga</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -45,9 +45,19 @@
     <link rel="stylesheet" href="profile.css">
 </head>
 
-<body class="antialiased">
+<body
+    class="antialiased min-h-screen w-screen overflow-x-hidden relative selection:bg-sand selection:text-cocoa font-sans bg-[linear-gradient(to_bottom,_#FFF9F0_0%,_#E6DCC3_20%,_#AFB090_40%,_#A07F65_65%,_#D27D60_100%)]">
 
-    <div id="auth-container" class="min-h-screen flex items-center justify-center p-4 md:p-8 relative">
+    <!-- Ambient Background Shapes (Replicated from Index) -->
+    <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <div
+            class="absolute top-[10%] left-[10%] w-[60vw] h-[60vw] bg-[#D4A574] rounded-full blur-[90px] opacity-20 animate-pulse mix-blend-multiply">
+        </div>
+        <div class="absolute bottom-[10%] right-[10%] w-[50vw] h-[50vw] bg-[#8B5A2B] rounded-full blur-[90px] opacity-20 animate-pulse mix-blend-multiply"
+            style="animation-delay: 2s;"></div>
+    </div>
+
+    <div id="auth-container" class="min-h-screen flex items-center justify-center p-4 md:p-8 relative z-10">
         <!-- Overlay removed for ivory theme -->
 
         <a href="index.html"
@@ -56,35 +66,36 @@
         </a>
 
         <div class="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 relative z-10 items-center">
-            <div class="text-cocoa fade-in order-2 lg:order-1 text-center lg:text-left">
+            <div class="text-white fade-in order-2 lg:order-1 text-center lg:text-left">
                 <div
-                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/40 border border-cocoa/10 text-[10px] font-bold uppercase tracking-[0.25em] mb-6 backdrop-blur-md text-cocoa">
-                    <i class="ph-fill ph-sparkle text-olive"></i> Studio & Wellness
+                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 border border-white/20 text-[10px] font-bold uppercase tracking-[0.25em] mb-6 backdrop-blur-md text-white">
+                    <i class="ph-fill ph-sparkle text-white"></i> Studio & Wellness
                 </div>
-                <h1 class="brand-font text-7xl md:text-7xl font-bold leading-tight mb-2 text-cocoa drop-shadow-sm">HAM
+                <h1 class="brand-font text-7xl md:text-8xl font-bold leading-tight mb-2 text-white drop-shadow-md">GEN
                     Yoga</h1>
-                <p class="text-cocoa/70 text-lg md:text-xl font-light leading-relaxed max-w-lg mx-auto lg:mx-0 mb-10">
+                <p
+                    class="text-white/90 text-lg md:text-2xl font-light leading-relaxed max-w-lg mx-auto lg:mx-0 mb-10 drop-shadow-sm">
                     Descubre tu mejor versión a través del movimiento consciente.
-                    <span class="block mt-2 text-olive text-base">Pilates Reformer • Vinyasa • Hatha</span>
+                    <span class="block mt-2 text-white font-medium text-base">Pilates Reformer • Vinyasa • Hatha</span>
                 </p>
-                <div class="flex flex-wrap justify-center lg:justify-start gap-4 text-xs font-medium text-cocoa/70">
+                <div class="flex flex-wrap justify-center lg:justify-start gap-4 text-xs font-medium text-white/80">
                     <div
-                        class="flex items-center gap-2 bg-white/40 border border-cocoa/10 px-4 py-2.5 rounded-full backdrop-blur-md">
-                        <i class="ph-fill ph-calendar-check text-olive text-lg"></i> <span>Reservas 24/7</span>
+                        class="flex items-center gap-2 bg-white/20 border border-white/30 px-4 py-2.5 rounded-full backdrop-blur-md">
+                        <i class="ph-fill ph-calendar-check text-white text-lg"></i> <span>Reservas 24/7</span>
                     </div>
                     <div
-                        class="flex items-center gap-2 bg-white/40 border border-cocoa/10 px-4 py-2.5 rounded-full backdrop-blur-md">
-                        <i class="ph-fill ph-ticket text-olive text-lg"></i> <span>Bonos Flexibles</span>
+                        class="flex items-center gap-2 bg-white/20 border border-white/30 px-4 py-2.5 rounded-full backdrop-blur-md">
+                        <i class="ph-fill ph-ticket text-white text-lg"></i> <span>Bonos Flexibles</span>
                     </div>
                 </div>
             </div>
 
             <div class="w-full max-w-md mx-auto order-1 lg:order-2 fade-in" style="animation-delay: 0.2s;">
                 <div id="login-card"
-                    class="bg-white/95 backdrop-blur-xl p-8 md:p-10 rounded-3xl shadow-2xl border-t-4 border-cocoa relative overflow-hidden">
+                    class="bg-white/20 backdrop-blur-xl p-8 md:p-10 rounded-3xl shadow-2xl border border-white/30 relative overflow-hidden text-white">
                     <div class="text-center mb-8 relative z-10">
-                        <h2 class="text-3xl font-bold text-cocoa brand-font">Bienvenido</h2>
-                        <p class="text-cocoa/60 mt-2 text-xs font-bold uppercase tracking-[0.2em]">Accede a tu cuenta
+                        <h2 class="text-3xl font-bold text-white brand-font">Bienvenido</h2>
+                        <p class="text-white/80 mt-2 text-xs font-bold uppercase tracking-[0.2em]">Accede a tu cuenta
                         </p>
                     </div>
                     <form id="form-login" class="space-y-5 relative z-10">
@@ -95,7 +106,7 @@
                                 <i
                                     class="ph-bold ph-envelope-simple absolute left-4 top-3.5 text-gray-400 group-focus-within:text-cocoa transition"></i>
                                 <input type="email" id="login-email"
-                                    class="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-olive focus:border-olive outline-none transition placeholder-gray-400"
+                                    class="w-full pl-11 pr-4 py-3 bg-white/10 border border-white/30 rounded-xl focus:ring-2 focus:ring-white/50 focus:border-white outline-none transition placeholder-white/50 text-white"
                                     placeholder="hola@ejemplo.com" required>
                             </div>
                         </div>
@@ -106,19 +117,20 @@
                                 <i
                                     class="ph-bold ph-lock-key absolute left-4 top-3.5 text-gray-400 group-focus-within:text-cocoa transition"></i>
                                 <input type="password" id="login-password"
-                                    class="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-olive focus:border-olive outline-none transition placeholder-gray-400"
+                                    class="w-full pl-11 pr-4 py-3 bg-white/10 border border-white/30 rounded-xl focus:ring-2 focus:ring-white/50 focus:border-white outline-none transition placeholder-white/50 text-white"
                                     placeholder="••••••••" required>
                             </div>
                         </div>
                         <button type="submit"
-                            class="w-full bg-cocoa text-ivory py-4 rounded-xl font-bold hover:bg-olive transition shadow-lg hover:shadow-xl transform active:scale-[0.98] tracking-wide text-sm flex items-center justify-center gap-2 group">
-                            INICIAR SESIÓN <i class="ph-bold ph-arrow-right group-hover:translate-x-1 transition"></i>
+                            class="w-full bg-white text-cocoa py-4 rounded-xl font-bold hover:bg-white/90 transition shadow-lg hover:shadow-xl transform active:scale-[0.98] tracking-wide text-sm flex items-center justify-center gap-2 group">
+                            INICIAR SESIÓN <i
+                                class="ph-bold ph-arrow-right group-hover:translate-x-1 transition text-cocoa"></i>
                         </button>
                     </form>
                     <div class="mt-8 text-center relative z-10">
                         <p class="text-gray-400 text-sm">¿Aún no tienes cuenta?</p>
                         <button onclick="toggleAuth('register')"
-                            class="text-olive font-bold text-xl hover:underline mt-1">Regístrate gratis aquí</button>
+                            class="text-white font-bold text-xl hover:underline mt-1">Regístrate gratis aquí</button>
                     </div>
                     <div
                         class="absolute -top-10 -right-10 w-32 h-32 bg-olive/20 rounded-full blur-3xl opacity-50 pointer-events-none">
@@ -177,11 +189,11 @@
     </div>
 
     <div id="app-view"
-        class="hidden min-h-screen flex flex-col bg-ivory items-center justify-center p-0 md:p-6 transition-all duration-500">
+        class="hidden min-h-screen flex flex-col bg-transparent items-center justify-center p-0 md:p-6 transition-all duration-500 relative z-20">
         <!-- Main Application Card (Zen Garden Container) -->
         <div
-            class="w-full max-w-[1400px] bg-ivory/95 backdrop-blur-xl md:rounded-[2.5rem] shadow-2xl flex flex-col min-h-screen md:min-h-[90vh] overflow-hidden border border-white/20 relative">
-            <header class="bg-ivory/90 backdrop-blur-md sticky top-0 z-50 border-b border-cocoa/10 shadow-sm">
+            class="w-full max-w-[1400px] bg-white/20 backdrop-blur-2xl md:rounded-[2.5rem] shadow-2xl flex flex-col min-h-screen md:min-h-[90vh] overflow-hidden border border-white/30 relative">
+            <header class="bg-white/10 backdrop-blur-md sticky top-0 z-50 border-b border-white/20 shadow-sm">
                 <div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center">
                     <div class="flex items-center gap-3 group cursor-default">
                         <div
@@ -190,7 +202,7 @@
                         </div>
                         <a href="https://maps.google.com/?q=Farmacia+Q19+Albacete"
                             class="flex flex-col hover:opacity-80 transition-opacity">
-                            <h1 class="brand-font font-bold text-3xl text-cocoa leading-none tracking-tight">HAM Yoga
+                            <h1 class="brand-font font-bold text-3xl text-cocoa leading-none tracking-tight">GEN Yoga
                             </h1>
                         </a>
                     </div>
@@ -241,18 +253,18 @@
                 </div>
             </header>
 
-            <nav id="public-nav" class="sticky top-20 z-40 bg-ivory/80 backdrop-blur-md border-b border-cocoa/5 mb-6">
+            <nav id="public-nav" class="sticky top-20 z-40 bg-white/10 backdrop-blur-md border-b border-white/20 mb-6">
                 <div class="max-w-7xl mx-auto flex justify-center">
-                    <button onclick="switchPublicView('horarios')" id="nav-public-horarios"
-                        class="px-8 py-4 text-sm font-bold uppercase tracking-widest border-b-2 border-olive text-cocoa transition hover:bg-white/50">
-                        <i class="ph-bold ph-calendar-check mr-2"></i> Clases
+                    <button id="nav-public-horarios" onclick="switchPublicView('horarios')"
+                        class="px-8 py-4 text-sm font-bold tracking-widest border-b-2 border-white text-white transition hover:bg-white/10">
+                        CLASES
                     </button>
-                    <button onclick="switchPublicView('profesores')" id="nav-public-profesores"
-                        class="px-8 py-4 text-sm font-bold uppercase tracking-widest border-b-2 border-transparent text-cocoa/40 hover:text-olive transition hover:bg-white/50">
-                        <i class="ph-bold ph-users mr-2"></i> Profesores
+                    <button id="nav-public-profesores" onclick="switchPublicView('profesores')"
+                        class="px-8 py-4 text-sm font-bold tracking-widest border-b-2 border-transparent text-white/60 transition hover:bg-white/10 hover:text-white">
+                        MAESTROS
                     </button>
                     <button onclick="switchPublicView('mis-clases')" id="nav-public-mis-clases"
-                        class="hidden px-8 py-4 text-sm font-bold uppercase tracking-widest border-b-2 border-transparent text-cocoa/40 hover:text-olive transition hover:bg-white/50">
+                        class="hidden px-8 py-4 text-sm font-bold uppercase tracking-widest border-b-2 border-transparent text-white/60 hover:text-white transition hover:bg-white/10">
                         <i class="ph-bold ph-list-checks mr-2"></i> Mis Clases
                     </button>
                 </div>
@@ -265,11 +277,12 @@
                         class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-6 pb-6 border-b border-cocoa/10">
                         <div class="flex-1">
                             <span
-                                class="inline-block py-1 px-3 rounded-full bg-olive/10 text-olive font-bold tracking-widest text-[10px] uppercase mb-3 border border-olive/20">Calendario
+                                class="inline-block py-1 px-3 rounded-full bg-white/20 text-white font-bold tracking-widest text-[10px] uppercase mb-3 border border-white/30">Calendario
                                 Semanal</span>
-                            <h2 class="text-4xl md:text-5xl brand-font font-bold text-cocoa mb-3">Reserva tu práctica
+                            <h2 class="text-4xl md:text-5xl brand-font font-bold text-white mb-3 drop-shadow-sm">Reserva
+                                tu práctica
                             </h2>
-                            <p class="text-cocoa/60 font-light text-lg max-w-xl leading-relaxed">Encuentra el equilibrio
+                            <p class="text-white/80 font-light text-lg max-w-xl leading-relaxed">Encuentra el equilibrio
                                 perfecto entre cuerpo y mente. Selecciona tu clase y prepárate para desconectar.</p>
                         </div>
 
@@ -525,7 +538,7 @@
                         class="w-14 h-14 bg-white rounded-full flex items-center justify-center text-cocoa/30 mx-auto mb-5 border border-cocoa/10 shadow-sm">
                         <span class="brand-font font-bold text-2xl pb-1 italic text-cocoa/40">H</span>
                     </div>
-                    <p class="brand-font font-bold text-cocoa text-xl mb-1">HAM Yoga</p>
+                    <p class="brand-font font-bold text-cocoa text-xl mb-1">GEN Yoga</p>
                     <p class="text-cocoa/60 text-sm mb-8 max-w-md mx-auto leading-relaxed">
                         Un espacio dedicado al bienestar integral, la salud física y la paz mental. <br>
                         Cuidamos de ti desde el interior.
@@ -544,7 +557,7 @@
                     </div>
                     <div
                         class="border-t border-cocoa/10 pt-8 mt-8 flex flex-col md:flex-row justify-center items-center gap-4 text-xs text-cocoa/40">
-                        <span>© 2025 HAM Yoga by Q19. Todos los derechos reservados.</span>
+                        <span>© 2025 GEN Yoga by Q19. Todos los derechos reservados.</span>
                     </div>
                 </div>
             </footer>

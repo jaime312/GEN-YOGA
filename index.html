@@ -13,8 +13,9 @@
         rel="stylesheet">
 
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=3">
 
     <script>
         tailwind.config = {
@@ -38,209 +39,476 @@
                     },
                     fontFamily: {
                         serif: ['Playfair Display', 'serif'],
-                        sans: ['Lato', 'sans-serif'],
-                        higuen: ['Higuen', 'serif']
+                        sans: ['Ubuntu', 'sans-serif'],
+                        ubuntu: ['Ubuntu', 'sans-serif']
                     }
                 }
             }
         }
     </script>
+    <style>
+        @keyframes wander1 {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            33% {
+                transform: translate(50vw, -30vh) scale(1.4);
+            }
+
+            66% {
+                transform: translate(-20vw, 40vh) scale(0.8);
+            }
+
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+        }
+
+        @keyframes wander2 {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            33% {
+                transform: translate(-40vw, 50vh) scale(1.3);
+            }
+
+            66% {
+                transform: translate(30vw, -20vh) scale(0.9);
+            }
+
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+        }
+
+        @keyframes wander3 {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            45% {
+                transform: translate(60vw, 40vh) scale(1.2);
+            }
+
+            80% {
+                transform: translate(-30vw, -50vh) scale(0.8);
+            }
+
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+        }
+
+        @keyframes wander4 {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            40% {
+                transform: translate(-50vw, -40vh) scale(1.5);
+            }
+
+            70% {
+                transform: translate(40vw, 30vh) scale(0.8);
+            }
+
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+        }
+
+        .ambient-shape {
+            position: absolute;
+            filter: blur(90px);
+            opacity: 0.2;
+            /* Mucho más visibles como pidió el usuario */
+            border-radius: 50%;
+            mix-blend-mode: multiply;
+            will-change: transform;
+        }
+
+        .shape-1 {
+            top: 10%;
+            left: 10%;
+            width: 70vw;
+            /* El doble de grandes */
+            height: 70vw;
+            background: #D4A574;
+            /* Sand 1 */
+            animation: wander1 35s infinite ease-in-out alternate;
+        }
+
+        .shape-2 {
+            top: 50%;
+            right: 10%;
+            width: 65vw;
+            height: 65vw;
+            background: #8B5A2B;
+            /* Bronze 1 */
+            animation: wander2 41s infinite ease-in-out alternate;
+        }
+
+        .shape-3 {
+            top: 20%;
+            right: 30%;
+            width: 45vw;
+            height: 45vw;
+            background: #D4A574;
+            /* Sand 2 */
+            animation: wander3 37s infinite ease-in-out alternate;
+            animation-delay: -10s;
+        }
+
+        .shape-4 {
+            bottom: 10%;
+            left: 10%;
+            width: 50vw;
+            height: 50vw;
+            background: #8B5A2B;
+            /* Bronze 2 */
+            animation: wander4 43s infinite ease-in-out alternate;
+            animation-delay: -5s;
+        }
+
+        /* Custom Safe Layout Logic */
+        /* Only apply absolute positioning if we have enough Width AND Height */
+        @media (min-width: 1024px) and (min-height: 800px) {
+            .safe-absolute-top-left {
+                position: absolute;
+                top: 4rem;
+                left: 4rem;
+                transform: translateY(-50%);
+            }
+
+            .safe-absolute-bottom-left {
+                position: absolute;
+                bottom: 4rem;
+                left: 4rem;
+                transform: translateY(50%);
+            }
+
+            .safe-absolute-top-right {
+                position: absolute;
+                top: 4rem;
+                right: 4rem;
+                transform: translateY(-50%);
+            }
+
+            .safe-absolute-bottom-right {
+                position: absolute;
+                bottom: 4rem;
+                right: 4rem;
+                transform: translateY(50%);
+            }
+
+            /* safe-absolute-header rules removed as we switched to flexbox flow for safety */
+
+            /* Ensure navigation buttons are visible in the flow */
+            .safe-hidden-on-desktop {
+                display: grid;
+            }
+
+            /* Force grid display if we are not in safe mode */
+        }
+
+        /* Animation for rotating symbols in the center */
+        @keyframes symbolCycle {
+
+            0%,
+            15% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            20%,
+            95% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+        }
+
+        .symbol-stack {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .symbol-stack img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            opacity: 0;
+            animation: symbolCycle 15s infinite;
+        }
+
+        /* Stagger delays for 5 items over 15s (3s each) */
+        .symbol-stack img:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .symbol-stack img:nth-child(2) {
+            animation-delay: 3s;
+        }
+
+        .symbol-stack img:nth-child(3) {
+            animation-delay: 6s;
+        }
+
+        .symbol-stack img:nth-child(4) {
+            animation-delay: 9s;
+        }
+
+        .symbol-stack img:nth-child(5) {
+            animation-delay: 12s;
+        }
+    </style>
 </head>
 
 <body
-    class="bg-ivory/40 h-screen w-screen overflow-y-auto md:overflow-hidden relative selection:bg-sand selection:text-cocoa">
+    class="min-h-screen w-screen overflow-x-hidden relative selection:bg-sand selection:text-cocoa font-sans lg:h-screen lg:overflow-hidden">
 
-    <div class="fixed inset-0 z-0 bg-ivory">
-    </div>
-
+    <!-- Background Gradient: Adjusted for better contrast with white text -->
     <div
-        class="absolute top-8 md:top-14 left-1/2 -translate-x-1/2 z-30 pointer-events-none flex flex-col items-center gap-2">
-        <h1 class="font-higuen text-7xl md:text-9xl text-olive tracking-[0.2em] leading-none select-none">
-            GEN
-        </h1>
-        <span
-            class="inline-block py-1 px-4 rounded-full border border-cocoa/20 text-olive font-bold tracking-[0.3em] text-[14px] md:text-xl uppercase backdrop-blur-sm">
-            YOGA & WELLNESS
-        </span>
+        class="fixed inset-0 z-0 bg-[linear-gradient(to_bottom,_#FFF9F0_0%,_#E6DCC3_20%,_#AFB090_40%,_#A07F65_65%,_#D27D60_100%)]">
     </div>
 
-    <aside
-        class="fixed left-4 md:left-8 lg:left-12 xl:left-32 2xl:left-64 bottom-0 h-full hidden md:flex flex-col justify-center items-center gap-20 md:gap-32 xl:gap-60 px-6 z-20 w-32 md:w-48">
+    <!-- Inner Glow/Highlight to mimic the center spotlight effect -->
+    <div
+        class="fixed inset-0 z-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.15)_0%,transparent_50%)] pointer-events-none">
+    </div>
 
-        <button onclick="openModal('clases')" class="side-btn group">
-            <span
-                class="vertical-text text-3xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-higuen tracking-widest text-cocoa transition-all duration-500">CLASES</span>
-        </button>
+    <!-- Main Content Container: Flex Column for safe stacking -->
+    <div
+        class="relative z-10 w-full min-h-screen flex flex-col items-center justify-between p-4 md:p-8 overflow-y-auto lg:h-screen lg:overflow-hidden">
 
-        <button onclick="openModal('precios')" class="side-btn group">
-            <span
-                class="vertical-text text-3xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-higuen tracking-widest text-cocoa transition-all duration-500">TARIFAS</span>
-        </button>
-
-    </aside>
-
-    <main
-        class="relative z-10 flex flex-col items-center justify-center h-full text-center px-4 w-full max-w-5xl mx-auto pt-0">
-
-        <h1
-            class="brand-font text-5xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-6xl text-cocoa font-medium mb-6 leading-tight drop-shadow-sm text-shadow-md">
-            YO SOY...<br>
-            <span id="dynamic-text"
-                class="text-olive italic transition-opacity duration-500 inline-block min-w-[300px]">🔥</span>
-        </h1>
-
-        <div class="max-w-xl mx-auto mb-12 opacity-90">
-            <p class="text-cocoa text-lg md:text-2xl font-light leading-relaxed mb-4">
-                En GEN Yoga fusionamos <u>movimiento</u> 🏃 , <u>respiración</u> 🧘 y <u>consciencia</u> 🙇 para crear
-                un espacio donde
-                tu <u>cuerpo</u> 🏋️ y tu <u>mente</u> 🧠 encuentren su equilibrio natural 🗽
-            </p>
-            <p class="text-olive font-serif text-xl md:text-2xl italic tracking-wide">
-                tu refugio, tu energía, tu momento
+        <!-- HEADER / LOGO -->
+        <div class="flex flex-col items-center mt-[1vh] z-20 transition-all duration-300 relative flex-shrink-0">
+            <h1
+                class="font-ubuntu text-[clamp(3rem,7vh,8rem)] text-white font-bold tracking-tighter leading-none drop-shadow-sm">
+                GEN</h1>
+            <p class="text-white text-[clamp(1rem,2vh,2rem)] tracking-[0.3em] font-medium mt-1">YOGA & WELL-BEING
             </p>
         </div>
 
-        <!-- Mobile Menu -->
-        <div class="flex flex-col gap-4 mb-12 md:hidden w-full max-w-xs z-30">
+        <!-- CENTRAL CONTENT -->
+        <div
+            class="flex-grow flex-shrink flex flex-col items-center justify-center text-center max-w-2xl min-h-0 space-y-[1vh] my-[1vh] z-10 px-4">
+            <h2 class="font-sans text-[clamp(2.5rem,8vh,8rem)] text-white font-medium tracking-wide drop-shadow-md">Yo
+                soy</h2>
+
+            <div class="w-auto h-[clamp(4rem,10vh,10rem)] my-[0.5vh] aspect-square">
+                <div class="symbol-stack">
+                    <img src="img/Diseño sin título (11).png" alt="Símbolo 1">
+                    <img src="img/Diseño sin título (12).png" alt="Símbolo 2">
+                    <img src="img/Diseño sin título (13).png" alt="Símbolo 3">
+                    <img src="img/Diseño sin título (14).png" alt="Símbolo 4">
+                    <img src="img/Diseño sin título (15).png" alt="Símbolo 5">
+                </div>
+            </div>
+
+            <p
+                class="text-white/90 text-[clamp(1.1rem,2.2vh,2rem)] font-light leading-relaxed max-w-4xl mx-auto drop-shadow-sm">
+                En GEN Yoga fusionamos movimiento, respiración y consciencia para crear un espacio donde tu cuerpo y tu
+                mente encuentren su equilibrio natural
+            </p>
+
+            <p class="text-white font-medium text-[clamp(1.2rem,2.5vh,3rem)] tracking-wide drop-shadow-md mt-[0.5vh]">
+                Tu refugio, tu energía, tu momento
+            </p>
+        </div>
+
+        <!-- MOBILE NAVIGATION (Visible only on mobile) -->
+        <div class="lg:hidden w-full grid grid-cols-2 gap-4 px-4 mt-8 z-30 mb-8 flex-shrink-0">
             <button onclick="openModal('clases')"
-                class="py-3 border border-cocoa/30 rounded-full text-cocoa tracking-[0.2em] text-sm hover:bg-sand/20 transition backdrop-blur-sm">CLASES</button>
+                class="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-4 text-center hover:bg-white/20 transition duration-300 shadow-lg">
+                <span class="text-white text-lg font-bold tracking-widest block drop-shadow-md">CLASES</span>
+            </button>
             <button onclick="openModal('precios')"
-                class="py-3 border border-cocoa/30 rounded-full text-cocoa tracking-[0.2em] text-sm hover:bg-sand/20 transition backdrop-blur-sm">TARIFAS</button>
+                class="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-4 text-center hover:bg-white/20 transition duration-300 shadow-lg">
+                <span class="text-white text-lg font-bold tracking-widest block drop-shadow-md">TARIFAS</span>
+            </button>
             <button onclick="openModal('profesores')"
-                class="py-3 border border-cocoa/30 rounded-full text-cocoa tracking-[0.2em] text-sm hover:bg-sand/20 transition backdrop-blur-sm">MAESTROS</button>
+                class="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-4 text-center hover:bg-white/20 transition duration-300 shadow-lg">
+                <span class="text-white text-lg font-bold tracking-widest block drop-shadow-md">MAESTROS</span>
+            </button>
             <a href="profile.html"
-                class="block py-3 border border-cocoa/30 rounded-full text-cocoa tracking-[0.2em] text-sm hover:bg-sand/20 transition backdrop-blur-sm text-center relative z-50 cursor-pointer">PERFIL</a>
+                class="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-4 text-center hover:bg-white/20 transition duration-300 flex items-center justify-center shadow-lg">
+                <span class="text-white text-lg font-bold tracking-widest block drop-shadow-md">MI PERFIL</span>
+            </a>
         </div>
-    </main>
 
-    <aside
-        class="fixed right-4 md:right-8 lg:right-12 xl:right-32 2xl:right-64 bottom-0 h-full hidden md:flex flex-col justify-center items-center gap-20 md:gap-32 xl:gap-60 px-6 z-20 w-32 md:w-48">
+        <!-- NAVIGATION LINKS (Responsive Wrapper) -->
 
-        <button onclick="openModal('profesores')" class="side-btn group">
-            <span
-                class="vertical-text-rl text-3xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-higuen tracking-widest text-cocoa transition-all duration-500">MAESTROS</span>
-        </button>
+        <!-- CORNER BUTTONS (Visible only in Safe Mode via CSS) -->
+        <!-- 
+             PARA RECOLOCAR LOS BOTONES:
+             Ahora están posicionados verticalmente con porcentajes ("top-1/4", "bottom-1/4").
+             Horizontalmente están separados del borde ("left-8", "right-8").
+        -->
 
-        <a href="profile.html" class="side-btn group">
-            <span
-                class="vertical-text-rl text-3xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-higuen tracking-widest text-cocoa transition-all duration-500">MI
-                PERFIL</span>
-        </a>
-    </aside>
+        <!-- LEFT SIDE NAVIGATION -->
+        <div class="hidden lg:flex flex-col items-start gap-4 absolute left-12 top-1/2 -translate-y-1/2 z-30">
+            <button onclick="openModal('clases')" onmouseenter="showHoverImage('left', 'clases')"
+                onmouseleave="hideHoverImage('left')"
+                class="group transition-transform duration-300 hover:scale-105 text-left w-full">
+                <span
+                    class="text-[clamp(2rem,4vh,4rem)] xl:text-6xl font-bold tracking-widest text-white drop-shadow-lg group-hover:text-white/80">CLASES</span>
+            </button>
 
-    <div class="absolute bottom-40 left-1/2 -translate-x-1/2 z-40">
-        <button onclick="openModal('socials')"
-            class="text-cocoa/70 hover:text-olive hover:scale-110 transition duration-300">
-            <i data-lucide="instagram" class="w-20 h-20"></i>
-        </button>
+            <!-- Hover Image Spacer: Responsive height -->
+            <div id="hover-image-left"
+                class="flex items-center justify-center w-64 h-[clamp(6rem,18vh,16rem)] pointer-events-none transition-opacity duration-500 opacity-0 z-0 relative pr-20">
+                <img id="img-clases" src="img/Clases.png"
+                    class="absolute w-full h-full object-contain drop-shadow-2xl hidden" alt="">
+                <img id="img-tarifas" src="img/Tarifas.png"
+                    class="absolute w-full h-full object-contain drop-shadow-2xl hidden" alt="">
+            </div>
+
+            <button onclick="openModal('precios')" onmouseenter="showHoverImage('left', 'tarifas')"
+                onmouseleave="hideHoverImage('left')"
+                class="group transition-transform duration-300 hover:scale-105 text-left w-full">
+                <span
+                    class="text-[clamp(2rem,4vh,4rem)] xl:text-6xl font-bold tracking-widest text-white drop-shadow-lg group-hover:text-white/80">TARIFAS</span>
+            </button>
+        </div>
+
+        <!-- RIGHT SIDE NAVIGATION -->
+        <div class="hidden lg:flex flex-col items-end gap-4 absolute right-12 top-1/2 -translate-y-1/2 z-30">
+            <button onclick="openModal('profesores')" onmouseenter="showHoverImage('right', 'maestros')"
+                onmouseleave="hideHoverImage('right')"
+                class="group transition-transform duration-300 hover:scale-105 text-right w-full">
+                <span
+                    class="text-[clamp(2rem,4vh,4rem)] xl:text-6xl font-bold tracking-widest text-white drop-shadow-lg group-hover:text-white/80">MAESTROS</span>
+            </button>
+
+            <!-- Hover Image Spacer: Responsive height -->
+            <div id="hover-image-right"
+                class="flex items-center justify-center w-64 h-[clamp(6rem,18vh,16rem)] pointer-events-none transition-opacity duration-500 opacity-0 z-0 relative pl-20">
+                <img id="img-maestros" src="img/Maestros.png"
+                    class="absolute w-full h-full object-contain drop-shadow-2xl hidden" alt="">
+                <img id="img-perfil" src="img/Mi_perfil.png"
+                    class="absolute w-full h-full object-contain drop-shadow-2xl hidden" alt="">
+            </div>
+
+            <a href="profile.html" onmouseenter="showHoverImage('right', 'perfil')"
+                onmouseleave="hideHoverImage('right')"
+                class="group transition-transform duration-300 hover:scale-105 block text-right w-full">
+                <span
+                    class="text-[clamp(2rem,4vh,4rem)] xl:text-6xl font-bold tracking-widest text-white drop-shadow-lg group-hover:text-white/80">MI
+                    PERFIL</span>
+            </a>
+        </div>
+        <!-- FOOTER -->
+        <footer class="w-full flex flex-col items-center gap-2 mt-0 z-10 text-white flex-shrink-0">
+            <!-- Instagram Icon -->
+            <a href="https://instagram.com" target="_blank"
+                class="hover:text-white transition-colors duration-300 transform hover:scale-110">
+                <i data-lucide="instagram" class="w-12 h-12 md:w-14 md:h-14"></i>
+            </a>
+
+            <!-- Info Bar -->
+            <div
+                class="w-full border-t border-white/30 pt-0 flex flex-col md:flex-row items-center justify-between gap-0 text-xs md:text-sm font-bold tracking-[0.2em] uppercase text-center md:text-left">
+
+                <div class="flex flex-col md:flex-row gap-0 md:gap-0 items-center relative top-3">
+                    <span>Calle San Carlos, 2, Albacete </span>
+                    <span class="hidden md:inline text-white">|</span>
+                    <a href="mailto:hola@genyoga.studio"
+                        class="hover:text-white/80 transition underline decoration-transparent hover:decoration-white">
+                        hola@genyoga.studio</a>
+                </div>
+
+                <div
+                    class="flex flex-col md:flex-row gap-0 md:gap-0 items-center text-center md:text-right relative top-3">
+                    <a href="#" class="hover:text-white transition">Terms & Conditions</a>
+                    <span>© 2026 GEN YOGA</span>
+                    <span class="text-white">. V2.6.3</span>
+                </div>
+            </div>
+        </footer>
+
     </div>
 
-    <footer
-        class="absolute bottom-0 left-0 w-full px-12 py-6 flex justify-between items-center text-[9px] md:text-[11px] text-cocoa uppercase tracking-[0.3em] font-sans z-30 border-t border-cocoa/20">
-        <div class="flex items-center gap-6">
-            <span>CALLE JOAQUIN QUIJADA, 11, ALBACETE</span>
-            <span class="hidden md:inline opacity-50">|</span>
-            <span class="hidden md:inline">HOLA@GENYOGA.COM</span>
-        </div>
-        <div class="flex items-center gap-8">
-            <a href="#" class="hover:text-olive transition font-medium">TERMS & CONDITIONS</a>
-            <span class="font-medium">© 2026 GEN YOGA</span>
-            <span class="text-[9px] opacity-60 ml-4 font-bold">V2.3.0</span>
-        </div>
-    </footer>
-
+    <!-- Modals (Preserved functioning logic, hidden by default) -->
     <div id="modal-overlay"
-        class="fixed inset-0 bg-ivory/95 backdrop-blur-xl z-50 hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4">
+        class="fixed inset-0 bg-black/40 backdrop-blur-md z-50 hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4">
 
         <button onclick="closeModal()"
-            class="absolute top-8 right-8 text-cocoa/70 hover:text-cocoa transition z-50 flex items-center gap-2 group">
+            class="absolute top-8 right-8 text-white hover:text-sand transition z-50 flex items-center gap-2 group">
             <span class="text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition">Cerrar</span>
             <i data-lucide="x" class="w-10 h-10"></i>
         </button>
 
-        <div id="modal-clases" class="modal-content hidden w-full max-w-5xl h-[85vh] overflow-y-auto hide-scrollbar">
-            <h2 class="brand-font text-5xl md:text-6xl text-center text-olive mb-16">Horario Semanal</h2>
-            <div class="space-y-6">
-                <div
-                    class="flex flex-col md:flex-row items-center justify-between p-8 border border-cocoa/10 hover:border-olive/50 hover:bg-cocoa/5 transition duration-300 group cursor-pointer">
-                    <div class="flex items-center gap-8">
-                        <span class="text-4xl font-serif text-olive group-hover:text-cocoa transition">07:00</span>
-                        <div class="text-left">
-                            <span class="block text-xl uppercase tracking-widest font-light text-cocoa">Morning
-                                Flow</span>
-                            <span class="text-sm text-slate">Sala Aire • 60 min</span>
-                        </div>
-                    </div>
-                    <div class="mt-4 md:mt-0 flex items-center gap-6">
-                        <span class="text-lg font-serif italic text-cocoa/60">con Elena García</span>
-                        <button
-                            class="px-6 py-2 bg-cocoa text-ivory text-xs uppercase tracking-widest hover:bg-olive hover:text-white transition">Reservar</button>
-                    </div>
-                </div>
-                <div
-                    class="flex flex-col md:flex-row items-center justify-between p-8 border border-cocoa/10 hover:border-olive/50 hover:bg-cocoa/5 transition duration-300 group cursor-pointer">
-                    <div class="flex items-center gap-8">
-                        <span class="text-4xl font-serif text-olive group-hover:text-cocoa transition">09:30</span>
-                        <div class="text-left">
-                            <span class="block text-xl uppercase tracking-widest font-light text-cocoa">Vinyasa
-                                Power</span>
-                            <span class="text-sm text-slate">Sala Fuego • 75 min</span>
-                        </div>
-                    </div>
-                    <div class="mt-4 md:mt-0 flex items-center gap-6">
-                        <span class="text-lg font-serif italic text-cocoa/60">con Marc Soler</span>
-                        <button
-                            class="px-6 py-2 bg-cocoa text-ivory text-xs uppercase tracking-widest hover:bg-olive hover:text-white transition">Reservar</button>
-                    </div>
-                </div>
+        <!-- Content for Modals (Same IDs as before for JS compatibility) -->
+        <div id="modal-clases"
+            class="modal-content hidden w-full max-w-[95vw] md:max-w-4xl lg:max-w-5xl h-auto max-h-[85vh] overflow-y-auto hide-scrollbar rounded-xl p-4 md:p-8 text-cocoa bg-[linear-gradient(to_bottom,_#FFF9F0_0%,_#E6DCC3_20%,_#AFB090_40%,_#A07F65_65%,_#D27D60_100%)] shadow-2xl">
+            <h2 class="brand-font text-3xl md:text-5xl lg:text-7xl text-center text-white mb-8 md:mb-16 drop-shadow-md">
+                Horario Semanal
+            </h2>
+            <div id="landing-clases-container"
+                class="space-y-6 [&>*]:bg-white/80 [&>*]:backdrop-blur-sm [&>*]:rounded-xl [&>*]:border-white/10">
+                <!-- Clases dinámicas aquí -->
             </div>
         </div>
 
-        <div id="modal-precios" class="modal-content hidden w-full max-w-6xl">
-            <h2 class="brand-font text-5xl md:text-6xl text-center text-olive mb-16">Tarifas</h2>
+        <div id="modal-precios"
+            class="modal-content hidden w-full max-w-[95vw] md:max-w-4xl lg:max-w-6xl h-auto max-h-[85vh] overflow-y-auto hide-scrollbar rounded-xl p-4 md:p-8 text-cocoa bg-[linear-gradient(to_bottom,_#FFF9F0_0%,_#E6DCC3_20%,_#AFB090_40%,_#A07F65_65%,_#D27D60_100%)] shadow-2xl">
+            <h2 class="brand-font text-3xl md:text-5xl lg:text-7xl text-center text-white mb-8 md:mb-16 drop-shadow-md">
+                Tarifas</h2>
+            <!-- Rate cards content... kept simple for now as focus is on main page -->
             <div class="grid md:grid-cols-3 gap-8 px-4">
-                <div class="p-10 border border-cocoa/10 bg-white/40 text-center hover:bg-white/60 transition group">
+                <!-- ... (Rate cards logic would go here, simplified for this specific edit to focus on landing) ... -->
+                <div class="p-10 border border-cocoa/10 bg-white/40 text-center">
                     <h3 class="text-2xl font-serif text-cocoa mb-2">Single Class</h3>
-                    <p class="text-cocoa/60 text-xs uppercase tracking-widest mb-8">Acceso puntual</p>
-                    <div class="text-5xl font-serif text-olive mb-8">XX€</div>
-                    <button
-                        class="w-full py-4 border border-cocoa/20 text-cocoa text-xs uppercase tracking-widest group-hover:bg-cocoa group-hover:text-ivory transition">Comprar</button>
+                    <div class="text-5xl font-serif text-olive mb-8">15€</div>
                 </div>
-                <div class="p-10 border border-olive bg-olive/10 text-center transform scale-105 shadow-2xl">
-                    <span
-                        class="inline-block bg-olive text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 mb-6">Recomendado</span>
+                <div class="p-10 border border-olive bg-olive/10 text-center shadow-2xl scale-105">
                     <h3 class="text-2xl font-serif text-cocoa mb-2">Pack 10</h3>
-                    <p class="text-cocoa/60 text-xs uppercase tracking-widest mb-8">Para constantes</p>
-                    <div class="text-5xl font-serif text-olive mb-8">XXX€</div>
-                    <button
-                        class="w-full py-4 bg-olive text-white font-bold text-xs uppercase tracking-widest hover:bg-cocoa hover:text-white transition">Comprar</button>
+                    <div class="text-5xl font-serif text-olive mb-8">120€</div>
                 </div>
-                <div class="p-10 border border-cocoa/10 bg-white/40 text-center hover:bg-white/60 transition group">
+                <div class="p-10 border border-cocoa/10 bg-white/40 text-center">
                     <h3 class="text-2xl font-serif text-cocoa mb-2">Unlimited</h3>
-                    <p class="text-cocoa/60 text-xs uppercase tracking-widest mb-8">Mensualidad</p>
-                    <div class="text-5xl font-serif text-olive mb-8">XX€</div>
-                    <button
-                        class="w-full py-4 border border-cocoa/20 text-cocoa text-xs uppercase tracking-widest group-hover:bg-cocoa group-hover:text-ivory transition">Suscribirse</button>
+                    <div class="text-5xl font-serif text-olive mb-8">80€</div>
                 </div>
             </div>
         </div>
 
-        <div id="modal-profesores" class="modal-content hidden text-center">
-            <h2 class="text-5xl text-olive brand-font">Sección Maestros</h2>
-        </div>
-        <div id="modal-area-personal" class="modal-content hidden text-center">
-            <h2 class="text-5xl text-olive brand-font">Área Privada</h2>
-        </div>
-        <div id="modal-socials" class="modal-content hidden text-center">
-            <h2 class="text-5xl text-olive brand-font">Redes Sociales</h2>
-        </div>
-        <div id="modal-registro" class="modal-content hidden text-center">
-            <h2 class="text-5xl text-olive brand-font">Empezar Registro</h2>
+        <div id="modal-profesores"
+            class="modal-content hidden w-full max-w-[95vw] md:max-w-4xl lg:max-w-6xl h-auto max-h-[85vh] overflow-y-auto hide-scrollbar rounded-xl p-4 md:p-8 text-cocoa bg-[linear-gradient(to_bottom,_#FFF9F0_0%,_#E6DCC3_20%,_#AFB090_40%,_#A07F65_65%,_#D27D60_100%)] shadow-2xl">
+            <h2 class="text-3xl md:text-5xl lg:text-7xl text-white brand-font mb-8 md:mb-16 text-center drop-shadow-md">
+                Nuestros
+                Maestros
+            </h2>
+            <div id="landing-profesores-container"
+                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 [&>*]:bg-white/80 [&>*]:backdrop-blur-sm [&>*]:rounded-3xl [&>*]:p-6 [&>*]:border-white/40">
+                <!-- Teachers content -->
+            </div>
         </div>
 
+        <div id="modal-socials" class="modal-content hidden text-center bg-ivory rounded-xl p-8">
+            <h2 class="text-5xl text-olive brand-font">Síguenos</h2>
+            <div class="flex justify-center gap-4 mt-8">
+                <i data-lucide="instagram" class="w-12 h-12 text-cocoa"></i>
+            </div>
+        </div>
     </div>
 
+    <!-- Scripts -->
     <script src="app.js"></script>
+    <script>
+        // Re-initialize Lucide icons
+        lucide.createIcons();
+    </script>
 </body>
 
 </html>
