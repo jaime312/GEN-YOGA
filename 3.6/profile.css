@@ -1,0 +1,492 @@
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('fonts/Ubuntu/Ubuntu-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('fonts/Ubuntu/Ubuntu-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Montserrat Arabic';
+    src: url('fonts/montserrat%20arabic/Montserrat-Arabic%20Regular%20400.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Montserrat Arabic';
+    src: url('fonts/montserrat%20arabic/Montserrat-Arabic%20Bold%20700.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ======================================================= */
+/* 1. ESTILOS BASE Y CONFIGURACIÓN GENERAL                 */
+/* ======================================================= */
+body {
+    font-family: 'Montserrat Arabic', sans-serif;
+    /* Brandbook theme */
+    background-color: #f8f6f2;
+    color: #26160c;
+
+    /* Configuración por defecto (WEB) */
+    cursor: none;
+
+    /* Variables de entorno para el Notch (iOS/Android) */
+    /* En web esto vale 0, en móvil se ajusta automáticamente */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+}
+
+/* Títulos */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.brand-font {
+    font-family: 'Ubuntu', sans-serif;
+}
+
+/* ======================================================= */
+/* 2. COMPONENTES DE UI (Admin, Paneles, Scrollbar)        */
+/* ======================================================= */
+
+/* Control de Visibilidad Admin */
+.admin-only {
+    display: none !important;
+}
+
+.is-admin .admin-only:not(.hidden) {
+    display: block !important;
+}
+
+.is-admin .admin-flex:not(.hidden) {
+    display: flex !important;
+}
+
+.is-profesor .staff-only {
+    display: block !important;
+}
+
+.is-profesor .staff-flex {
+    display: flex !important;
+}
+
+.is-admin .client-only,
+.is-profesor .client-only {
+    display: none !important;
+}
+
+/* Animaciones */
+.fade-in {
+    animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Scrollbar elegante (Principalmente Web) */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #B48A47; /* Golden Ochre */
+    border-radius: 10px;
+    border: 2px solid #B48A47;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #26160C; /* Dark Brown */
+}
+
+/* Efecto Cristal */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* ======================================================= */
+/* 3. CALENDARIO                                           */
+/* ======================================================= */
+.calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.calendar-day:hover:not(.disabled):not(.other-month) {
+    transform: scale(1.05);
+    background: linear-gradient(135deg, #D27D60, #8C8658);
+    color: white;
+}
+
+.calendar-day.selected {
+    background: linear-gradient(135deg, #D27D60, #8C8658) !important;
+    color: white !important;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(210, 125, 96, 0.3);
+}
+
+.calendar-day.has-classes::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    width: 4px;
+    height: 4px;
+    background: #8C8658;
+    border-radius: 50%;
+}
+
+.calendar-day.selected.has-classes::after {
+    background: white;
+}
+
+.calendar-day.disabled {
+    color: #E6DCC3;
+    /* Sand */
+    filter: grayscale(1);
+    cursor: not-allowed;
+    opacity: 0.4;
+}
+
+.calendar-day.other-month {
+    color: #E6DCC3;
+    /* Sand */
+    opacity: 0.3;
+}
+
+.calendar-day.today {
+    border: 2px solid #D27D60;
+    font-weight: bold;
+}
+
+/* ======================================================= */
+/* 4. LOGICA DEL CURSOR PERSONALIZADO (WEB)                */
+/* ======================================================= */
+
+.wink-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    font-size: 2rem;
+    line-height: 1;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    transition: transform 0.1s ease-out;
+    user-select: none;
+}
+
+.wink-cursor.clicking {
+    transform: translate(-50%, -50%) scale(0.8) rotate(-10deg);
+}
+
+body.platform-web a,
+body.platform-web button,
+body.platform-web input,
+body.platform-web select,
+body.platform-web textarea,
+body.platform-web .cursor-pointer {
+    cursor: none !important;
+}
+
+
+/* ======================================================= */
+/* 5. ADAPTACIONES MÓVILES (iOS + ANDROID)                 */
+/* ======================================================= */
+
+/* REGLAS COMUNES APP (iOS y Android) */
+body.platform-ios,
+body.platform-android {
+    /* Restaurar cursor nativo (invisible en táctil) */
+    cursor: auto !important;
+}
+
+/* Ocultar cursor personalizado en apps */
+body.platform-ios .wink-cursor,
+body.platform-android .wink-cursor {
+    display: none !important;
+}
+
+/* Restaurar punteros en elementos interactivos para Apps */
+body.platform-ios a,
+body.platform-android a,
+body.platform-ios button,
+body.platform-android button,
+body.platform-ios input,
+body.platform-android input,
+body.platform-ios select,
+body.platform-android select {
+    cursor: auto !important;
+}
+
+/* --- ESPECÍFICO iOS (iPhone/iPad) --- */
+body.platform-ios header {
+    /* Ajuste fino para el Header debajo del Notch */
+    padding-top: 10px;
+}
+
+/* --- ESPECÍFICO ANDROID --- */
+body.platform-android {
+    /* Ajuste opcional para Android si la barra de estado es transparente */
+    padding-top: 5px;
+}
+
+/* ======================================================= */
+/* 6. UTILIDADES DE VISIBILIDAD POR PLATAFORMA             */
+/* ======================================================= */
+
+/* Mostrar SOLO en Web (Ocultar en móviles) */
+body.platform-ios .web-only,
+body.platform-android .web-only {
+    display: none !important;
+}
+
+/* Mostrar SOLO en iOS */
+body:not(.platform-ios) .ios-only {
+    display: none !important;
+}
+
+/* Mostrar SOLO en Android */
+body:not(.platform-android) .android-only {
+    display: none !important;
+}
+
+/* Mostrar en CUALQUIER App Móvil (No Web) */
+body.platform-web .mobile-only {
+    display: none !important;
+}
+
+/* ======================================================= */
+/* 7. INDICADORES MULTI-COLOR (Versión 3.0)                */
+/* ======================================================= */
+.calendar-dots {
+    display: flex;
+    justify-content: center;
+    gap: 3px;
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: fit-content;
+}
+
+.calendar-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 9999px;
+    transition: all 0.2s ease;
+}
+
+.calendar-dot.yoga {
+    background-color: #10B981; /* Green */
+}
+
+.calendar-dot.psicologia {
+    background-color: #3B82F6; /* Blue */
+}
+
+.calendar-dot.nutricion {
+    background-color: #8B5CF6; /* Purple */
+}
+
+.calendar-day.selected .calendar-dot {
+    background-color: #ffffff !important;
+}
+
+/* Indicadores de calendarios específicos */
+.calendar-day.has-psicologia::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    width: 5px;
+    height: 5px;
+    background: #3B82F6;
+    border-radius: 50%;
+}
+
+.calendar-day.has-nutricion::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    width: 5px;
+    height: 5px;
+    background: #8B5CF6;
+    border-radius: 50%;
+}
+
+.calendar-day.selected.has-psicologia::after,
+.calendar-day.selected.has-nutricion::after {
+    background: #ffffff;
+}
+
+/* Estilos para sub-filtros de profesionales */
+.filtro-prof-btn {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(38, 22, 12, 0.2);
+    color: rgba(38, 22, 12, 0.6);
+    background-color: transparent;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.filtro-prof-btn:hover {
+    background-color: rgba(38, 22, 12, 0.05);
+    color: #26160c;
+}
+
+.filtro-prof-btn.active {
+    background-color: #26160c;
+    color: #ffffff;
+    border-color: #26160c;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+@media (min-width: 1024px) {
+    .profile-calendar-main {
+        grid-column: span 9 / span 9;
+    }
+
+    .profile-calendar-side {
+        grid-column: span 3 / span 3;
+    }
+}
+
+/* Helper visibility for Admin view vs Client view */
+.is-admin-visible {
+    display: none !important;
+}
+.is-admin .is-admin-visible {
+    display: block !important;
+}
+.is-admin .is-admin-hidden {
+    display: none !important;
+}
+.is-admin #view-inicio {
+    display: none !important;
+}
+
+/* Reducir el tamaño del footer en modo administrador */
+.is-admin footer {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+}
+.is-admin footer .w-10 {
+    width: 1.75rem !important;
+    height: 1.75rem !important;
+    margin-bottom: 0.4rem !important;
+    padding: 0.3rem !important;
+}
+.is-admin footer p.brand-font {
+    font-size: 1rem !important;
+    margin-bottom: 0.25rem !important;
+}
+
+/* ======================================================= */
+/* 8. CORRECCIÓN DE BOTONES SWEETALERT (VISIBILIDAD)       */
+/* ======================================================= */
+.swal2-popup .swal2-styled.swal2-confirm {
+    background-color: #8C8658 !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    border-radius: 0.75rem !important;
+    padding: 0.625rem 1.5rem !important;
+    font-size: 0.875rem !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+    transition: all 0.2s ease !important;
+}
+
+.swal2-popup .swal2-styled.swal2-confirm:hover {
+    background-color: #76704b !important; /* Tonalidad verde oliva más oscura */
+    transform: translateY(-1px) !important;
+}
+
+.swal2-popup .swal2-styled.swal2-cancel {
+    background-color: #e5e7eb !important; /* Gris claro */
+    color: #374151 !important; /* Texto gris oscuro */
+    font-weight: bold !important;
+    border-radius: 0.75rem !important;
+    padding: 0.625rem 1.5rem !important;
+    font-size: 0.875rem !important;
+    transition: all 0.2s ease !important;
+}
+
+.swal2-popup .swal2-styled.swal2-cancel:hover {
+    background-color: #d1d5db !important; /* Gris más oscuro */
+    color: #1f2937 !important;
+}
+
+.swal2-popup .swal2-styled.swal2-deny {
+    background-color: #ef4444 !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    border-radius: 0.75rem !important;
+    padding: 0.625rem 1.5rem !important;
+    font-size: 0.875rem !important;
+    transition: all 0.2s ease !important;
+}
+
+.swal2-popup .swal2-styled.swal2-deny:hover {
+    background-color: #dc2626 !important;
+}
+
+/* Botones de Abono Mensual */
+.btn-activar-mensual {
+    background-color: #10b981 !important;
+    color: #ffffff !important;
+    transition: all 0.2s ease;
+}
+.btn-activar-mensual:hover {
+    background-color: #059669 !important;
+}
+
+.btn-desactivar-mensual {
+    background-color: #ef4444 !important;
+    color: #ffffff !important;
+    transition: all 0.2s ease;
+}
+.btn-desactivar-mensual:hover {
+    background-color: #dc2626 !important;
+}
+
+

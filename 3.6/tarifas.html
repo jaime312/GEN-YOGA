@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>GEN Yoga | Tarifas</title>
+        <meta name="description" content="Consulta las tarifas y bonos de GEN Yoga: clases de yoga, consultas personalizadas de psicología y nutrición, y talleres especiales." />
+        <link rel="stylesheet" href="tailwind-compiled.css" />
+        <link rel="stylesheet" href="profile.css" />
+
+        <script src="https://unpkg.com/lucide@latest" defer></script>
+        <script src="https://unpkg.com/@phosphor-icons/web"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </head>
+    <body
+        class="subpixel-antialiased min-h-screen w-screen overflow-x-hidden relative selection:bg-mutedgold selection:text-cocoa font-sans"
+    >
+        <!-- Background Gradient: Inspired by user image (Terracotta, Gold, Olive) -->
+        <div
+            class="fixed inset-0 z-0 bg-[linear-gradient(to_bottom,_#C3B89A_0%,_#AB593D_40%,_#8F6B2D_70%,_#6A6540_100%)]"
+        ></div>
+
+        <!-- Inner Glow/Highlight to mimic the center spotlight effect -->
+        <div
+            class="fixed inset-0 z-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.15)_0%,transparent_50%)] pointer-events-none"
+        ></div>
+
+        <!-- Ambient background shapes (ZEN & FRESH) -->
+        <div
+            id="parallax-bg"
+            class="fixed inset-0 z-0 pointer-events-none overflow-hidden transition-transform duration-1000 ease-out"
+        >
+            <div class="ambient-shape shape-1"></div>
+            <div class="ambient-shape shape-2"></div>
+            <div class="ambient-shape shape-3"></div>
+            <div class="ambient-shape shape-4"></div>
+        </div>
+
+        <div
+            class="min-h-screen flex flex-col items-center p-4 md:p-8 pt-20 md:pt-24 relative z-10 w-full max-w-6xl mx-auto"
+        >
+            <a
+                href="index.html"
+                class="absolute top-6 left-6 z-20 bg-terracotta backdrop-blur-md border border-terracotta text-white px-6 py-3 rounded-xl font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-cocoa transition shadow-lg hover:scale-105 active:scale-95 flex items-center gap-2 group"
+            >
+                <i
+                    class="ph-bold ph-arrow-left group-hover:-translate-x-1 transition"
+                ></i>
+                Volver a inicio
+            </a>
+
+            <div
+                class="w-full bg-white/10 backdrop-blur-xl rounded-3xl p-6 md:p-12 border border-white/20 shadow-2xl mt-12 md:mt-8 text-cocoa"
+            >
+                <h2
+                    class="brand-font text-3xl md:text-5xl lg:text-7xl text-center text-white mb-8 md:mb-12 drop-shadow-md"
+                >
+                    Tarifas
+                </h2>
+
+                <!-- Sub-pestañas de filtrado de tarifas -->
+                <div class="flex justify-center gap-2 mb-12 flex-wrap">
+                    <button
+                        id="btn-tarifa-yoga"
+                        onclick="switchTarifas('yoga')"
+                        class="px-5 py-2.5 text-xs uppercase tracking-wider font-bold rounded-full bg-white text-cocoa transition border border-white/20 shadow-sm hover:scale-105 active:scale-95"
+                    >
+                        Yoga
+                    </button>
+                    <button
+                        id="btn-tarifa-psicologia"
+                        onclick="switchTarifas('psicologia')"
+                        class="px-5 py-2.5 text-xs uppercase tracking-wider font-bold rounded-full bg-white/20 text-white hover:bg-white/30 transition border border-white/10 hover:scale-105 active:scale-95"
+                    >
+                        Consultas
+                    </button>
+                    <button
+                        id="btn-tarifa-talleres"
+                        onclick="switchTarifas('talleres')"
+                        class="px-5 py-2.5 text-xs uppercase tracking-wider font-bold rounded-full bg-white/20 text-white hover:bg-white/30 transition border border-white/10 hover:scale-105 active:scale-95"
+                    >
+                        Talleres
+                    </button>
+                </div>
+
+                <!-- 1. YOGA (Grid vertical de tarjetas) -->
+                <div
+                    id="tarifas-yoga"
+                    class="grid md:grid-cols-2 max-w-4xl mx-auto gap-8 px-4 items-stretch"
+                >
+                    <!-- Bono individual -->
+                    <div
+                        class="bg-white/40 backdrop-blur-md rounded-3xl p-8 border border-white/20 shadow-sm flex flex-col justify-between hover:scale-[1.02] transition duration-300 text-cocoa"
+                    >
+                        <div>
+                            <div class="w-12 h-12 rounded-2xl bg-white/60 flex items-center justify-center mb-6 text-cocoa shadow-inner">
+                                <i class="ph-fill ph-ticket text-2xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-serif text-cocoa font-bold mb-2">Bono Individual</h3>
+                            <p class="text-[10px] text-cocoa/60 mb-6 font-light uppercase tracking-wider">Yoga</p>
+                            <ul class="space-y-3 text-sm text-cocoa/80 pl-1 text-left">
+                                <li class="flex items-center gap-2"><i class="ph-bold ph-check text-olive"></i> 1 clase de yoga</li>
+                                <li class="flex items-center gap-2"><i class="ph-bold ph-check text-olive"></i> Reserva desde tu perfil o desde recepción</li>
+                                <li class="flex items-center gap-2"><i class="ph-bold ph-check text-olive"></i> <span id="cancelacion-horas-text">Cancelación permitida hasta 12h antes de la hora de inicio de la clase</span></li>
+                            </ul>
+                        </div>
+                        <div class="mt-8">
+                            <div class="text-4xl font-serif font-bold text-cocoa mb-4">15€</div>
+                            <a href="profile.html" class="block w-full py-3 bg-cocoa text-white text-center text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-black transition shadow-sm">Comprar Bono</a>
+                        </div>
+                    </div>
+                    <!-- CENTRAL CARD — Bono Mensual -->
+                    <div
+                        class="relative bg-white/70 backdrop-blur-lg rounded-3xl p-8 border-2 border-white shadow-xl flex flex-col justify-between hover:scale-[1.03] transition duration-300 text-cocoa"
+                    >
+                        <div
+                            class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-terracotta text-white text-[9px] font-bold uppercase tracking-[0.25em] px-4 py-1.5 rounded-full shadow-md"
+                        >
+                            ★ Especial
+                        </div>
+                        <div>
+                            <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center mb-6 text-terracotta shadow-md">
+                                <i class="ph-fill ph-calendar-blank text-2xl"></i>
+                            </div>
+                            <h3 class="text-3xl font-serif text-cocoa font-bold mb-2">Bono Mensual</h3>
+                            <p class="text-[10px] text-terracotta font-semibold mb-6 uppercase tracking-wider">Plan Flexible</p>
+                            <ul class="space-y-3 text-sm text-cocoa pl-1 text-left">
+                                <li class="flex items-center gap-2"><i class="ph-bold ph-check text-terracotta"></i> 2 clases cada semana (Lunes-Domingo)</li>
+                                <li class="flex items-center gap-2"><i class="ph-bold ph-check text-terracotta"></i> Hasta 8 clases al mes en total</li>
+                                <li class="flex items-center gap-2"><i class="ph-bold ph-check text-terracotta"></i> Reserva desde tu perfil o desde recepción</li>
+                                <li class="flex items-center gap-2"><i class="ph-bold ph-check text-terracotta"></i> Opción de usar bonos individuales si superas el límite semanal</li>
+                            </ul>
+                        </div>
+                        <div class="mt-8">
+                            <div class="text-5xl font-serif font-bold text-cocoa mb-4">90€<span class="text-xs font-sans font-normal text-cocoa/60">/mes</span></div>
+                            <a href="profile.html" class="block w-full py-3.5 bg-terracotta text-white text-center text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-cocoa transition shadow-md">Adquirir Plan</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. CONSULTAS -->
+                <div
+                    id="tarifas-psicologia"
+                    class="grid md:grid-cols-2 gap-8 px-4 hidden"
+                >
+                    <div class="bg-white/50 backdrop-blur-md rounded-3xl p-8 border border-white/30 shadow-md flex flex-col justify-between hover:shadow-lg transition duration-300 text-cocoa">
+                        <div>
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shadow-inner">
+                                    <i class="ph-fill ph-brain text-2xl"></i>
+                                </div>
+                                <div class="text-left">
+                                    <h3 class="text-2xl font-serif text-cocoa font-bold">Psicología</h3>
+                                    <p class="text-xs text-cocoa/50 font-medium">Bienestar y salud mental</p>
+                                </div>
+                            </div>
+                            <div class="p-5 bg-white/45 rounded-2xl border border-white/20 flex flex-col sm:flex-row justify-between items-start gap-4 mt-8">
+                                <div class="text-left pr-4">
+                                    <p class="font-bold text-cocoa text-sm">Sesión individual</p>
+                                    <p class="text-xs text-cocoa/60 mt-1 font-light leading-relaxed">Consulta personalizada para cuidar tu bienestar y salud mental. Gestión y asignación por administración.</p>
+                                </div>
+                                <span class="text-xs font-bold text-cocoa bg-white/70 px-3 py-2 rounded-lg shrink-0 mt-1 sm:mt-0 text-center">Consultar con recepción las tarifas</span>
+                            </div>
+                        </div>
+                        <div class="mt-8">
+                            <button onclick="Swal.fire('Información', 'Contacta con el centro o administrador para programar y abonar tu consulta.', 'info')" class="block w-full py-3 bg-cocoa text-white text-center text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-black transition shadow-sm">Contactar con Admin</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white/50 backdrop-blur-md rounded-3xl p-8 border border-white/30 shadow-md flex flex-col justify-between hover:shadow-lg transition duration-300 text-cocoa">
+                        <div>
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="w-12 h-12 rounded-xl bg-green-50 text-green-700 flex items-center justify-center shadow-inner">
+                                    <i class="ph-fill ph-apple text-2xl"></i>
+                                </div>
+                                <div class="text-left">
+                                    <h3 class="text-2xl font-serif text-cocoa font-bold">Nutrición</h3>
+                                    <p class="text-xs text-cocoa/50 font-medium">Alimentación y salud física</p>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="p-5 bg-white/45 rounded-2xl border border-white/20 flex flex-col sm:flex-row justify-between items-start gap-4 mt-6">
+                                    <div class="text-left pr-4">
+                                        <p class="font-bold text-cocoa text-sm">Primera Consulta (Evaluación Inicial)</p>
+                                        <p class="text-xs text-cocoa/60 mt-1 font-light leading-relaxed">Comienza tu transformación. Una sesión integral y profunda donde analizamos tu punto de partida, objetivos e historial de hábitos para diseñar tu estrategia de alimentación y bienestar personalizada. Gestión y asignación por administración.</p>
+                                    </div>
+                                    <span class="text-xs font-bold text-cocoa bg-white/70 px-3 py-2 rounded-lg shrink-0 mt-1 sm:mt-0 text-center">Consultar con recepción las tarifas</span>
+                                </div>
+                                <div class="p-5 bg-white/45 rounded-2xl border border-white/20 flex flex-col sm:flex-row justify-between items-start gap-4">
+                                    <div class="text-left pr-4">
+                                        <p class="font-bold text-cocoa text-sm">Sesión de Seguimiento</p>
+                                        <p class="text-xs text-cocoa/60 mt-1 font-light leading-relaxed">Tu acompañamiento en el camino. Evaluamos tus progresos cotidianos, resolvemos dudas y adaptamos tus pautas nutricionales para consolidar hábitos saludables que duren para siempre. Gestión y asignación por administración.</p>
+                                    </div>
+                                    <span class="text-xs font-bold text-cocoa bg-white/70 px-3 py-2 rounded-lg shrink-0 mt-1 sm:mt-0 text-center">Consultar con recepción las tarifas</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-8">
+                            <button onclick="Swal.fire('Información', 'Contacta con el centro o administrador para programar y abonar tu consulta.', 'info')" class="block w-full py-3 bg-cocoa text-white text-center text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-black transition shadow-sm">Contactar con Admin</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. TALLERES -->
+                <div
+                    id="tarifas-talleres"
+                    class="space-y-6 px-4 hidden text-cocoa"
+                >
+                    <div class="bg-white/50 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-white/20 shadow-md hover:scale-[1.005] hover:shadow-lg transition duration-300 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                        <div class="flex items-start md:items-center gap-4 text-left">
+                            <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center shadow-inner shrink-0 mt-1 md:mt-0">
+                                <i class="ph-fill ph-sketch-logo text-3xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-serif text-cocoa font-bold">Talleres temáticos (Próximamente)</h3>
+                                <p class="text-sm text-cocoa/80 mt-1">Sesiones especiales para profundizar en diferentes estilos y prácticas de yoga, meditación y bienestar holístico. Las temáticas, fechas e inscripciones se anunciarán muy pronto en recepción.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between md:justify-end gap-6 w-full md:w-auto border-t md:border-t-0 pt-4 md:pt-0 border-cocoa/10">
+                            <span class="text-xs font-bold text-cocoa bg-white/70 px-4 py-3 rounded-xl border border-white/30 shadow-sm shrink-0 text-center">Consultar tarifas</span>
+                            <button onclick="Swal.fire('Próximamente', 'Los próximos talleres y eventos especiales se anunciarán muy pronto. Para cualquier consulta, ponte en contacto con recepción.', 'info')" class="px-6 py-3.5 bg-terracotta text-white text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-cocoa transition shadow-md text-center shrink-0">Saber Más</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="app.js" defer></script>
+        <script>
+            function mostrarFuncionEnPruebas() {
+                alert("Esta función está en periodo de pruebas y aún no está disponible.");
+            }
+
+            function switchTarifas(category) {
+                const sections = {
+                    yoga: document.getElementById("tarifas-yoga"),
+                    psicologia: document.getElementById("tarifas-psicologia"),
+                    talleres: document.getElementById("tarifas-talleres"),
+                };
+                const buttons = {
+                    yoga: document.getElementById("btn-tarifa-yoga"),
+                    psicologia: document.getElementById("btn-tarifa-psicologia"),
+                    talleres: document.getElementById("btn-tarifa-talleres"),
+                };
+
+                // Switch visibility
+                Object.keys(sections).forEach((key) => {
+                    const el = sections[key];
+                    if (!el) return;
+                    if (key === category) {
+                        el.classList.remove("hidden");
+                        if (key === "talleres") {
+                            el.classList.add("space-y-6");
+                        } else {
+                            el.classList.add("grid");
+                        }
+                    } else {
+                        el.classList.add("hidden");
+                        if (key === "talleres") {
+                            el.classList.remove("space-y-6");
+                        } else {
+                            el.classList.remove("grid");
+                        }
+                    }
+                });
+
+                // Switch button classes
+                Object.keys(buttons).forEach((key) => {
+                    const btn = buttons[key];
+                    if (!btn) return;
+                    if (key === category) {
+                        btn.className =
+                            "px-5 py-2.5 text-xs uppercase tracking-wider font-bold rounded-full bg-white text-cocoa transition border border-white/20 shadow-sm hover:scale-105 active:scale-95";
+                    } else {
+                        btn.className =
+                            "px-5 py-2.5 text-xs uppercase tracking-wider font-bold rounded-full bg-white/20 text-white hover:bg-white/30 transition border border-white/10 hover:scale-105 active:scale-95";
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>

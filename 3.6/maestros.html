@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>GEN Yoga | Maestros</title>
+        <link rel="stylesheet" href="tailwind-compiled.css" />
+
+        <script src="https://unpkg.com/lucide@latest" defer></script>
+        <script src="https://unpkg.com/@phosphor-icons/web"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    </head>
+    <body
+        class="subpixel-antialiased min-h-screen w-screen overflow-x-hidden relative selection:bg-mutedgold selection:text-cocoa font-sans"
+    >
+        <!-- Background Gradient: Inspired by user image (Terracotta, Gold, Olive) -->
+        <div
+            class="fixed inset-0 z-0 bg-[linear-gradient(to_bottom,_#C3B89A_0%,_#AB593D_40%,_#8F6B2D_70%,_#6A6540_100%)]"
+        ></div>
+
+        <!-- Inner Glow/Highlight to mimic the center spotlight effect -->
+        <div
+            class="fixed inset-0 z-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.15)_0%,transparent_50%)] pointer-events-none"
+        ></div>
+
+        <!-- Ambient background shapes (ZEN & FRESH) -->
+        <div
+            id="parallax-bg"
+            class="fixed inset-0 z-0 pointer-events-none overflow-hidden transition-transform duration-1000 ease-out"
+        >
+            <div class="ambient-shape shape-1"></div>
+            <div class="ambient-shape shape-2"></div>
+            <div class="ambient-shape shape-3"></div>
+            <div class="ambient-shape shape-4"></div>
+        </div>
+
+        <div
+            class="min-h-screen flex flex-col items-center p-4 md:p-8 pt-20 md:pt-24 relative z-10 w-full max-w-6xl mx-auto"
+        >
+            <a
+                href="index.html"
+                class="absolute top-6 left-6 z-20 bg-terracotta backdrop-blur-md border border-terracotta text-white px-6 py-3 rounded-xl font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-cocoa transition shadow-lg hover:scale-105 active:scale-95 flex items-center gap-2 group"
+            >
+                <i
+                    class="ph-bold ph-arrow-left group-hover:-translate-x-1 transition"
+                ></i>
+                Volver a inicio
+            </a>
+
+            <div
+                class="w-full bg-white/10 backdrop-blur-xl rounded-3xl p-6 md:p-12 border border-white/20 shadow-2xl mt-12 md:mt-8 text-cocoa"
+            >
+                <h2
+                    class="text-3xl md:text-5xl lg:text-7xl text-white brand-font mb-8 md:mb-12 text-center drop-shadow-md"
+                >
+                    Maestros
+                </h2>
+
+                <!-- Sub-pestañas de filtrado de profesionales -->
+                <div class="flex justify-center gap-2 mb-12 flex-wrap">
+                    <button
+                        id="btn-filtro-prof-todos"
+                        onclick="filtrarProfesionalesLanding('todos')"
+                        class="px-5 py-2.5 text-xs uppercase tracking-wider font-bold rounded-full bg-white text-cocoa transition border border-white/20 shadow-sm hover:scale-105 active:scale-95"
+                    >
+                        Todos
+                    </button>
+                    <button
+                        id="btn-filtro-prof-yoga"
+                        onclick="filtrarProfesionalesLanding('yoga')"
+                        class="px-5 py-2.5 text-xs uppercase tracking-wider font-bold rounded-full bg-white/20 text-white hover:bg-white/30 transition border border-white/10 hover:scale-105 active:scale-95"
+                    >
+                        Clases
+                    </button>
+                    <button
+                        id="btn-filtro-prof-psicologia"
+                        onclick="filtrarProfesionalesLanding('psicologia')"
+                        class="px-5 py-2.5 text-xs uppercase tracking-wider font-bold rounded-full bg-white/20 text-white hover:bg-white/30 transition border border-white/10 hover:scale-105 active:scale-95"
+                    >
+                        Consultas
+                    </button>
+                    <button
+                        id="btn-filtro-prof-talleres"
+                        onclick="filtrarProfesionalesLanding('talleres')"
+                        class="px-5 py-2.5 text-xs uppercase tracking-wider font-bold rounded-full bg-white/20 text-white hover:bg-white/30 transition border border-white/10 hover:scale-105 active:scale-95"
+                    >
+                        Talleres
+                    </button>
+                </div>
+
+                <div
+                    id="landing-profesores-container"
+                    class="flex flex-wrap justify-center gap-8 w-full"
+                >
+                    <!-- Teachers content -->
+                </div>
+            </div>
+        </div>
+
+        <script src="app.js" defer></script>
+    </body>
+</html>
