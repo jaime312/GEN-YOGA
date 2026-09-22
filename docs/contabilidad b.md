@@ -32,8 +32,6 @@ actualización 10.0–11.7 -> Sistema antiabuso, Ayurveda, privacidad de aforo y
 
 actualización 12.0–13.2 -> Clases especiales, talleres, reprogramaciones, códigos promocionales, inscripciones manuales y Stripe dinámico -> Recuperación de contraseña, reconciliación Stripe, emails a profesores, consulta doble y gestión de bonos -> Pendiente 100
 
-actualizacion 15.0 -> Descarga de Excel y PDF para marketing con datos del gimnasio -> pendiente 100
-
 ### Cambios mayores outlook
 
 compra y configuración de dominio y hosting para outlook -> Pagado 100
